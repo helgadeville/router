@@ -4,6 +4,8 @@ export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
     .developmentLogging();
+  
+  aurelia.use.plugin('aurelia-utility-converters');
 
   //Uncomment the line below to enable animation.
   //aurelia.use.plugin('aurelia-animator-css');
