@@ -17,6 +17,7 @@ module.exports = {
       "includes": [
         "aurelia-framework",
         "aurelia-bootstrapper",
+        "aurelia-http-client",
         "aurelia-fetch-client",
         "aurelia-router",
         "aurelia-animator-css",
@@ -27,6 +28,8 @@ module.exports = {
         "aurelia-loader-default",
         "aurelia-history-browser",
         "aurelia-logging-console",
+        "aurelia-dialog",
+        "aurelia-utility-converters",
         "bootstrap",
         "bootstrap/css/bootstrap.css!text",
         "fetch",
