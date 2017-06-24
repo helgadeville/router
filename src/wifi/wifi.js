@@ -21,14 +21,65 @@ export class Wireless {
     
     activate() {
         this.overlay.open();
-        return this.http.get('cgi-bin/get_wireless.json')
+        return this.http.get('cgi-bin/get_wireless.text')
             .then(response => {
                 this.overlay.close();
                 // TODO
+                this.decode(response.response);
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error getting router wireless');
             });
+    }
+    
+    getWords(line) {
+        var n = line.indexOf(' ');
+        if (n < 0) {
+            n = line.indexOf('\t');
+            if (n < 0) {
+                return;
+            }
+        }
+        var first = line.substring(0, n);
+        line = line.substring(n + 1).trim();
+        n = line.indexOf(' ')
+        if (n < 0) {
+            n = line.indexOf('\t');
+            if (n < 0) {
+                return;
+            }
+        }
+        var second = line.substring(0, n);
+        line = line.substring(n + 1).trim();
+        return [ first, second, line ];
+    }
+    
+    decode(text) {
+        var lines = text.split('\n');
+        var object = {};
+        var name = null;
+        for(var i = 0 ; i < lines.length ; i++) {
+            var line = lines[i].trim();
+            if (line) {
+                var splt = this.getWords(line);
+                if (splt) {
+                    if (splt[0] === 'config') {
+                        name = splt[1];
+                        object[name] = {
+                            name: splt[2]
+                        };
+                    } else
+                    if (splt[0] === 'option') {
+                        if (name) {
+                            object[name][splt[1]] = splt[2];
+                        } else {
+                            console.log('Error: name undefined');
+                        }
+                    }
+                }
+            }
+        }
+        return object;
     }
     
     submit() {

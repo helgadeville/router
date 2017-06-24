@@ -14,4 +14,51 @@
 	<natures>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1498322316301</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-jspm_packages</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1498322316303</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-node_modules</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1498322316305</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-export</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1498322316307</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-dist</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1498322316309</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-build</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

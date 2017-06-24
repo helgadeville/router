@@ -25,11 +25,19 @@ gulp.task('build-system', function() {
     .pipe(gulp.dest(paths.output));
 });
 
-//copies changed html files to the output directory
-gulp.task('build-scripts', function() {
-  return gulp.src(paths.scripts)
+//copies changed json files to the output directory
+gulp.task('build-jsons', function() {
+  return gulp.src(paths.jsons)
     .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
     .pipe(changed(paths.master, {extension: '.json'}))
+    .pipe(gulp.dest(paths.cgiOutput));
+});
+
+//copies changed text files to the output directory
+gulp.task('build-texts', function() {
+  return gulp.src(paths.texts)
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(changed(paths.master, {extension: '.text'}))
     .pipe(gulp.dest(paths.cgiOutput));
 });
 
@@ -57,7 +65,7 @@ gulp.task('build-css', function() {
 gulp.task('build', function(callback) {
   return runSequence(
     'clean',
-    ['build-system', 'build-scripts', 'build-html', 'build-css'],
+    ['build-system', 'build-jsons', 'build-texts', 'build-html', 'build-css'],
     callback
   );
 });

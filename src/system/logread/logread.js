@@ -9,7 +9,7 @@ export class LogRead {
     }
     
     activate() {
-        this.http.get('cgi-bin/logread.json')
+        this.http.get('cgi-bin/logread.text')
         .then(response => {
             this.logread = response.content;
         }).catch(error => {

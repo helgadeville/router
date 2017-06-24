@@ -1,0 +1,198 @@
+[    0.000000] Linux version 4.4.71 (buildbot@builds-02.infra.lede-project.org) (gcc version 5.4.0 (LEDE GCC 5.4.0 r3101-bce140e) ) #0 Wed Jun 7 19:24:41 2017
+[    0.000000] MyLoader: sysp=45f474ad, boardp=a8f6ec7e, parts=603a979c
+[    0.000000] bootconsole [early0] enabled
+[    0.000000] CPU0 revision is: 00019374 (MIPS 24Kc)
+[    0.000000] SoC: Atheros AR9330 rev 1
+[    0.000000] Determined physical RAM map:
+[    0.000000]  memory: 02000000 @ 00000000 (usable)
+[    0.000000] Initrd not found or empty - disabling initrd
+[    0.000000] No valid device tree found, continuing without
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000000000000-0x0000000001ffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x0000000001ffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x0000000001ffffff]
+[    0.000000] On node 0 totalpages: 8192
+[    0.000000] free_area_init_node: node 0, pgdat 803d04d0, node_mem_map 81000000
+[    0.000000]   Normal zone: 64 pages used for memmap
+[    0.000000]   Normal zone: 0 pages reserved
+[    0.000000]   Normal zone: 8192 pages, LIFO batch:0
+[    0.000000] Primary instruction cache 64kB, VIPT, 4-way, linesize 32 bytes.
+[    0.000000] Primary data cache 32kB, 4-way, VIPT, cache aliases, linesize 32 bytes
+[    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+[    0.000000] pcpu-alloc: [0] 0 
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 8128
+[    0.000000] Kernel command line:  board=TL-MR3220-v2  console=ttyATH0,115200 rootfstype=squashfs,jffs2 noinitrd
+[    0.000000] PID hash table entries: 128 (order: -3, 512 bytes)
+[    0.000000] Dentry cache hash table entries: 4096 (order: 2, 16384 bytes)
+[    0.000000] Inode-cache hash table entries: 2048 (order: 1, 8192 bytes)
+[    0.000000] Writing ErrCtl register=00000000
+[    0.000000] Readback ErrCtl register=00000000
+[    0.000000] Memory: 27864K/32768K available (3073K kernel code, 163K rwdata, 412K rodata, 312K init, 205K bss, 4904K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] NR_IRQS:51
+[    0.000000] Clocks: CPU:400.000MHz, DDR:400.000MHz, AHB:200.000MHz, Ref:25.000MHz
+[    0.000000] clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 9556302233 ns
+[    0.000013] sched_clock: 32 bits at 200MHz, resolution 5ns, wraps every 10737418237ns
+[    0.007549] Calibrating delay loop... 265.42 BogoMIPS (lpj=1327104)
+[    0.088739] pid_max: default: 32768 minimum: 301
+[    0.093335] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.099495] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.109695] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.117732] futex hash table entries: 256 (order: -1, 3072 bytes)
+[    0.125256] NET: Registered protocol family 16
+[    0.129947] MIPS: machine is TP-LINK TL-MR3220 v2
+[    0.606223] Can't analyze schedule() prologue at 800670bc
+[    0.623611] clocksource: Switched to clocksource MIPS
+[    0.628658] NET: Registered protocol family 2
+[    0.632760] TCP established hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.638187] TCP bind hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.644235] TCP: Hash tables configured (established 1024 bind 1024)
+[    0.650405] UDP hash table entries: 256 (order: 0, 4096 bytes)
+[    0.655892] UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+[    0.662164] NET: Registered protocol family 1
+[    0.666062] PCI: CLS 0 bytes, default 32
+[    0.671775] Crashlog allocated RAM at address 0x1f00000
+[    0.695943] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.700143] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
+[    0.713089] io scheduler noop registered
+[    0.715523] io scheduler deadline registered (default)
+[    0.720656] Serial: 8250/16550 driver, 16 ports, IRQ sharing enabled
+[    0.730697] ar933x-uart: ttyATH0 at MMIO 0x18020000 (irq = 11, base_baud = 1562500) is a AR933X UART
+[    0.738551] console [ttyATH0] enabled
+[    0.745339] bootconsole [early0] disabled
+[    0.759620] m25p80 spi0.0: found gd25q32, expected m25p80
+[    0.763582] m25p80 spi0.0: gd25q32 (4096 Kbytes)
+[    0.769658] 5 tp-link partitions found on MTD device spi0.0
+[    0.773827] Creating 5 MTD partitions on "spi0.0":
+[    0.778556] 0x000000000000-0x000000020000 : "u-boot"
+[    0.785541] 0x000000020000-0x000000152fa4 : "kernel"
+[    0.791267] 0x000000152fa4-0x0000003f0000 : "rootfs"
+[    0.797091] mtd: device 2 (rootfs) set to be root filesystem
+[    0.801333] 1 squashfs-split partitions found on MTD device rootfs
+[    0.807551] 0x000000370000-0x0000003f0000 : "rootfs_data"
+[    0.815195] 0x0000003f0000-0x000000400000 : "art"
+[    0.820703] 0x000000020000-0x0000003f0000 : "firmware"
+[    0.844088] libphy: ag71xx_mdio: probed
+[    1.435104] ag71xx-mdio.1: Found an AR7240/AR9330 built-in switch
+[    1.467199] eth0: Atheros AG71xx at 0xba000000, irq 5, mode:GMII
+[    2.055323] ag71xx ag71xx.0: connected to PHY at ag71xx-mdio.1:04 [uid=004dd041, driver=Generic PHY]
+[    2.064065] eth1: Atheros AG71xx at 0xb9000000, irq 4, mode:MII
+[    2.072393] NET: Registered protocol family 10
+[    2.081928] NET: Registered protocol family 17
+[    2.085106] bridge: automatic filtering via arp/ip/ip6tables has been deprecated. Update your scripts to load br_netfilter if you need this.
+[    2.097679] 8021q: 802.1Q VLAN Support v1.8
+[    2.110202] VFS: Mounted root (squashfs filesystem) readonly on device 31:2.
+[    2.118269] Freeing unused kernel memory: 312K (803f2000 - 80440000)
+[    3.436364] init: Console is alive
+[    3.438597] init: - watchdog -
+[    5.098532] kmodloader: loading kernel modules from /etc/modules-boot.d/*
+[    5.262253] usbcore: registered new interface driver usbfs
+[    5.266465] usbcore: registered new interface driver hub
+[    5.271706] usbcore: registered new device driver usb
+[    5.325452] SCSI subsystem initialized
+[    5.335719] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    5.342844] ehci-platform: EHCI generic platform driver
+[    5.346837] ehci-platform ehci-platform: EHCI Host Controller
+[    5.352417] ehci-platform ehci-platform: new USB bus registered, assigned bus number 1
+[    5.362403] ehci-platform ehci-platform: irq 3, io mem 0x1b000000
+[    5.383661] ehci-platform ehci-platform: USB 2.0 started, EHCI 1.00
+[    5.389805] hub 1-0:1.0: USB hub found
+[    5.392643] hub 1-0:1.0: 1 port detected
+[    5.401900] usbcore: registered new interface driver usb-storage
+[    5.407340] kmodloader: done loading kernel modules from /etc/modules-boot.d/*
+[    5.424270] init: - preinit -
+[    5.853713] usb 1-1: new high-speed USB device number 2 using ehci-platform
+[    6.126514] random: procd: uninitialized urandom read (4 bytes read, 10 bits of entropy available)
+[    6.134904] usb-storage 1-1:1.0: USB Mass Storage device detected
+[    6.154729] scsi host0: usb-storage 1-1:1.0
+[    6.357198] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready
+[    7.155372] scsi 0:0:0:0: Direct-Access     SanDisk  Cruzer Fit       1.00 PQ: 0 ANSI: 6
+[    7.165777] sd 0:0:0:0: [sda] 15630336 512-byte logical blocks: (8.00 GB/7.45 GiB)
+[    7.173496] sd 0:0:0:0: [sda] Write Protect is off
+[    7.176935] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+[    7.177750] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[    7.193099]  sda: sda1
+[    7.198366] sd 0:0:0:0: [sda] Attached SCSI removable disk
+[    8.455019] eth0: link up (1000Mbps/Full duplex)
+[    8.458225] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+[    9.677687] mount_root: loading kmods from internal overlay
+[    9.710118] kmodloader: loading kernel modules from //etc/modules-boot.d/*
+[    9.717608] kmodloader: done loading kernel modules from //etc/modules-boot.d/*
+[   10.118069] jffs2: notice: (430) jffs2_build_xattr_subsystem: complete building xattr subsystem, 0 of xdatum (0 unchecked, 0 orphan) and 0 of xref (0 dead, 0 orphan) found.
+[   10.132656] block: attempting to load /tmp/jffs_cfg/upper/etc/config/fstab
+[   10.215712] EXT4-fs (sda1): recovery complete
+[   10.220239] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: 
+[   10.246467] mount_root: switched to extroot
+[   10.254395] urandom-seed: Seeding with /etc/urandom.seed
+[   10.326272] eth0: link down
+[   10.344923] procd: - early -
+[   10.346485] procd: - watchdog -
+[   11.039262] procd: - ubus -
+[   11.267215] random: ubusd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+[   11.275482] random: ubusd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+[   11.283927] random: ubusd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+[   11.293221] random: ubusd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+[   11.301742] random: ubusd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+[   11.310819] random: ubusd: uninitialized urandom read (4 bytes read, 60 bits of entropy available)
+[   11.319799] random: ubusd: uninitialized urandom read (4 bytes read, 61 bits of entropy available)
+[   11.328980] procd: - init -
+[   11.907268] kmodloader: loading kernel modules from /etc/modules.d/*
+[   11.918078] tun: Universal TUN/TAP device driver, 1.6
+[   11.921723] tun: (C) 1999-2004 Max Krasnyansky <maxk@qualcomm.com>
+[   11.934775] ip6_tables: (C) 2000-2006 Netfilter Core Team
+[   11.957237] Loading modules backported from Linux version wt-2017-01-31-0-ge882dff19e7f
+[   11.963875] Backport generated by backports.git backports-20160324-13-g24da7d3c
+[   11.975529] ip_tables: (C) 2000-2006 Netfilter Core Team
+[   11.991677] nf_conntrack version 0.5.0 (440 buckets, 1760 max)
+[   12.042729] xt_time: kernel timezone is -0000
+[   12.125070] PPP generic driver version 2.4.2
+[   12.131236] NET: Registered protocol family 24
+[   12.193318] ath: EEPROM regdomain: 0x0
+[   12.193349] ath: EEPROM indicates default country code should be used
+[   12.193363] ath: doing EEPROM country->regdmn map search
+[   12.193390] ath: country maps to regdmn code: 0x3a
+[   12.193406] ath: Country alpha2 being used: US
+[   12.193420] ath: Regpair used: 0x3a
+[   12.205292] ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
+[   12.213293] ieee80211 phy0: Atheros AR9330 Rev:1 mem=0xb8100000, irq=2
+[   12.372725] kmodloader: done loading kernel modules from /etc/modules.d/*
+[   13.647557] random: jshn: uninitialized urandom read (4 bytes read, 94 bits of entropy available)
+[   13.770613] random: ubusd: uninitialized urandom read (4 bytes read, 94 bits of entropy available)
+[   19.239056] device eth0 entered promiscuous mode
+[   19.253458] IPv6: ADDRCONF(NETDEV_UP): br-lan: link is not ready
+[   19.309461] IPv6: ADDRCONF(NETDEV_UP): eth1: link is not ready
+[   21.345281] eth0: link up (1000Mbps/Full duplex)
+[   21.373772] br-lan: port 1(eth0) entered forwarding state
+[   21.377806] br-lan: port 1(eth0) entered forwarding state
+[   21.389723] IPv6: ADDRCONF(NETDEV_CHANGE): br-lan: link becomes ready
+[   21.475258] Adding 65532k swap on /swapfile.  Priority:-1 extents:1 across:65532k 
+[   21.505207] eth1: link up (100Mbps/Full duplex)
+[   21.508322] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+[   22.093729] random: nonblocking pool is initialized
+[   23.373878] br-lan: port 1(eth0) entered forwarding state
+[  644.395767] eth0: link down
+[  644.397564] br-lan: port 1(eth0) entered disabled state
+[  646.396697] eth0: link up (1000Mbps/Full duplex)
+[  646.399929] br-lan: port 1(eth0) entered forwarding state
+[  646.405396] br-lan: port 1(eth0) entered forwarding state
+[  648.405137] br-lan: port 1(eth0) entered forwarding state
+[52122.621618] eth0: link down
+[52122.623424] br-lan: port 1(eth0) entered disabled state
+[52124.122733] eth0: link up (1000Mbps/Full duplex)
+[52124.125966] br-lan: port 1(eth0) entered forwarding state
+[52124.131430] br-lan: port 1(eth0) entered forwarding state
+[52126.131357] br-lan: port 1(eth0) entered forwarding state
+[84636.134659] eth0: link down
+[84636.136459] br-lan: port 1(eth0) entered disabled state
+[84637.635698] eth0: link up (1000Mbps/Full duplex)
+[84637.638926] br-lan: port 1(eth0) entered forwarding state
+[84637.644390] br-lan: port 1(eth0) entered forwarding state
+[84639.642570] br-lan: port 1(eth0) entered forwarding state
+[84768.133499] eth0: link down
+[84768.135297] br-lan: port 1(eth0) entered disabled state
+[84769.634589] eth0: link up (1000Mbps/Full duplex)
+[84769.637815] br-lan: port 1(eth0) entered forwarding state
+[84769.643280] br-lan: port 1(eth0) entered forwarding state
+[84771.641465] br-lan: port 1(eth0) entered forwarding state

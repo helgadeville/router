@@ -9,7 +9,7 @@ export class DMesg {
     }
     
     activate() {
-        this.http.get('cgi-bin/dmesg.json')
+        this.http.get('cgi-bin/dmesg.text')
         .then(response => {
             this.logread = response.content;
         }).catch(error => {
