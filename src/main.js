@@ -10,6 +10,4 @@ export function configure(aurelia) {
 
   // start application
   aurelia.start().then(() => aurelia.setRoot());
-  // finally hide overlay by hand - do NOT use injectors here
-  //document.getElementById('overlay-main').classList.add('noshow');
 }

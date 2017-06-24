@@ -2,6 +2,7 @@ export class Overlay {
     
     constructor() {
         this.overlay = document.getElementById('overlay-main');
+        this.overlaySpinner = document.getElementById('overlay-spinner');
         this.overlayProgress = document.getElementById('overlay-progress');
         this.overlayBar = document.getElementById('overlay-bar');
         this.overlayMessage = document.getElementById('overlay-message');
@@ -19,9 +20,12 @@ export class Overlay {
         if (withBar) {
             this.overlayBar.style.width = '0%';
             this.overlayProgress.classList.remove('noshow');
+            this.overlaySpinner.classList.remove('noshow');
+            this.overlaySpinner.classList.add('noshow');
         } else {
             this.overlayProgress.classList.remove('noshow');
             this.overlayProgress.classList.add('noshow');
+            this.overlaySpinner.classList.remove('noshow');
         }
     }
     

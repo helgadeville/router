@@ -1,14 +1,22 @@
 <template>
-   <ai-dialog>
-      <ai-dialog-body>
-         <h2>${message}</h2>
-      </ai-dialog-body>
+    <ai-dialog class="modal-container">
+        <ai-dialog-body>
+            <div class="modal-message">
+                <div>
+                    <i class="${iconClass} modal-icon"></i>
+                    <span class="modal-span">${message}</span>
+                </div>
+	        </div>
+        </ai-dialog-body>
 
-      <ai-dialog-footer>
-         <button click.trigger = "controller.cancel()">Cancel</button>
-         <button click.trigger = "controller.ok(message)">Ok</button>
-      </ai-dialog-footer>
+        <ai-dialog-footer>
+            <div class="modal-footer">
+                <button repeat.for="btn of buttons"
+                    class="${btn.clazz}"
+                    click.trigger="click('${btn.name}')"
+                >${btn.text}</button>
+	        </div>
+        </ai-dialog-footer>
     
-   </ai-dialog>
-    
+    </ai-dialog>   
 </template>

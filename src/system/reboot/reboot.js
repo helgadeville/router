@@ -17,7 +17,15 @@ export class Reboot {
   }
   
   reboot() {
-      this.dialogService.open({viewModel: Prompt, model: 'Are you sure to reboot the router ?' }).whenClosed(response => {
+      let dlg = this.dialogService.open( {
+                                              viewModel: Prompt, 
+                                              model: {
+                                                  type: 'warning',
+                                                  message: 'Are you sure to reboot the router ?',
+                                                  btn: [ 'ok', 'cancel' ]
+                                              }
+                                          });
+      dlg.whenClosed(response => {
           if (!response.wasCancelled) {
              console.log('reboot requested');
              this.http.get('cgi-bin/reboot.json')

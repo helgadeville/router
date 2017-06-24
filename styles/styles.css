@@ -51,24 +51,8 @@ ux-dialog-overlay {
     background-color: green;
 }
 
-.splash {
-  text-align: center;
-  margin: 10% 0 0 0;
-  box-sizing: border-box;
-}
-
-.splash .message {
-  font-size: 48px;
-  line-height: 48px;
-  text-shadow: rgba(0, 0, 0, 0.5) 0 0 15px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.splash .fa-spinner {
-  text-align: center;
-  display: inline-block;
-  font-size: 72px;
-  margin-top: 50px;
+.halign {
+	text-align: center;
 }
 
 .page-host {
@@ -85,18 +69,6 @@ ux-dialog-overlay {
 	display: none !important;
 }
 
-@media print {
-  .page-host {
-    position: absolute;
-    left: 10px;
-    right: 0;
-    top: 50px;
-    bottom: 0;
-    overflow-y: inherit;
-    overflow-x: inherit;
-  }
-}
-
 section {
   margin: 0 20px;
 }
@@ -105,4 +77,36 @@ section {
   margin: 12px 24px 0 6px;
 }
 
+.modal-container {
+	border: 1px solid gray;
+	border-radius: 20px;
+}
 
+.modal-message {
+	padding: 15px;
+}
+
+.modal-icon {
+	vertical-align: middle;
+}
+
+.modal-span {
+	margin-left: 10px;
+	font-size: larger;
+}
+
+.message-info-red {
+	color: lightred;
+}
+
+.message-info-green {
+    color: lightgreen;
+}
+
+.message-info-blue {
+    color: lightblue;
+}
+
+.message-info-orange {
+    color: orangered;
+}
