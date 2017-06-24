@@ -11,7 +11,7 @@ export class DMesg {
     activate() {
         this.http.get('cgi-bin/dmesg.json')
         .then(response => {
-            this.logread = response.content.dmesg;
+            this.logread = response.content;
         }).catch(error => {
             console.log('Error getting dmesg');
         });    

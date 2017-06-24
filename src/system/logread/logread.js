@@ -11,7 +11,7 @@ export class LogRead {
     activate() {
         this.http.get('cgi-bin/logread.json')
         .then(response => {
-            this.logread = response.content.logread;
+            this.logread = response.content;
         }).catch(error => {
             console.log('Error getting logread');
         });    

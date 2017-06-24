@@ -105,15 +105,4 @@ section {
   margin: 12px 24px 0 6px;
 }
 
-/* animate page transitions */
-section.au-enter-active {
-  -webkit-animation: fadeInRight 1s;
-  animation: fadeInRight 1s;
-}
-
-div.au-stagger {
-  /* 50ms will be applied between each successive enter operation */
-  -webkit-animation-delay: 50ms;
-  animation-delay: 50ms;
-}
 

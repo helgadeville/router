@@ -13,7 +13,7 @@
     </head>
 
     <body>
-        <div id="overlay-main" class="overlay noshow">
+        <div id="overlay-main" class="overlay">
             <div class="overlay-box">
                 <div class="overlay-box-content">
                     <div class="overlay-box-content-inside">
@@ -31,13 +31,8 @@
             </div>
         </div>
         <div aurelia-app="main">
-            <div class="splash">
-                <div class="message">AuRoutelia is loading...</div>
-                <i class="fa fa-spinner fa-spin"></i>
-            </div>
             <script src="jspm_packages/system.js"></script>
             <script src="config.js"></script>
-            <script src="jspm_packages/npm/bluebird@3.4.1/js/browser/bluebird.min.js"></script>
             <script>
                 System.import('aurelia-bootstrapper');
             </script>

@@ -3,19 +3,17 @@ import {inject} from 'aurelia-framework';
 import {Prompt} from 'modal/basic';
 import {HttpClient} from 'aurelia-http-client';
 import {Overlay} from 'overlay/overlay'
-import {Router} from 'aurelia-router';
 
-@inject(HttpClient,DialogService,Overlay,Router)
+@inject(HttpClient,DialogService,Overlay)
 
 export class Reboot {
     
   heading = 'Reboot the system';
   
-  constructor(httpClient, dialogService,overlay,router) {
+  constructor(httpClient, dialogService,overlay) {
       this.http = httpClient;
       this.dialogService = dialogService;
       this.overlay = overlay;
-      this.router = router;
   }
   
   reboot() {
@@ -34,12 +32,8 @@ export class Reboot {
                      } else {
                          window.clearInterval(me.ival);
                          me.overlay.close();
-                         console.log('navigate to main page');
-                         me.router.navigate('/');
-                         // force refresh
-                         window.setTimeout(function() {
-                             location.reload(true);
-                         }, 100);
+                         console.log('reload');
+                         window.location.href = window.location.origin;
                      }
                  }, 500);
              }).catch(error => {
