@@ -91,22 +91,24 @@ section {
 }
 
 .modal-span {
+	white-space: pre-line;
 	margin-left: 10px;
 	font-size: larger;
+	text-align: center;
 }
 
-.message-info-red {
-	color: lightred;
+.message-error-red {
+	color: red;
 }
 
-.message-info-green {
-    color: lightgreen;
+.message-question-green {
+    color: green;
 }
 
 .message-info-blue {
-    color: lightblue;
+    color: blue;
 }
 
-.message-info-orange {
+.message-warning-orange {
     color: orangered;
 }

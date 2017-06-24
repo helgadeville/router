@@ -3,8 +3,18 @@
         <ai-dialog-body>
             <div class="modal-message">
                 <div>
-                    <i class="${iconClass} modal-icon"></i>
-                    <span class="modal-span">${message}</span>
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="${iconClass} modal-icon"></i>
+                            </td>
+                            <td>
+                                <div class="modal-span">
+                                    <span>${message}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 	        </div>
         </ai-dialog-body>
@@ -12,8 +22,9 @@
         <ai-dialog-footer>
             <div class="modal-footer">
                 <button repeat.for="btn of buttons"
+                    name="${btn.name}"
                     class="${btn.clazz}"
-                    click.trigger="click('${btn.name}')"
+                    click.delegate="click($event)"
                 >${btn.text}</button>
 	        </div>
         </ai-dialog-footer>

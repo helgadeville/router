@@ -1,0 +1,34 @@
+<template>
+  <section class="">
+    <div class="halign">
+        <h2>${heading}</h2>
+    </div>
+    <form role="form" submit.delegate="submit()">
+        <div class="form-group">
+            <label for="enabled">Wireless Access Point Enabled</label>
+            <input type="checkbox" value.bind="enabled" class="form-control" id="enabled">
+        </div>
+        <div class="form-group">
+            <label for="oldSsid">Current SSID name</label>
+            <input type="text" value.bind="oldSsid" class="form-control" id="oldSsid" disabled="disabled">
+        </div>
+        <div class="form-group">
+            <label for="newSsid">New SSID name</label>
+            <input type="text" value.bind="newSsid" class="form-control" id="newSsid">
+        </div>
+        <div class="form-group">
+            <label for="oldPassword">Current Password</label>
+            <input type="text" value.bind="oldPassword" class="form-control" id="oldPassword" disabled="disabled">
+            <span><small>* WPA/WPA2 is the only allowed mode of operation</small></span>
+        </div>
+        <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="text" value.bind="newPassword" class="form-control" id="newPassword">
+            <span><small>* password is minimum 8 characters</small></span>
+        </div>
+        <div class="halign">
+            <button type="submit" class="btn btn-danger" disabled.bind="!newIp || !check(newIp) || newIp === oldIp">SAVE SETTINGS</button>
+        </div>
+    </form>
+  </section>
+</template>

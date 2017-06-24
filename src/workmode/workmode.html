@@ -1,3 +1,21 @@
 <template>
-    <span>WORK MODE</span>
+  <section class="">
+    <div class="halign">
+        <h2>${heading}</h2>
+    </div>
+    <form role="form" submit.delegate="submit()">
+        <div class="form-group">
+            <label for="oldIp">Current router IP Address</label>
+            <input type="text" value.bind="oldIp" class="form-control" id="oldIp" disabled="disabled">
+        </div>
+        <div class="form-group">
+            <label for="newIp">New router IP Address</label>
+            <input type="text" value.bind="newIp" class="form-control" id="newIp">
+            <span><small>* new IP address must not be the same as old IP address</small></span>
+        </div>
+        <div class="halign">
+            <button type="submit" class="btn btn-danger" disabled.bind="!newIp || !check(newIp) || newIp === oldIp">CHANGE LAN IP ADDRESS</button>
+        </div>
+    </form>
+  </section>
 </template>

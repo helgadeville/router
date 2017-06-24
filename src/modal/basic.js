@@ -28,15 +28,15 @@ export class Prompt {
                 if (!config.btn) config.btn = [ 'ok' ];
                 break;
             case 'error':
-                this.iconClass = 'fa fa-exclamation-circle fa-4x message-info-red';
+                this.iconClass = 'fa fa-exclamation-circle fa-4x message-error-red';
                 if (!config.btn) config.btn = [ 'ok' ];
                 break;
             case 'question':
-                this.iconClass = 'fa fa-question-circle fa-4x message-info-green';
+                this.iconClass = 'fa fa-question-circle fa-4x message-question-green';
                 if (!config.btn) config.btn = [ 'yes', 'no' ];
                 break;
             case 'warning':
-                this.iconClass = 'fa fa-exclamation-triangle fa-4x message-info-orange';
+                this.iconClass = 'fa fa-exclamation-triangle fa-4x message-warning-orange';
                 if (!config.btn) config.btn = [ 'ok', 'cancel' ];
                 break;
         }
@@ -128,13 +128,14 @@ export class Prompt {
         this.buttons = buttons;
    }
    
-   click(name) {
-       for(var btn in this.buttons) {
-           if (btn.name === name) {
+   click($event) {
+       for(var btnn in this.buttons) {
+           var btn = this.buttons[btnn];
+           if (btn.name === $event.currentTarget.name) {
                if (btn.cancel) {
-                   controller.cancel();
+                   this.controller.cancel();
                } else {
-                   controller.ok(btn.name);
+                   this.controller.ok(btn.name);
                }
            }
        }
