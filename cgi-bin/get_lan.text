@@ -1,0 +1,15 @@
+lan=interface
+lan.type='bridge'
+lan.ifname='eth0'
+lan.proto='static'
+lan.netmask='255.255.255.0'
+lan.ip6assign='60'
+lan.ipaddr='10.10.10.10'
+dhcp-lan=dhcp
+dhcp-lan.interface='lan'
+dhcp-lan.start='100'
+dhcp-lan.limit='150'
+dhcp-lan.leasetime='12h'
+dhcp-lan.dhcpv6='server'
+dhcp-lan.ra='server'
+dhcp-lan.dhcp_option='6,10.10.10.10'

@@ -4,7 +4,7 @@ import {HttpClient} from 'aurelia-http-client';
 @inject(HttpClient)
 
 export class FormEncoder {
-    
+
     constructor(http) {
         this.http = http;
     }
@@ -21,11 +21,12 @@ export class FormEncoder {
     }
     
     submit(url, data) {
-        return this.http.createRequest(url)
-            .withHeader('Content-Type', 'application/x-www-form-urlencoded')
-            .asPost()
-            .withContent(this.encode(data))
-            .send();
+        let rq = this.http.createRequest(url);
+        let enc = this.encode(data);
+        rq.withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        rq.asPost();
+        rq.withContent(enc);
+        return rq.send();
     }
     
 }

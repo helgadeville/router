@@ -1,21 +1,62 @@
 <template>
-  <section class="">
-    <div class="halign">
-        <h2>${heading}</h2>
-    </div>
-    <form role="form" submit.delegate="submit()">
-        <div class="form-group">
-            <label for="oldIp">Current router IP Address</label>
-            <input type="text" value.bind="oldIp" class="form-control" id="oldIp" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="newIp">New router IP Address</label>
-            <input type="text" value.bind="newIp" class="form-control" id="newIp">
-            <span><small>* new IP address must not be the same as old IP address</small></span>
-        </div>
-        <div class="halign">
-            <button type="submit" class="btn btn-danger" disabled.bind="!newIp || !check(newIp) || newIp === oldIp">CHANGE LAN IP ADDRESS</button>
-        </div>
-    </form>
-  </section>
+    <section class="">
+	    <div class="halign">
+	        <h2>${heading}</h2>
+	    </div>
+	    <div repeat.for="lan of lans" class="div-border">
+	        <form role="form" submit.delegate="submit($event)" name="${lan['#']}">
+		        <div class="form-group">
+		            <label class="width100 halign label-border"><small>${lan.ifname}</small></label>
+		        </div>
+		        <div class="form-group">
+		            <label for="oldIp${lan['#']}">Current LAN IP Address</label>
+		            <input type="text" value.bind="lan.ipaddr" class="form-control" id="oldIp${lan['#']}" disabled="disabled">
+		        </div>
+		        <div class="form-group">
+		            <label for="newIp${lan['#']}">New LAN IP Address</label>
+		            <input type="text" value.bind="lan.newIpaddr" class="form-control" id="newIp${lan['#']}">
+		            <ul>
+    		            <li><span><small>new IP address must not be the same as old IP address</small></span></li>
+    		            <li if.bind="lan.dhcp"><span><small>new IP address must not fall between DHCP start and stop addresses</small></span></li>
+    		        </ul>
+		        </div>
+		        <div class="form-group div-border" if.bind="lan.dhcp">
+			        <div class="width100">
+	                    <label class="width100 halign label-border"><small>DHCP Server</small></label>
+	                </div>
+		            <table class="width100">
+		                <tr class="width100">
+                            <td>
+                                <label for="dhcpStart${lan['#']}">DHCP first IP address</label>
+                                <input type="number" value.bind="lan.dhcp.start" class="form-control" id="dhcpStart${lan['#']}" disabled="disabled" />
+                            </td>
+                            <td>
+                                <label for="dhcpStop${lan['#']}">DHCP last IP address</label>
+                                <input type="number" value.bind="lan.dhcp.stop" class="form-control" id="dhcpStop${lan['#']}" disabled="disabled" />
+                            </td>
+                        </tr>
+		                <tr class="width100">
+		                    <td>
+    		                    <label for="newDhcpStart${lan['#']}">New DHCP first IP address</label>
+                                <input type="number" min="1" max="254" value.bind="lan.dhcp.newStart" class="form-control" id="newDhcpStart${lan['#']}" />
+                                <ul>
+                                    <li><span><small>first DHCP must be higher than 0 and lower than first DHCP</small></span></li>
+                                </ul>
+		                    </td>
+		                    <td>
+		                        <label for="newDhcpStop${lan['#']}">New DHCP last IP address</label>
+                                <input type="number" min="1" max="254" value.bind="lan.dhcp.newStop" class="form-control" id="newDhcpStop${lan['#']}"/>
+                                <ul>
+                                    <li><span><small>last DHCP must be higher than first DHCP and lower than 255</small></span></li>
+                                </ul>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		        <div class="halign">
+		            <button type="submit" class="btn btn-danger" disabled.bind="!lan.newIpaddr || !check(lan.newIpaddr, lan.dhcp.newStart, lan.dhcp.newStop) || lan.newIpaddr === lan.ipaddr">CHANGE LAN IP ADDRESS</button>
+		        </div>
+	        </form>
+	    </div>
+    </section>
 </template>

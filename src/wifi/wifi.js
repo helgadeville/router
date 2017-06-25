@@ -66,7 +66,7 @@ export class Wireless {
             var iface = ifaces[i];
             for(var j = 0 ; j < devices.length ; j++) {
                 var dev = devices[j];
-                if (dev.name === iface.device) {
+                if (dev['#'] === iface.device) {
                     iface.devicename = iface.device;
                     iface.device = dev;
                     ret.push(iface);
@@ -77,12 +77,33 @@ export class Wireless {
         return ret;
     }
     
-    submit() {
+    submit($event) {
+        var dev = $event.currentTarget.name;
+        if (!dev) {
+            console.log('Error: no wifi name detected');
+            return;
+        }
+        var wifi = null;
+        for(var i = 0 ; i < this.wifis.length ; i++) {
+            if (this.wifis[i]['#'] === dev) {
+                wifi = this.wifis[i];
+                break;
+            }
+        }
+        if (!wifi) {
+            console.log('Error: unknown wifi referenced');
+            return;
+        }
         let dlg = this.dialogService.warning('You are about to change wireless mode.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
-                // TODO
                 let data = {
+                    device: wifi.devicename,
+                    iface: wifi['#'],
+                    ssid: wifi.newSsid,
+                    key: wifi.newKey,
+                    channel: wifi.device.newChannel,
+                    disabled: wifi.device.enabled ? '0' : '1'
                 };
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_wireless.json', data)
@@ -90,7 +111,19 @@ export class Wireless {
                         this.overlay.close();
                         if (response.content.status === "0") {
                             console.log('Router wireless set');
-                            // TODO
+                            var me = this;
+                            this.overlay.open('Network is reloading', true);
+                            this.v = 0;
+                            this.ival = window.setInterval(function() {
+                                if (++me.v <= 100) {
+                                    me.overlay.setPercent(me.v);
+                                } else {
+                                    window.clearInterval(me.ival);
+                                    me.overlay.close();
+                                    console.log('reload');
+                                    window.location.reload(true);
+                                }
+                            }, 50);
                         } else {
                             console.log('Error setting router wireless');
                             this.dialogService.error('Ooops ! Error occured:\n' + response.message);

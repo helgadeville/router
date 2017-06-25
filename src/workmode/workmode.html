@@ -11,7 +11,9 @@
         <div class="form-group">
             <label for="newIp">New router IP Address</label>
             <input type="text" value.bind="newIp" class="form-control" id="newIp">
-            <span><small>* new IP address must not be the same as old IP address</small></span>
+            <ul>
+                <li><span><small>new IP address must not be the same as old IP address</small></span></li>
+            </ul>
         </div>
         <div class="halign">
             <button type="submit" class="btn btn-danger" disabled.bind="!newIp || !check(newIp) || newIp === oldIp">CHANGE LAN IP ADDRESS</button>

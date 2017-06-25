@@ -4,7 +4,7 @@
             <h2>${heading}</h2>
         </div>
         <div repeat.for="wifi of wifis" class="div-border">
-		    <form role="form" submit.delegate="submit()">
+		    <form role="form" submit.delegate="submit($event)" name="${wifi['#']}">
 		        <div class="form-group">
 		          <label class="width100 halign label-border"><small>${wifi.devicename}</small></label>
 		        </div>
@@ -12,34 +12,34 @@
 		            <label><input type="checkbox" checked.bind="wifi.device.enabled" />&nbsp;Wireless Access Point Enabled</label>
 		        </div>
 		        <div class="form-group">
-		            <label for="oldChannel${wifi.name}">Current channel</label>
-                    <input type="text" value.bind="wifi.device.channel" class="form-control" id="oldChannel${wifi.name}" disabled="disabled" />
+		            <label for="oldChannel${wifi['#']}">Current channel</label>
+                    <input type="text" value.bind="wifi.device.channel" class="form-control" id="oldChannel${wifi['#']}" disabled="disabled" />
                 </div>
                 <div class="form-group">
-                    <label for="newChannel${wifi.name}">New channel assignment:&nbsp;</label>
-                    <select value.bind="wifi.device.newChannel" id="newChannel${wifi.name}">
+                    <label for="newChannel${wifi['#']}">New channel assignment:&nbsp;</label>
+                    <select value.bind="wifi.device.newChannel" id="newChannel${wifi['#']}">
 				        <option repeat.for="channel of channels"
                                 value="${channel}" model.bind="channel">${channel}</option>
                     </select>
                 </div>
 		        <div class="form-group">
-		            <label for="oldSsid${wifi.name}">Current SSID name</label>
-		            <input type="text" value.bind="wifi.ssid" class="form-control" id="oldSsid${wifi.name}" disabled="disabled" />
+		            <label for="oldSsid${wifi['#']}">Current SSID name</label>
+		            <input type="text" value.bind="wifi.ssid" class="form-control" id="oldSsid${wifi['#']}" disabled="disabled" />
 		        </div>
 		        <div class="form-group">
-		            <label for="newSsid${wifi.name}">New SSID name</label>
-		            <input type="text" value.bind="wifi.newSsid" class="form-control" id="newSsid${wifi.name}"/>
+		            <label for="newSsid${wifi['#']}">New SSID name</label>
+		            <input type="text" value.bind="wifi.newSsid" class="form-control" id="newSsid${wifi['#']}" />
 		        </div>
 		        <div class="form-group">
 		            <label><input type="checkbox" checked.bind="wifi.showPass" />&nbsp;Show Current Password</label>
 		        </div>
 		        <div class="form-group" if.bind="wifi.showPass">
-		            <label for="oldPassword${wifi.name}">Current Password</label>
-		            <input type="text" value.bind="wifi.key" class="form-control" id="oldPassword${wifi.name}" disabled="disabled" />
+		            <label for="oldPassword${wifi['#']}">Current Password</label>
+		            <input type="text" value.bind="wifi.key" class="form-control" id="oldPassword${wifi['#']}" disabled="disabled" />
 		        </div>
 		        <div class="form-group">
-		            <label for="newPassword${wifi.name}">New Password</label>
-		            <input type="text" value.bind="wifi.newKey" class="form-control" id="newPassword${wifi.name}" />
+		            <label for="newPassword${wifi['#']}">New Password</label>
+		            <input type="text" value.bind="wifi.newKey" class="form-control" id="newPassword${wifi['#']}" />
 		            <ul>
 		                <li><span><small>WPA/WPA2 is the only allowed mode of operation</small></span></li>
 		                <li><span><small>password is minimum 8 characters</small></span></li>
@@ -47,7 +47,7 @@
 		        </div>
 		        <div class="halign">
 		            <button type="submit" class="btn btn-danger" 
-		                    disabled.bind="!wifi.newSsid || !wifi.newKey || wifi.newKey.length < 8">SAVE SETTINGS</button>
+		                    disabled.bind="wifi.device.enabled && (!wifi.newSsid || !wifi.newKey || wifi.newKey.length < 8)">SAVE SETTINGS</button>
 		        </div>
 		    </form>
 	   </div>

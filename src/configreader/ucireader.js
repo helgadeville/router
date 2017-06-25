@@ -1,3 +1,8 @@
+/**
+ * Main method of this class is "read" which takes standard openwrt text file
+ * and translates it to an object with properties
+ */
+
 export class UciReader {
 
     read(text) {
@@ -18,7 +23,7 @@ export class UciReader {
                         var dot = key.indexOf('.');
                         if (dot < 0) {
                             obj = key;
-                            name = 'name';
+                            name = '#';
                         } else {
                             obj = key.substring(0, dot);
                             name = key.substring(dot + 1);
@@ -35,11 +40,11 @@ export class UciReader {
         var ret = {};
         for(var name in object) {
             var obj = object[name];
-            var tag = obj.name;
+            var tag = obj['#'];
             if (!ret[tag]) {
                 ret[tag] = [];
             }
-            obj.name = name;
+            obj['#'] = name;
             ret[tag].push(obj);
         }
         return ret;

@@ -46,7 +46,7 @@ export class ConfigReader {
                             object[name] = [];
                         }
                         current = {
-                            name: splt[2]
+                            '#': splt[2]
                         };
                         object[name].push(current);
                     } else
