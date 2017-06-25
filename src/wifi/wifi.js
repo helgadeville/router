@@ -4,19 +4,26 @@ import {Md5ValueConverter} from 'aurelia-utility-converters';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
+import {ConfigReader} from 'configreader/configreader'
 
-@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay)
+@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay,ConfigReader)
+
+/**
+ * A class that displays WIFI config
+ * TODO: rewrite HTML for multiple devices
+ */
 
 export class Wireless {
     
     heading = 'Wireless Access Setup';
     
-    constructor(http, MD5VC, FEC, dialogs, overlay) {
+    constructor(http, MD5VC, FEC, dialogs, overlay, configreader) {
         this.http = http;
         this.MD5VC = MD5VC;
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;
+        this.creader = configreader;
     }
     
     activate() {
@@ -25,61 +32,42 @@ export class Wireless {
             .then(response => {
                 this.overlay.close();
                 // TODO
-                this.decode(response.response);
+                var config = this.creader.read(response.response);
+                // need to rewrite returned object to array
+                var wifis = this.decode(config);
+                // setup new ssid & enabled property
+                for(var i = 0 ; i < wifis.length ; i++) {
+                    wifis[i].newSsid = wifis[i].ssid;
+                    var dev = wifis[i].device;
+                    if (dev && dev.disabled) {
+                        dev.enabled = dev.disabled !== '1';
+                    }
+                }
+                // bind
+                this.wifis = wifis;
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error getting router wireless');
             });
     }
     
-    getWords(line) {
-        var n = line.indexOf(' ');
-        if (n < 0) {
-            n = line.indexOf('\t');
-            if (n < 0) {
-                return;
-            }
-        }
-        var first = line.substring(0, n);
-        line = line.substring(n + 1).trim();
-        n = line.indexOf(' ')
-        if (n < 0) {
-            n = line.indexOf('\t');
-            if (n < 0) {
-                return;
-            }
-        }
-        var second = line.substring(0, n);
-        line = line.substring(n + 1).trim();
-        return [ first, second, line ];
-    }
-    
-    decode(text) {
-        var lines = text.split('\n');
-        var object = {};
-        var name = null;
-        for(var i = 0 ; i < lines.length ; i++) {
-            var line = lines[i].trim();
-            if (line) {
-                var splt = this.getWords(line);
-                if (splt) {
-                    if (splt[0] === 'config') {
-                        name = splt[1];
-                        object[name] = {
-                            name: splt[2]
-                        };
-                    } else
-                    if (splt[0] === 'option') {
-                        if (name) {
-                            object[name][splt[1]] = splt[2];
-                        } else {
-                            console.log('Error: name undefined');
-                        }
-                    }
+    decode(config) {
+        if (!config) return;
+        var devices = config['wifi-device'];
+        var ifaces = config['wifi-iface'];
+        var ret = [];
+        for(var i = 0 ; i < ifaces.length ; i++) {
+            var iface = ifaces[i];
+            for(var j = 0 ; j < devices.length ; j++) {
+                var dev = devices[j];
+                if (dev.name === iface.device) {
+                    iface.device = dev;
+                    ret.push(iface);
+                    break;
                 }
             }
         }
-        return object;
+        return ret;
     }
     
     submit() {

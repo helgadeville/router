@@ -1,34 +1,41 @@
 <template>
-  <section class="">
-    <div class="halign">
-        <h2>${heading}</h2>
-    </div>
-    <form role="form" submit.delegate="submit()">
-        <div class="form-group">
-            <label for="enabled">Wireless Access Point Enabled</label>
-            <input type="checkbox" value.bind="enabled" class="form-control" id="enabled">
-        </div>
-        <div class="form-group">
-            <label for="oldSsid">Current SSID name</label>
-            <input type="text" value.bind="oldSsid" class="form-control" id="oldSsid" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="newSsid">New SSID name</label>
-            <input type="text" value.bind="newSsid" class="form-control" id="newSsid">
-        </div>
-        <div class="form-group">
-            <label for="oldPassword">Current Password</label>
-            <input type="text" value.bind="oldPassword" class="form-control" id="oldPassword" disabled="disabled">
-            <span><small>* WPA/WPA2 is the only allowed mode of operation</small></span>
-        </div>
-        <div class="form-group">
-            <label for="newPassword">New Password</label>
-            <input type="text" value.bind="newPassword" class="form-control" id="newPassword">
-            <span><small>* password is minimum 8 characters</small></span>
-        </div>
+    <section class="">
         <div class="halign">
-            <button type="submit" class="btn btn-danger" disabled.bind="!newIp || !check(newIp) || newIp === oldIp">SAVE SETTINGS</button>
+            <h2>${heading}</h2>
         </div>
-    </form>
-  </section>
+        <div repeat.for="wifi of wifis">
+		    <form role="form" submit.delegate="submit()">
+		        <div class="form-group">
+		            <label><input type="checkbox" checked.bind="wifi.device.enabled" />&nbsp;Wireless Access Point Enabled</label>
+		        </div>
+		        <div class="form-group">
+		            <label for="oldSsid${wifi.name}">Current SSID name</label>
+		            <input type="text" value.bind="wifi.ssid" class="form-control" id="oldSsid${wifi.name}" disabled="disabled" />
+		        </div>
+		        <div class="form-group">
+		            <label for="newSsid${wifi.name}">New SSID name</label>
+		            <input type="text" value.bind="wifi.newSsid" class="form-control" id="newSsid${wifi.name}"/>
+		        </div>
+		        <div class="form-group">
+		            <label><input type="checkbox" checked.bind="wifi.showPass" />&nbsp;Show Current Password</label>
+		        </div>
+		        <div class="form-group" if.bind="wifi.showPass">
+		            <label for="oldPassword${wifi.name}">Current Password</label>
+		            <input type="text" value.bind="wifi.key" class="form-control" id="oldPassword${wifi.name}" disabled="disabled" />
+		        </div>
+		        <div class="form-group">
+		            <label for="newPassword${wifi.name}">New Password</label>
+		            <input type="text" value.bind="wifi.newKey" class="form-control" id="newPassword${wifi.name}" />
+		            <ul>
+		                <li><span><small>WPA/WPA2 is the only allowed mode of operation</small></span></li>
+		                <li><span><small>password is minimum 8 characters</small></span></li>
+		            <ul>
+		        </div>
+		        <div class="halign">
+		            <button type="submit" class="btn btn-danger" 
+		                    disabled.bind="!wifi.newSsid || !wifi.newKey || wifi.newKey.length < 8">SAVE SETTINGS</button>
+		        </div>
+		    </form>
+	   </div>
+    </section>
 </template>
