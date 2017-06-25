@@ -1,16 +1,13 @@
-
-config wifi-device 'radio0'
-    option type 'mac80211'
-    option channel '11'
-    option hwmode '11g'
-    option path 'platform/ar933x_wmac'
-    option htmode 'HT20'
-    option disabled '1'
-
-config wifi-iface 'default_radio0'
-    option device 'radio0'
-    option network 'lan'
-    option mode 'ap'
-    option ssid 'LEDE'
-    option encryption 'none'
-
+radio0=wifi-device
+radio0.type='mac80211'
+radio0.channel='11'
+radio0.hwmode='11g'
+radio0.path='platform/ar933x_wmac'
+radio0.htmode='HT20'
+radio0.disabled='1'
+default_radio0=wifi-iface
+default_radio0.device='radio0'
+default_radio0.network='lan'
+default_radio0.mode='ap'
+default_radio0.ssid='LEDE'
+default_radio0.encryption='none'

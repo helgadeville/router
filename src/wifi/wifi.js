@@ -4,9 +4,9 @@ import {Md5ValueConverter} from 'aurelia-utility-converters';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
-import {ConfigReader} from 'configreader/configreader'
+import {UciReader} from 'configreader/ucireader'
 
-@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay,ConfigReader)
+@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay,UciReader)
 
 /**
  * A class that displays WIFI config
@@ -17,13 +17,13 @@ export class Wireless {
     
     heading = 'Wireless Access Setup';
     
-    constructor(http, MD5VC, FEC, dialogs, overlay, configreader) {
+    constructor(http, MD5VC, FEC, dialogs, overlay, ucireader) {
         this.http = http;
         this.MD5VC = MD5VC;
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;
-        this.creader = configreader;
+        this.creader = ucireader;
     }
     
     activate() {
@@ -31,7 +31,6 @@ export class Wireless {
         return this.http.get('cgi-bin/get_wireless.text')
             .then(response => {
                 this.overlay.close();
-                // TODO
                 var config = this.creader.read(response.response);
                 // need to rewrite returned object to array
                 var wifis = this.decode(config);
@@ -39,11 +38,14 @@ export class Wireless {
                 for(var i = 0 ; i < wifis.length ; i++) {
                     wifis[i].newSsid = wifis[i].ssid;
                     var dev = wifis[i].device;
-                    if (dev && dev.disabled) {
-                        dev.enabled = dev.disabled !== '1';
-                    }
+                    dev.newChannel = dev.channel;
+                    dev.enabled = dev.disabled !== '1';
                 }
                 // bind
+                this.channels = [ 'auto' ];
+                for(var i = 1 ; i <= 13 ; i++) {
+                    this.channels.push(i + '');
+                }
                 this.wifis = wifis;
             }).catch(error => {
                 this.overlay.close();
@@ -55,12 +57,17 @@ export class Wireless {
         if (!config) return;
         var devices = config['wifi-device'];
         var ifaces = config['wifi-iface'];
+        if (!devices || !ifaces) {
+            console.log('Error in configuration');
+            return;
+        }
         var ret = [];
         for(var i = 0 ; i < ifaces.length ; i++) {
             var iface = ifaces[i];
             for(var j = 0 ; j < devices.length ; j++) {
                 var dev = devices[j];
                 if (dev.name === iface.device) {
+                    iface.devicename = iface.device;
                     iface.device = dev;
                     ret.push(iface);
                     break;

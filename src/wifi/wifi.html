@@ -3,11 +3,25 @@
         <div class="halign">
             <h2>${heading}</h2>
         </div>
-        <div repeat.for="wifi of wifis">
+        <div repeat.for="wifi of wifis" class="div-border">
 		    <form role="form" submit.delegate="submit()">
+		        <div class="form-group">
+		          <label class="width100 halign label-border"><small>${wifi.devicename}</small></label>
+		        </div>
 		        <div class="form-group">
 		            <label><input type="checkbox" checked.bind="wifi.device.enabled" />&nbsp;Wireless Access Point Enabled</label>
 		        </div>
+		        <div class="form-group">
+		            <label for="oldChannel${wifi.name}">Current channel</label>
+                    <input type="text" value.bind="wifi.device.channel" class="form-control" id="oldChannel${wifi.name}" disabled="disabled" />
+                </div>
+                <div class="form-group">
+                    <label for="newChannel${wifi.name}">New channel assignment:&nbsp;</label>
+                    <select value.bind="wifi.device.newChannel" id="newChannel${wifi.name}">
+				        <option repeat.for="channel of channels"
+                                value="${channel}" model.bind="channel">${channel}</option>
+                    </select>
+                </div>
 		        <div class="form-group">
 		            <label for="oldSsid${wifi.name}">Current SSID name</label>
 		            <input type="text" value.bind="wifi.ssid" class="form-control" id="oldSsid${wifi.name}" disabled="disabled" />
