@@ -1,9 +1,123 @@
 <template>
-  <section class="">
-      <h1>${name}</h1>
-      <h1>${date}</h1>
-    <h2>${heading}</h2>
-    <div>
-    </div>
-  </section>
+	<section class="">
+	    <div class="halign">
+            <h2>${heading}</h2>
+        </div>
+        <div class="div-border">
+            <div>
+	            <table class="width100">
+	                <tr class="width100">
+	                    <td>
+	                        <span>Machine:</span>
+	                    </td>
+	                    <td>
+	                        <span>System:</span>
+	                    </td>
+	                    <td>
+	                        <span>Cpu:</span>
+	                    </td>
+	                </tr>
+	                <tr class="width100">
+	                    <td>
+	                        <input class="form-control" value.bind="system.machine" disabled="disabled" />
+	                    </td>
+	                    <td>
+	                        <input class="form-control" value.bind="system.system" disabled="disabled" />
+	                    </td>
+	                    <td>
+	                        <input class="form-control" value.bind="system.cpu" disabled="disabled" />
+	                    </td>
+	                </tr>
+	            </table>
+	        </div>
+            <div>
+                <table class="width100">
+                    <tr class="width100">
+                        <td>
+                            <span>Date:</span>
+                        </td>
+                        <td>
+                            <span>Uptime:</span>
+                        </td>
+                    </tr>
+                    <tr class="width100">
+                        <td>
+                            <input class="form-control" value.bind="system.date" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input class="form-control" value.bind="system.up" disabled="disabled" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="width100">
+                    <tr class="width100">
+                        <td class="width50">
+                            <span>Internet status:</span>
+                        </td>
+                        <td class="width50">
+                            <span>Workmode:</span>
+                        </td>
+                    </tr>
+                    <tr class="width100">
+                        <td class="width50 halign">
+                            <div>
+                                <i if.bind="system.internet === 'online'" class="fa fa-cog fa-spin fa-2x color-green valign"></i>
+                                <i if.bind="system.internet === 'offline'" class="fa fa-close fa-2x color-red valign"></i>
+                            </div>
+                        </td>
+                        <td class="width50 halign">
+                            <div>
+                                <i if.bind="system.workmode.indexOf('wired') >= 0"
+                                   data-toggle="tooltip" title="Wired client"
+                                   class="fa fa-plug fa-2x color-gray valign"></i>
+                                <i if.bind="system.workmode.indexOf('client') >= 0"
+                                   data-toggle="tooltip" title="Wireless client"
+                                   class="fa fa-random fa-2x color-gray valign"></i>
+                                <i if.bind="system.workmode.indexOf('access-point') >= 0"
+                                   data-toggle="tooltip" title="Wireless access point"
+                                   class="fa fa-wifi fa-2x color-gray valign"></i>
+                                <button class="btn btn-danger" click.delegate="workmode()">CHANGE</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="width100">
+                    <tr class="width100">
+                        <td class="width50">
+                            <span>Wireless:</span>
+                        </td>
+                        <td class="width50">
+                            <span>VPN:</span>
+                        </td>
+                    </tr>
+                    <tr class="width100">
+                        <td class="width50 halign">
+                            <div>
+                                <i if.bind="system.wireless === 'enabled'" class="fa fa-wifi fa-2x color-green valign"></i>
+                                <i if.bind="system.wireless === 'disabled'" class="fa fa-close fa-2x color-red valign"></i>
+                                <button if.bind="system.wireless === 'disabled'" class="btn btn-success" click.delegate="wifi(true)">ENABLE</button>
+                                <button if.bind="system.wireless === 'enabled'" class="btn btn-danger" click.delegate="wifi(false)">DISABLE</button>
+                            </div>                        
+                        </td>
+                        <td class="width50 halign">
+                            <div>
+	                            <i if.bind="system.VPN === 'up'" class="fa fa-lock fa-2x color-green valign"></i>
+	                            <i if.bind="system.VPN === 'starting'" class="fa fa-refresh fa-spin fa-2x color-blue valign"></i>
+	                            <i if.bind="system.VPN === 'stopping'" class="fa fa-moon-o fa-2x color-gray valign"></i>
+	                            <i if.bind="system.VPN === 'down'" class="fa fa-unlock fa-2x color-red valign"></i>
+	                            <i if.bind="system.VPN === 'error'" class="fa fa-exclamation-circle fa-2x color-yellow valign"></i>
+		                        <button if.bind="system.VPN === 'down'" class="btn btn-success" click.delegate="vpn(true)">START VPN</button>
+		                        <button if.bind="system.VPN === 'up'" class="btn btn-danger" click.delegate="vpn(false)">STOP VPN</button>
+		                        <button if.bind="system.VPN === 'error'" class="btn btn-warning" click.delegate="vpnrestart()">RESTART VPN</button>
+		                    </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+	</section>
 </template>

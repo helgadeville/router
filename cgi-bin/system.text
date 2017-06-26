@@ -1,0 +1,21 @@
+     _________
+    /        /\      _    ___ ___  ___
+   /  LE    /  \    | |  | __|   \| __|
+  /    DE  /    \   | |__| _|| |) | _|
+ /________/  LE  \  |____|___|___/|___|                      lede-project.org
+ \        \   DE /
+  \    LE  \    /  -----------------------------------------------------------
+   \  DE    \  /    Reboot (17.01.2, r3435-65eec8bd5f)
+    \________\/    -----------------------------------------------------------
+
+             total       used       free     shared    buffers     cached
+Mem:         28176      19708       8468         20       1720       4044
+-/+ buffers/cache:      13944      14232
+Swap:        65532       4788      60744
+
+Filesystem                Size      Used Available Use% Mounted on
+/dev/root                 2.3M      2.3M         0 100% /rom
+tmpfs                    13.8M    212.0K     13.6M   2% /tmp
+/dev/sda1                 7.3G    108.3M      6.8G   2% /overlay
+overlayfs:/overlay        7.3G    108.3M      6.8G   2% /
+tmpfs                   512.0K         0    512.0K   0% /dev

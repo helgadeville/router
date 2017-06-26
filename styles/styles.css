@@ -55,8 +55,16 @@ ux-dialog-overlay {
 	text-align: center;
 }
 
+.valign {
+	vertical-align: middle;
+}
+
 .width100 {
 	width: 100%;
+}
+
+.width50 {
+	width: 50%;
 }
 
 .page-host {
@@ -99,6 +107,34 @@ section {
 	margin-left: 10px;
 	font-size: larger;
 	text-align: center;
+}
+
+.color-white {
+	color: white;
+}
+
+.color-black {
+    color: black;
+}
+
+.color-gray {
+	color: gray;
+}
+
+.color-red {
+    color: red;
+}
+
+.color-green {
+    color: green;
+}
+
+.color-blue {
+    color: blue;
+}
+
+.color-yellow {
+    color: orangered;
 }
 
 .message-error-red {

@@ -101,10 +101,12 @@ export class Wireless {
                     device: wifi.devicename,
                     iface: wifi['#'],
                     ssid: wifi.newSsid,
-                    key: wifi.newKey,
                     channel: wifi.device.newChannel,
                     disabled: wifi.device.enabled ? '0' : '1'
                 };
+                if (wifi.device.enabled) {
+                    data.key = wifi.newKey;
+                }
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_wireless.json', data)
                     .then(response => {
@@ -123,7 +125,7 @@ export class Wireless {
                                     console.log('reload');
                                     window.location.reload(true);
                                 }
-                            }, 50);
+                            }, 60);
                         } else {
                             console.log('Error setting router wireless');
                             this.dialogService.error('Ooops ! Error occured:\n' + response.message);

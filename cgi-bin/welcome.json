@@ -1,0 +1,10 @@
+{
+"system":"Atheros AR9330 rev 10",
+"machine":"TP-LINK TL-MR3220 v2",
+"cpu":"MIPS 24Kc V7.4",
+"up":" 06:08:48 up 2 days, 13:21,  load average: 0.00, 0.00, 0.00",
+"date":"Mon Jun 26 06:08:48 UTC 2017",
+"internet":"online",
+"wireless":"disabled",
+"workmode":"wired access-point",
+"VPN":"down"}

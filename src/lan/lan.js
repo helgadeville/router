@@ -117,7 +117,7 @@ export class LAN {
                                     var newURL = window.location.protocol + "//" + newIp + "/" + window.location.hash;
                                     window.location.href = newURL;
                                 }
-                            }, 100);
+                            }, 200);
                         } else {
                             console.log('Error setting router LAN');
                             this.dialogService.error('Ooops ! Error occured:\n' + response.message);
