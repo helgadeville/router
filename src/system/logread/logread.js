@@ -11,6 +11,10 @@ export class LogRead {
     }
     
     activate() {
+        this.refresh();   
+    }
+    
+    refresh() {
         this.overlay.open();
         this.http.get('cgi-bin/logread.text')
         .then(response => {
@@ -19,7 +23,7 @@ export class LogRead {
         }).catch(error => {
             this.overlay.close();
             console.log('Error getting logread');
-        });    
+        });  
     }
     
 }

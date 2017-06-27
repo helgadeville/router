@@ -15,7 +15,7 @@ import {UciReader} from 'configreader/ucireader'
 
 export class Wireless {
     
-    heading = 'Wireless Access Setup';
+    heading = 'Wireless Access Point';
     
     constructor(http, MD5VC, FEC, dialogs, overlay, ucireader) {
         this.http = http;
@@ -33,20 +33,19 @@ export class Wireless {
                 this.overlay.close();
                 var config = this.creader.read(response.response);
                 // need to rewrite returned object to array
-                var wifis = this.decode(config);
-                // setup new ssid & enabled property
-                for(var i = 0 ; i < wifis.length ; i++) {
-                    wifis[i].newSsid = wifis[i].ssid;
-                    var dev = wifis[i].device;
-                    dev.newChannel = dev.channel;
-                    dev.enabled = dev.disabled !== '1';
+                var devices = this.decode(config);
+                // setup new properties as old ones
+                for(var i = 0 ; i < devices.length ; i++) {
+                    var device = devices[i];
+                    device.enabled = !device.disabled;
+                    for(var j = 0 ; j < device.interfaces.length ; j++) {
+                        var wifi = device.interfaces[j];
+                        wifi.devicename = device['#'];
+                        wifi.enabled = !wifi.disabled;
+                    }
                 }
                 // bind
-                this.channels = [ 'auto' ];
-                for(var i = 1 ; i <= 13 ; i++) {
-                    this.channels.push(i + '');
-                }
-                this.wifis = wifis;
+                this.devices = devices;
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error getting router wireless');
@@ -61,37 +60,98 @@ export class Wireless {
             console.log('Error in configuration');
             return;
         }
-        var ret = [];
-        for(var i = 0 ; i < ifaces.length ; i++) {
-            var iface = ifaces[i];
-            for(var j = 0 ; j < devices.length ; j++) {
-                var dev = devices[j];
-                if (dev['#'] === iface.device) {
-                    iface.devicename = iface.device;
-                    iface.device = dev;
-                    ret.push(iface);
-                    break;
+        for(var i = 0 ; i < devices.length ; i++) {
+            var device = devices[i];
+            device.interfaces = [];
+            device.channels = device.channels.split(',');
+            device.channels.unshift('auto');
+            device.channels.unshift('do not change');
+            for(var j = 0 ; j < ifaces.length ; j++) {
+                var iface = ifaces[j];
+                if (device['#'] == iface.device) {
+                    device.interfaces.push(iface);
                 }
             }
         }
-        return ret;
+        return devices;
+    }
+    
+    radio($event) {
+        var name = $event.currentTarget.name;
+        if (!name) {
+            console.log('Error: no device name detected');
+            return;
+        }
+        var device = null;
+        for(var i = 0 ; i < this.devices.length ; i++) {
+            if (this.devices[i]['#'] == name) {
+                device = this.devices[i];
+                break;
+            }
+        }
+        if (!device) {
+            console.log('Error: no device detected.');
+            return;
+        }
+        let dlg = this.dialogService.warning('You are about to change device mode.\nAre you sure ?');
+        dlg.whenClosed(result => {
+            if (!result.wasCancelled) {
+                let data = {
+                    device: device['#'],
+                    disabled: device.enabled ? '0' : '1'
+                };
+                if (device.newChannel && device.newChannel != 'do not change') {
+                    data.newChannel = device.newChannel;
+                }
+                this.overlay.open();
+                this.FEC.submit('cgi-bin/set_radio.json', data)
+                    .then(response => {
+                        this.overlay.close();
+                        if (response.content.status === "0") {
+                            console.log('Router wireless set');
+                            var me = this;
+                            this.overlay.open('Network is reloading', true);
+                            this.v = 0;
+                            this.ival = window.setInterval(function() {
+                                if (++me.v <= 100) {
+                                    me.overlay.setPercent(me.v);
+                                } else {
+                                    window.clearInterval(me.ival);
+                                    me.overlay.close();
+                                    console.log('reload');
+                                    window.location.reload(true);
+                                }
+                            }, 60);
+                        } else {
+                            console.log('Error setting router radio');
+                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        }
+                    }).catch(error => {
+                        this.overlay.close();
+                        console.log('Error setting router radio');
+                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                    });
+            }
+        });
     }
     
     submit($event) {
-        var dev = $event.currentTarget.name;
-        if (!dev) {
+        var name = $event.currentTarget.name;
+        if (!name) {
             console.log('Error: no wifi name detected');
             return;
         }
         var wifi = null;
-        for(var i = 0 ; i < this.wifis.length ; i++) {
-            if (this.wifis[i]['#'] === dev) {
-                wifi = this.wifis[i];
-                break;
+        for(var i = 0 ; i < this.devices.length ; i++) {
+            for(var j = 0 ; j < this.devices[i].interfaces.length && !wifi ; j++) {
+                if (this.devices[i].interfaces[j]['#'] == name) {
+                    wifi = this.devices[i].interfaces[j];
+                    break;
+                }
             }
         }
         if (!wifi) {
-            console.log('Error: unknown wifi referenced');
+            console.log('Error: no wifi detected.');
             return;
         }
         let dlg = this.dialogService.warning('You are about to change wireless mode.\nAre you sure ?');
@@ -100,11 +160,12 @@ export class Wireless {
                 let data = {
                     device: wifi.devicename,
                     iface: wifi['#'],
-                    ssid: wifi.newSsid,
-                    channel: wifi.device.newChannel,
-                    disabled: wifi.device.enabled ? '0' : '1'
+                    disabled: wifi.enabled ? '0' : '1'
                 };
-                if (wifi.device.enabled) {
+                if (wifi.newSsid) {
+                    data.ssid = wifi.newSsid;
+                }
+                if (wifi.newKey) {
                     data.key = wifi.newKey;
                 }
                 this.overlay.open();

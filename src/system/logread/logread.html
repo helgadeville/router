@@ -1,6 +1,13 @@
 <template>
     <div>
-        <span>LOGREAD</span><br/>
-        <pre>${logread}</pre>
+        <div class="halign">
+            <span>logread</span><br/>
+            <button  click.delegate="refresh()">
+                <i class="fa fa-refresh fa-2x color-green"></i>
+            </button>
+        </div>
+        <div>
+            <pre>${logread}</pre>
+        </div>
     </div>
 </template>

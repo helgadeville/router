@@ -9,7 +9,7 @@ import {UciReader} from 'configreader/ucireader'
 
 export class LAN {
     
-    heading = 'LAN Address Change Utility';
+    heading = 'LAN Settings';
     
     constructor(http, FEC, dialogs, overlay, ucireader) {
         this.http = http;

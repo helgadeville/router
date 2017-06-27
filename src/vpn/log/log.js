@@ -3,7 +3,9 @@ import {HttpClient} from 'aurelia-http-client';
 import {Overlay} from 'overlay/overlay'
 @inject(HttpClient,Overlay)
 
-export class DMesg {
+export class VpnLog {
+    
+    heading = 'OpenVPN log';
 
     constructor(http, overlay) {
         this.http = http;
@@ -16,13 +18,13 @@ export class DMesg {
     
     refresh() {
         this.overlay.open();
-        this.http.get('cgi-bin/dmesg.text')
+        this.http.get('cgi-bin/vpnlog.text')
         .then(response => {
             this.overlay.close();
             this.logread = response.content;
         }).catch(error => {
             this.overlay.close();
-            console.log('Error getting dmesg');
+            console.log('Error getting openvpn log');
         });   
     }
 }

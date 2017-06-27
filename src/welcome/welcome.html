@@ -62,13 +62,15 @@
                     </tr>
                     <tr class="width100">
                         <td class="width50 halign">
-                            <div>
+                            <div class="div-border">
                                 <i if.bind="system.internet === 'online'" class="fa fa-cog fa-spin fa-2x color-green valign"></i>
                                 <i if.bind="system.internet === 'offline'" class="fa fa-close fa-2x color-red valign"></i>
+                                <span if.bind="system.internet === 'online'">&nbsp;ONLINE</span>
+                                <span if.bind="system.internet === 'offline'">&nbsp;offline</span>
                             </div>
                         </td>
                         <td class="width50 halign">
-                            <div>
+                            <div class="div-border">
                                 <i if.bind="system.workmode.indexOf('wired') >= 0"
                                    data-toggle="tooltip" title="Wired client"
                                    class="fa fa-plug fa-2x color-gray valign"></i>
@@ -88,7 +90,7 @@
                 <table class="width100">
                     <tr class="width100">
                         <td class="width50">
-                            <span>Wireless:</span>
+                            <span>Radio Devices:</span>
                         </td>
                         <td class="width50">
                             <span>VPN:</span>
@@ -96,15 +98,22 @@
                     </tr>
                     <tr class="width100">
                         <td class="width50 halign">
-                            <div>
-                                <i if.bind="system.wireless === 'enabled'" class="fa fa-wifi fa-2x color-green valign"></i>
-                                <i if.bind="system.wireless === 'disabled'" class="fa fa-close fa-2x color-red valign"></i>
-                                <button if.bind="system.wireless === 'disabled'" class="btn btn-success" click.delegate="wifi(true)">ENABLE</button>
-                                <button if.bind="system.wireless === 'enabled'" class="btn btn-danger" click.delegate="wifi(false)">DISABLE</button>
-                            </div>                        
+                            <div class="div-border">
+	                            <div repeat.for="device of system.wireless" class="mini-border">
+	                                <span><small>${device['#']}</small></span>
+	                                <i if.bind="device.state === 'enabled'" class="fa fa-wifi color-green valign"></i>
+	                                <i if.bind="device.state === 'disabled'" class="fa fa-close color-red valign"></i>
+	                                <button if.bind="device.state === 'disabled'"
+	                                        name="${device['#']}"
+	                                        class="btn btn-success btn-xs" click.delegate="wifi($event, true)">ENABLE</button>
+	                                <button if.bind="device.state === 'enabled'" class="btn btn-danger btn-xs" 
+	                                        name="${device['#']}"
+	                                        click.delegate="wifi($event, false)">DISABLE</button>
+	                            </div>
+	                        </div>
                         </td>
                         <td class="width50 halign">
-                            <div>
+                            <div class="div-border">
 	                            <i if.bind="system.VPN === 'up'" class="fa fa-lock fa-2x color-green valign"></i>
 	                            <i if.bind="system.VPN === 'starting'" class="fa fa-refresh fa-spin fa-2x color-blue valign"></i>
 	                            <i if.bind="system.VPN === 'stopping'" class="fa fa-moon-o fa-2x color-gray valign"></i>

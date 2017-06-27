@@ -1,0 +1,127 @@
+client
+dev tun
+proto udp
+# comment unwanted servers, leave no more than 64
+#remote dz1.vyprvpn.com 443
+#remote ar1.vyprvpn.com 443
+#remote au2.vyprvpn.com 443
+#remote au3.vyprvpn.com 443
+#remote au1.vyprvpn.com 443
+remote at1.vyprvpn.com 443
+#remote bh1.vyprvpn.com 443
+remote be1.vyprvpn.com 443
+#remote br1.vyprvpn.com 443
+remote bg1.vyprvpn.com 443
+#remote ca1.vyprvpn.com 443
+#remote co1.vyprvpn.com 443
+#remote cr1.vyprvpn.com 443
+remote cz1.vyprvpn.com 443
+remote dk1.vyprvpn.com 443
+#remote ae1.vyprvpn.com 443
+#remote eg1.vyprvpn.com 443
+#remote sv1.vyprvpn.com 443
+remote fi1.vyprvpn.com 443
+remote fr1.vyprvpn.com 443
+remote de1.vyprvpn.com 443
+remote gr1.vyprvpn.com 443
+#remote hk1.vyprvpn.com 443
+remote is1.vyprvpn.com 443
+remote in1.vyprvpn.com 443
+#remote id1.vyprvpn.com 443
+remote ie1.vyprvpn.com 443
+#remote il1.vyprvpn.com 443
+remote it1.vyprvpn.com 443
+remote jp1.vyprvpn.com 443
+remote lv1.vyprvpn.com 443
+remote li1.vyprvpn.com 443
+remote lt1.vyprvpn.com 443
+remote lu1.vyprvpn.com 443
+remote mo1.vyprvpn.com 443
+remote my1.vyprvpn.com 443
+#remote mv1.vyprvpn.com 443
+#remote mh1.vyprvpn.com 443
+#remote mx1.vyprvpn.com 443
+remote eu1.vyprvpn.com 443
+#remote nz1.vyprvpn.com 443
+remote no1.vyprvpn.com 443
+#remote pk1.vyprvpn.com 443
+#remote pa1.vyprvpn.com 443
+#remote ph1.vyprvpn.com 443
+#remote pl1.vyprvpn.com 443
+remote pt1.vyprvpn.com 443
+#remote qa1.vyprvpn.com 443
+remote ro1.vyprvpn.com 443
+remote ru1.vyprvpn.com 443
+#remote sa1.vyprvpn.com 443
+remote sg1.vyprvpn.com 443
+remote sk1.vyprvpn.com 443
+remote si1.vyprvpn.com 443
+remote kr1.vyprvpn.com 443
+remote es1.vyprvpn.com 443
+remote se1.vyprvpn.com 443
+remote ch1.vyprvpn.com 443
+#remote tw1.vyprvpn.com 443
+#remote th1.vyprvpn.com 443
+remote tr1.vyprvpn.com 443
+remote us3.vyprvpn.com 443
+remote us6.vyprvpn.com 443
+remote us1.vyprvpn.com 443
+remote us4.vyprvpn.com 443
+remote us5.vyprvpn.com 443
+remote us7.vyprvpn.com 443
+remote us8.vyprvpn.com 443
+remote us2.vyprvpn.com 443
+remote ua1.vyprvpn.com 443
+remote uk1.vyprvpn.com 443
+#remote uy1.vyprvpn.com 443
+#remote vn1.vyprvpn.com 443
+resolv-retry 5
+remote-random
+nobind
+persist-key
+persist-tun
+persist-remote-ip
+# since we have many remotes, do NOT verify name
+#verify-x509-name ch1.vyprvpn.com name
+auth-user-pass /etc/openvpn/auth.txt
+comp-lzo
+keepalive 10 60
+verb 3
+auth SHA256
+cipher AES-256-CBC
+tls-cipher TLS-DHE-RSA-WITH-AES-256-CBC-SHA
+log /var/log/openvpn.log
+status /var/log/openvpn-status.log
+script-security 2
+up "/etc/openvpn/upvpn"
+down "/etc/openvpn/downvpn"
+
+<ca>
+-----BEGIN CERTIFICATE-----
+MIIEpDCCA4ygAwIBAgIJANd2Uwt7SabsMA0GCSqGSIb3DQEBBQUAMIGSMQswCQYD
+VQQGEwJLWTEUMBIGA1UECBMLR3JhbmRDYXltYW4xEzARBgNVBAcTCkdlb3JnZVRv
+d24xFzAVBgNVBAoTDkdvbGRlbkZyb2ctSW5jMRowGAYDVQQDExFHb2xkZW5Gcm9n
+LUluYyBDQTEjMCEGCSqGSIb3DQEJARYUYWRtaW5AZ29sZGVuZnJvZy5jb20wHhcN
+MTAwNDA5MjExOTIxWhcNMjAwNDA2MjExOTIxWjCBkjELMAkGA1UEBhMCS1kxFDAS
+BgNVBAgTC0dyYW5kQ2F5bWFuMRMwEQYDVQQHEwpHZW9yZ2VUb3duMRcwFQYDVQQK
+Ew5Hb2xkZW5Gcm9nLUluYzEaMBgGA1UEAxMRR29sZGVuRnJvZy1JbmMgQ0ExIzAh
+BgkqhkiG9w0BCQEWFGFkbWluQGdvbGRlbmZyb2cuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEA37JesfCwOj69el0AmqwXyiUJ2Bm+q0+eR9hYZEk7
+pVoj5dF9RrKirZyCM/9zEvON5z4pZMYjhpzrq6eiLu3j1xV6lX73Hg0dcflweM5i
+qxFAHCwEFIiMpPwOgLV399sfHCuda11boIPE4SRooxUPEju908AGg/i+egntvvR2
+d7pnZl2SCJ1sxlbeAAkYjX6EXmIBFyJdmry1y05BtpdTgPmTlJ0cMj7DlU+2gehP
+ss/q6YYRAhrKtlZwxeunc+RD04ieah+boYU0CBZinK2ERRuAjx3hbCE4b0S6eizr
+QmSuGFNu6Ghx+E1xasyl1Tz/fHgHl3P93Jf0tFov7uuygQIDAQABo4H6MIH3MB0G
+A1UdDgQWBBTh9HiMh5RnRVIt/ktXddiGkDkXBTCBxwYDVR0jBIG/MIG8gBTh9HiM
+h5RnRVIt/ktXddiGkDkXBaGBmKSBlTCBkjELMAkGA1UEBhMCS1kxFDASBgNVBAgT
+C0dyYW5kQ2F5bWFuMRMwEQYDVQQHEwpHZW9yZ2VUb3duMRcwFQYDVQQKEw5Hb2xk
+ZW5Gcm9nLUluYzEaMBgGA1UEAxMRR29sZGVuRnJvZy1JbmMgQ0ExIzAhBgkqhkiG
+9w0BCQEWFGFkbWluQGdvbGRlbmZyb2cuY29tggkA13ZTC3tJpuwwDAYDVR0TBAUw
+AwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAwihrN0QNE19RRvGywBvsYDmzmM5G8ta5
+8yB+02Mzbm0KuVxnPJaoVy4L4WocAnqLeKfmpYWUid1MPwDPtwtQ00U7QmRBRNLU
+hS6Bth1wXtuDvkRoHgymSvg1+wonJNpv/VquNgwt7XbC9oOjVEd9lbUd+ttxzboI
+8P1ci6+I861PylA0DOv9j5bbn1oE0hP8wDv3bTklEa612zzEVnnfgw+ErVnkrnk8
+8fTiv6NZtHgUOllMq7ymlV7ut+BPp20rjBdOCNn2Q7dNCKIkI45qkwHtXjzFXIxz
+Gq3tLVeC54g7XZIc7X0S9avgAE7h9SuRYmsSzvLTtiP1obMCHB5ebQ==
+-----END CERTIFICATE-----
+</ca>

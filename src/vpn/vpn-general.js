@@ -1,21 +1,19 @@
 import {inject} from 'aurelia-framework';
-import {Router} from 'aurelia-router';
 import {HttpClient} from 'aurelia-http-client';
-import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
-@inject(Router, HttpClient, FormEncoder, Dialogs, Overlay)
+@inject(HttpClient, Dialogs, Overlay)
 
-export class Welcome {
-
+export class VpnGeneral {
+    
+    heading = 'General Information';
+    
     skip_poll = false;
     
     poll_freq = 1000;
     
-    constructor(router, http, FEC, dialogs, overlay) {
-        this.router = router;
+    constructor(http, dialogs, overlay) {
         this.http = http;
-        this.FEC = FEC;
         this.dialogs = dialogs;
         this.overlay = overlay;
     }
@@ -49,46 +47,17 @@ export class Welcome {
         if (this.skip_poll) {
             return;
         }
-        return this.http.get('cgi-bin/welcome.json')
+        return this.http.get('cgi-bin/vpnstatus.text')
             .then(response => {
-                this.system = response.content;
+                var txt = response.content;
+                if (txt) {
+                    // first line is status, next are logs
+                    this.VPN = txt.split('\n')[0];
+                    this.log = txt.substring(this.VPN.length + 1);
+                }
             }).catch(error => {
                 console.log('Error getting status');
             });
-    }
-    
-    wifi($event, arg) {
-        var dev = $event.currentTarget.name;
-        let dlg = 
-            this.dialogs.question('Are you sure ?');
-        dlg.whenClosed(result => {
-            if (!result.wasCancelled && result.output === 'yes') {
-                this.skip_poll = true;
-                let data = {
-                    device: dev,
-                    disabled: arg ? '0' : '1'
-                };
-                this.FEC.submit('cgi-bin/set_radio.json', data)
-                .then(response => {
-                    this.overlay.open('Network is reloading', true);
-                    this.v = 0;
-                    this.ival = window.setInterval(function() {
-                        if (++me.v <= 100) {
-                            me.overlay.setPercent(me.v);
-                        } else {
-                            window.clearInterval(me.ival);
-                            me.overlay.close();
-                            console.log('reload');
-                            window.location.reload(true);
-                        }
-                    }, 60);
-                }).catch(error => {
-                    this.skip_poll = false;
-                    console.log('Error setting radio device');
-                    this.dialogs.error('Error during operation.');
-                });
-            }
-        });
     }
     
     vpn(arg) {
@@ -129,9 +98,4 @@ export class Welcome {
         });
     }
     
-    workmode() {
-        this.router.navigate('/workmode');
-    }
-    
 }
-

@@ -1,0 +1,28 @@
+<template>
+    <div>
+        <span>${heading}</span><br/>
+        
+        <div class="halign">
+            <div>
+                <span>VPN status:</span>
+            </div>
+	        <div class="div-border">
+			    <i if.bind="VPN === 'up'" class="fa fa-lock fa-2x color-green valign"></i>
+			    <i if.bind="VPN === 'starting'" class="fa fa-refresh fa-spin fa-2x color-blue valign"></i>
+			    <i if.bind="VPN === 'stopping'" class="fa fa-moon-o fa-2x color-gray valign"></i>
+			    <i if.bind="VPN === 'down'" class="fa fa-unlock fa-2x color-red valign"></i>
+			    <i if.bind="VPN === 'error'" class="fa fa-exclamation-circle fa-2x color-yellow valign"></i>
+			    <button if.bind="VPN === 'down'" class="btn btn-success" click.delegate="vpn(true)">START VPN</button>
+			    <button if.bind="VPN === 'up'" class="btn btn-danger" click.delegate="vpn(false)">STOP VPN</button>
+			    <button if.bind="VPN === 'error'" class="btn btn-warning" click.delegate="vpnrestart()">RESTART VPN</button>
+			</div>
+	    </div>
+        
+        <div class="halign">
+            <span>VPN status log:</span>
+        </div>
+        <div>
+            <pre>${log}</pre>
+        </div>
+    </div>
+</template>

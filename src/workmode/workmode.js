@@ -9,7 +9,7 @@ import {Overlay} from 'overlay/overlay'
 
 export class WorkMode {
     
-    heading = 'Work Mode Setup';
+    heading = 'Internet Source';
     
     constructor(http, MD5VC, FEC, dialogs, overlay) {
         this.http = http;
@@ -24,7 +24,10 @@ export class WorkMode {
         return this.http.get('cgi-bin/get_work_mode.json')
             .then(response => {
                 this.overlay.close();
-                // TODO
+                this.protos = [ 'do not change', 'dhcp', 'static' ];
+                this.selection = response.content.selected;
+                this.wans = response.content.wired;
+                this.radios = response.content.wireless;
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error getting router work mode');

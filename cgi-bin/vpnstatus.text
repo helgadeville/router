@@ -1,0 +1,13 @@
+up
+OpenVPN STATISTICS
+Updated,Tue Jun 27 06:25:14 2017
+TUN/TAP read bytes,761679
+TUN/TAP write bytes,8481913
+TCP/UDP read bytes,9304363
+TCP/UDP write bytes,1298818
+Auth read bytes,8483577
+pre-compress bytes,19484
+post-compress bytes,19718
+pre-decompress bytes,4986
+post-decompress bytes,5647
+END
