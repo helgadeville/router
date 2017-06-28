@@ -59,12 +59,24 @@ ux-dialog-overlay {
 	vertical-align: middle;
 }
 
+.talign {
+	vertical-align: top;
+}
+
 .width100 {
 	width: 100%;
 }
 
 .width50 {
 	width: 50%;
+}
+
+.height0 {
+	height: 0px;
+}
+
+.iblock {
+	display: inline-block;
 }
 
 .page-host {

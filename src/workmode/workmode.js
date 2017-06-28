@@ -1,19 +1,17 @@
 import {inject} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-http-client';
-import {Md5ValueConverter} from 'aurelia-utility-converters';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
 
-@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay)
+@inject(HttpClient,FormEncoder,Dialogs,Overlay)
 
 export class WorkMode {
     
     heading = 'Internet Source';
     
-    constructor(http, MD5VC, FEC, dialogs, overlay) {
+    constructor(http, FEC, dialogs, overlay) {
         this.http = http;
-        this.MD5VC = MD5VC;
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;

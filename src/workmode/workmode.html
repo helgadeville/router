@@ -8,11 +8,15 @@
             <label>WAN Ethernet Port(s)</label>
             <div repeat.for="wan of wans" class="div-border">
                 <div class="form-group">
-                    <label class="width100 halign label-border"><small>${wan.ifname}</small></label>
+                    <div class="width100 halign label-border">
+                        <label><small>${wan.ifname}&nbsp;-&nbsp;</small></label>
+                        <label if.bind="!wan.maximized" click.delegate="wan.maximized=true"><small>click to see details</small></label>
+                        <label if.bind="wan.maximized" click.delegate="wan.maximized=false"><small>click to hide details</small></label>
+                    </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ${ wan.maximized ? '' : 'noshow' }">
                     <table class="width100">
-                        <tr class="width100">
+                        <tr class="width100 talign">
                             <td class="width50">
                                 <div class="mini-border">
 	                                <table class="width100">
@@ -57,7 +61,7 @@
 				                </div>
 			                </td>
                         </tr>
-                        <tr class="width100">
+                        <tr class="width100 talign">
                             <td class="width50">
                                 <div class="mini-border">
 	                                <table class="width100">
@@ -100,21 +104,114 @@
 			        </table>
 	            </div>
 	            <div class="form-group">
-	                <div class="${wan.ifname === $parent.selection ? 'background-lightgreen div-border halign' : 'div-border halign'}">
+	                <div class="div-border halign ${wan.ifname === $parent.selection ? 'background-lightgreen' : ''}">
    	                    <input type="radio" class="bigradio" name="source" value.bind="wan.ifname" checked.bind="$parent.selection">
    	                    <span>&nbsp;Internet Source</span>
 	                </div>
-	            </div>
+		        </div>
 	        </div>
         </div>
         <div class="div-border">
             <label>Radio devices</label>
             <div repeat.for="radio of radios" class="div-border">
                 <div class="form-group">
-                    <label class="width100 halign label-border"><small>${radio.ifname}</small></label>
+                    <div class="width100 halign label-border">
+                        <label><small>${radio.ifname}&nbsp;-&nbsp;</small></label>
+                        <label if.bind="!radio.maximized" click.delegate="radio.maximized=true"><small>click to see details</small></label>
+                        <label if.bind="radio.maximized" click.delegate="radio.maximized=false"><small>click to hide details</small></label>
+                    </div>
+                </div>
+                <div class="form-group ${ radio.maximized ? '' : 'noshow' }">
+                    <table class="width100">
+                        <tr class="width100 talign">
+                            <td class="width50">
+                                <div class="mini-border">
+                                    <table class="width100">
+                                        <tr class="width100">
+                                            <td>
+                                                <label for="oldProto${radio.ifname}">Current IP Assignment</label>
+                                                <input type="text" value.bind="radio.proto" class="form-control" id="oldProto${radio.ifname}" disabled="disabled">
+                                            </td>
+                                        </tr>
+                                        <tr class="width100">
+                                            <td>
+                                                <label for="newProto${radio.ifname}">New IP Assignment</label>
+                                                <div>
+                                                    <select value.bind="radio.newProto" id="newProto${radio.ifname}" class="select-margin">
+                                                        <option repeat.for="proto of $parent.protos"
+                                                                value="${proto}" model.bind="proto">${proto}</option>
+                                                    </select>
+                                                </div>
+                                                <li><span><small>if not sure, use 'dhcp'</small></span></li>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="width50">
+                                <div class="mini-border">
+                                    <table class="width100">
+                                        <tr class="width100">
+                                            <td>
+                                                <label for="oldMac${radio.ifname}">Current MAC</label>
+                                                <input type="text" value.bind="radio.mac" class="form-control" id="oldMac${radio.ifname}" disabled="disabled">
+                                            </td>
+                                        </tr>
+                                        <tr class="width100">
+                                            <td>
+                                                <label for="newMac${radio.ifname}">New MAC</label>
+                                                <input type="text" value.bind="radio.newMac" class="form-control" id="newMac${radio.ifname}">
+                                                <li><span><small>if not sure, leave empty</small></span></li>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="width100 talign">
+                            <td class="width50">
+                                <div class="mini-border">
+                                    <table class="width100">
+                                        <tr class="width100">
+                                            <td>
+                                                <label for="oldIp${radio.ifname}">Current WAN IP Address</label>
+                                                <input type="text" value.bind="radio.ip" class="form-control" id="oldIp${radio.ifname}" disabled="disabled">
+                                            </td>
+                                        </tr>
+                                        <tr  if.bind="radio.newProto === 'static' || (radio.newProto === 'do not change' && radio.proto === 'static')" class="width100">
+                                            <td>
+                                                <label for="newIp${radio.ifname}">New WAN IP Address</label>
+                                                <input type="text" value.bind="radio.newIp" class="form-control" id="newIp${radio.ifname}">
+                                                <li><span><small>new IP address must not be the same as old IP address</small></span></li>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="width50">
+                                <div class="mini-border">
+                                    <table class="width100">
+                                        <tr class="width100">
+                                            <td>
+                                                <label for="oldMask${radio.ifname}">Current WAN Netmask</label>
+                                                <input type="text" value.bind="radio.mask" class="form-control" id="oldMask${radio.ifname}" disabled="disabled">
+                                            </td>
+                                        </tr>
+                                        <tr if.bind="radio.newProto === 'static' || (radio.newProto === 'do not change' && radio.proto === 'static')" class="width100">
+                                            <td>
+                                                <label for="newMask${radio.ifname}">New WAN Netmask</label>
+                                                <input type="text" value.bind="radio.newMask" class="form-control" id="newMask${radio.ifname}">
+                                                <li><span><small>if not sure, leave empty or use 255.255.255.0</small></span></li>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="form-group">
-                    <div class="${radio.ifname === $parent.selection ? 'background-lightgreen div-border halign' : 'div-border halign'}">
+                    <div class="div-border halign ${radio.ifname === $parent.selection ? 'background-lightgreen' : ''}">
 	                    <input disabled="disabled" type="radio" class="bigradio" name="source" value.bind="radio.ifname" checked.bind="$parent.selection">
 	                    <span>&nbsp;Internet Source</span>
 		            </div>
