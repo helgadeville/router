@@ -80,7 +80,7 @@ export class VpnConfigs {
                     }
                 }).catch(error => {
                     this.overlay.close();
-                    console.log('Error setting new VPN config');
+                    console.log('Error setting new VPN configuration');
                     this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
                 });
             }
@@ -101,15 +101,15 @@ export class VpnConfigs {
                 .then(response => {
                     this.overlay.close();
                     if (response.content.status === "0") {
-                        console.log('VPN config removed');
+                        console.log('VPN configuration removed');
                         window.location.reload(true);
                     } else {
-                        console.log('Error removing VPN config');
+                        console.log('Error removing VPN configuration');
                         this.dialogService.error('Ooops ! Error occured:\n' + response.message);
                     }
                 }).catch(error => {
                     this.overlay.close();
-                    console.log('Error removing VPN config');
+                    console.log('Error removing VPN configuration');
                     this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
                 });
             }
@@ -140,12 +140,12 @@ export class VpnConfigs {
                 console.log('VPN config set');
                 window.location.reload(true);
             } else {
-                console.log('Error setting VPN config');
+                console.log('Error setting VPN configuration');
                 this.dialogService.error('Ooops ! Error occured:\n' + response.message);
             }
         }).catch(error => {
             this.overlay.close();
-            console.log('Error setting new VPN config');
+            console.log('Error setting new VPN configuration');
             this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
         });
     }

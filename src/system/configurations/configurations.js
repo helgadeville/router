@@ -68,14 +68,91 @@ export class Configurations {
         // TODO
     }
     
+    download($event) {
+        var name = $event.currentTarget.name;
+        var data = {
+            file : name
+        };
+        this.overlay.open();
+        this.FEC.submit('cgi-bin/get_system_config.json', data)
+        .then(response => {
+            this.overlay.close();
+            // response.response is text, force download
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(response.response));
+            dl.setAttribute('download', name);
+            dl.click();
+        }).catch(error => {
+            this.overlay.close();
+            console.log('Error setting new VPN config');
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+        });
+    }
+    
     restore($event) {
-        var trg = $event ? $event.currentTarget.name : 'default';
-        // TODO: send restore
+        var name = $event.currentTarget.name;
+        let dlg = 
+            this.dialogService.warning('You are about to restore system configration.\nAfter that, router will be rebooted.\nAre you sure ?');
+        dlg.whenClosed(result => {
+            if (!result.wasCancelled) {
+                var name = $event.currentTarget.name;
+                var data = {
+                    file : name
+                };
+                this.overlay.open();
+                this.FEC.submit('cgi-bin/set_system_config.json', data)
+                .then(response => {
+                    this.overlay.close();
+                    if (response.content.status === "0") {
+                        console.log('System configuration restored');
+                        // full reboot required !
+                        var me = this;
+                        this.overlay.open('Router is rebooting', true);
+                        this.v = 0;
+                        this.ival = window.setInterval(function() {
+                            if (++me.v <= 100) {
+                                me.overlay.setPercent(me.v);
+                            } else {
+                                window.clearInterval(me.ival);
+                                me.overlay.close();
+                                console.log('reload');
+                                window.location.href = window.location.origin;
+                            }
+                        }, 500);
+                    } else {
+                        console.log('Error restoring system configuration');
+                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                    }
+                }).catch(error => {
+                    this.overlay.close();
+                    console.log('Error restoring system configuration');
+                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                });
+            }
+        });
     }
     
     remove($event) {
-        var trg = $event.currentTarget.name;
-        // TODO: send remove
+        var name = $event.currentTarget.name;
+        var data = {
+            file : name
+        };
+        this.overlay.open();
+        this.FEC.submit('cgi-bin/remove_system.json', data)
+        .then(response => {
+            this.overlay.close();
+            if (response.content.status === "0") {
+                console.log('System configuration removed');
+                window.location.reload(true);
+            } else {
+                console.log('Error removing system configuration');
+                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+            }
+        }).catch(error => {
+            this.overlay.close();
+            console.log('Error removing system configuration');
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+        });
     }
     
 }
