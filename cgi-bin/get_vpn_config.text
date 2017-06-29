@@ -1,3 +1,5 @@
+#user=ala@ma.kota.pl
+#original-file vyprvpn.ovpn
 client
 dev tun
 proto udp

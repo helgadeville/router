@@ -8,10 +8,11 @@ export class OvpnReader {
     cert = null;
     
     // lines that need to be changed or removed, no space after auth-user-pass here !
-    special = [ 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
+    special = [ 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
     
-    read(txt) {
+    read(txt, fileName) {
         this.original = txt;
+        this.fileName = fileName;
         var lines = txt.split('\n');
         var newLines = [];
         var newCert = [];
@@ -26,8 +27,6 @@ export class OvpnReader {
                     commented = true;
                     line = line.substring(1).trim();
                 }
-                // strip everything that is past the comment NOT at the beginning
-                line.replace(new RegExp('\#.*', 'g'), '');
                 // replace tabs
                 line.replace(new RegExp('\t', 'g'),' ');
                 // make lowercase for easier recognition
@@ -41,8 +40,6 @@ export class OvpnReader {
                     // and skip
                     continue;
                 }
-                // skip commented lines
-                if (commented) continue;
                 // now need to check for special lines
                 var spec = false;
                 for(var j = 0 ; j < lowCase.length ; j++) {
@@ -100,7 +97,10 @@ export class OvpnReader {
                 output += rmt.remote + '\n';
             }
         }
-        // now special lines [ 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
+        // now special lines [ 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
+        if (this.fileName) {
+            output += '#original-file ' + this.fileName + '\n';
+        }
         output += 'auth-user-pass /etc/openvpn/auth.txt\n';
         output += 'log /var/log/openvpn.log\n';
         output += 'status /var/log/openvpn-status.log\n';

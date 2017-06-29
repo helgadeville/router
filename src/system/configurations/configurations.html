@@ -3,20 +3,42 @@
         <span>${heading}</span>
         <form role="form">
             <div class="div-border">
-                <div repeat.for="config of configs" class="mini-border">
-                    <div class="form-group">
-                        <label for="fileName${config.id}">File name:</label>
-                        <input type="text" value.bind="config.name" class="form-control" id="fileName${config.id}" disabled="disabled">
-                    </div>
-                    <div class="form-group">
-                        <label for="desc${config.id}">Description:</label>
-                        <input type="text" value.bind="config.desc" class="form-control" id="desc${config.id}" disabled="disabled">
-                    </div>
-                    <div class="halign">
-                        <button class="btn btn-default" name="${config.id}" click.delegate="download($event)">DOWNLOAD</button>
-                        <button class="btn btn-success" name="${config.id}" click.delegate="restore($event)">RESTORE</button>
-                        <button if.bind="$first" class="btn btn-danger" name="${config.id}" click.delegate="remove($event)">REMOVE</button>
-                    </div>
+                <table class="width100">
+	                <tr class="mini-border width100">
+                        <td class="margin5">
+                            <div>
+                                <label>Default router configuration</label>
+                            </div>
+                        </td>
+                        <td class="fright margin5">
+                            <div>
+                                <button class="btn btn-success" click.delegate="restore()">RESTORE</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr repeat.for="config of configs" class="mini-border width100">
+                        <td class="margin5">
+                            <div>
+                                <a href="./cgi-bin/download/${config}">${config}</a>
+                            </div>
+                        </td>
+                        <td class="fright margin5">
+                            <div>
+                                <button class="btn btn-default" name="${config}" click.delegate="download($event)">DOWNLOAD</button>
+                                <button class="btn btn-success" name="${config}" click.delegate="restore($event)">RESTORE</button>
+                                <button class="btn btn-danger" name="${config}" click.delegate="remove($event)">REMOVE</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="div-border">
+                <div class="form-group">
+                    <label for="fileName">Enter file name for current configuration (extension will be added if needed):</label>
+                    <input type="text" value.bind="fileName" class="form-control" id="fileName" />
+                </div>
+                <div class="halign">
+                    <button class="btn btn-success" disabled.bind="!fileNameOk" click.delegate="saveCurrent()">SAVE CURRENT</button>
                 </div>
             </div>
             <div class="div-border">

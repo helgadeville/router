@@ -55,12 +55,32 @@ ux-dialog-overlay {
 	text-align: center;
 }
 
+.ralign {
+	text-align: right;
+}
+
+.lalign {
+	text-align: left;
+}
+
 .valign {
 	vertical-align: middle;
 }
 
 .talign {
 	vertical-align: top;
+}
+
+.fleft {
+	float: left;
+}
+
+.fright {
+	float: right;
+}
+
+.margin5 {
+	padding: 5px;
 }
 
 .width100 {

@@ -19,35 +19,64 @@ export class VpnConfigs {
     
     activate() {
         this.overlay.open();
-        return this.http.get('cgi-bin/get_vpn_configurations.json')
+        return this.http.get('cgi-bin/get_vpn_configurations.text')
             .then(response => {
                 this.overlay.close();
-                this.configs = response.content;
+                var cfgs = response.response.split('\n');
+                var configs = [];
+                for (var i = 0 ; i < cfgs.length ; i++) {
+                    if (cfgs[i]) {
+                        configs.push(cfgs[i]);
+                    }
+                }
+                this.configs = configs;
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error getting router work mode');
             });
     }
     
-    set($event) {
+    download($event) {
+        var name = $event.currentTarget.name;
+        var data = {
+            file : name
+        };
+        this.overlay.open();
+        this.FEC.submit('cgi-bin/get_vpn_config.text', data)
+        .then(response => {
+            this.overlay.close();
+            // response.response is text, force download
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(response.response));
+            dl.setAttribute('download', name);
+            dl.click();
+        }).catch(error => {
+            this.overlay.close();
+            console.log('Error setting new VPN config');
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+        });
+    }
+    
+    restore($event) {
+        var name = $event.currentTarget.name;
         let dlg = 
-            this.dialogService.warning('You are about to set new VPN configration.\nAre you sure ?');
+            this.dialogService.warning('You are about to restore VPN configration.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
                 // set current config
                 var data = {
-                    id : id
+                    file : name
                 };
                 this.overlay.open();
-                this.FEC.submit('cgi-bin/restore_vpn.json', data)
+                this.FEC.submit('cgi-bin/get_vpn_config.text', data)
                 .then(response => {
                     this.overlay.close();
-                    if (response.content.status === "0") {
-                        console.log('VPN config set');
-                        window.location.reload(true);
+                    // response.response is text
+                    if (!this.save(original, name, null, false, true)) {
+                        this.dialogService.error('Could not parse target configuration.');
                     } else {
-                        console.log('Error setting VPN config');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        console.log('VPN configuration restored.');
+                        window.location.reload(true);
                     }
                 }).catch(error => {
                     this.overlay.close();
@@ -59,81 +88,75 @@ export class VpnConfigs {
     }
     
     remove($event) {
+        var name = $event.currentTarget.name;
         let dlg = 
             this.dialogService.warning('You are about to remove stored VPN configration.\nThis operation is not reversible.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
-                // set current config
                 var data = {
-                    id : id
+                    file : name
                 };
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/remove_vpn.json', data)
                 .then(response => {
                     this.overlay.close();
                     if (response.content.status === "0") {
-                        console.log('VPN config set');
+                        console.log('VPN config removed');
                         window.location.reload(true);
                     } else {
-                        console.log('Error setting VPN config');
+                        console.log('Error removing VPN config');
                         this.dialogService.error('Ooops ! Error occured:\n' + response.message);
                     }
                 }).catch(error => {
                     this.overlay.close();
-                    console.log('Error setting new VPN config');
+                    console.log('Error removing VPN config');
                     this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
                 });
             }
         });
     }
     
-    loadSet() {
-        load(false);
+    save(original, file, remotes, upload, set) {
+        var ovpn = new OvpnReader();
+        try {
+            ovpn.read(original, file);
+        } catch(error) {
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            return false;
+        };
+        var data = {};
+        if (upload) {
+            data.file = file;
+            data.original = original;
+        }
+        if (set) {
+            data.current = ovpn.get(remotes);
+        }
+        this.overlay.open();
+        this.FEC.submit('cgi-bin/set_vpn.json', data)
+        .then(response => {
+            this.overlay.close();
+            if (response.content.status === "0") {
+                console.log('VPN config set');
+                window.location.reload(true);
+            } else {
+                console.log('Error setting VPN config');
+                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+            }
+        }).catch(error => {
+            this.overlay.close();
+            console.log('Error setting new VPN config');
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+        });
     }
     
-    loadArchive() {
-        load(true);
-    }
-    
-    load(archive) {
+    upload(set) {
         var me = this;
         this.overlay.open();
-        var fileToLoad = document.getElementById("upload").files[0];
+        var fileToLoad = document.getElementById("uploadFile").files[0];
         var fileReader = new FileReader();
-        fileReader.onload = function(fileLoadedEvent){
-            var textFromFileLoaded = fileLoadedEvent.target.result;
-            var ovpn = new OvpnReader();
-            try {
-                ovpn.read(textFromFileLoaded);
-                if (ovpn.common && ovpn.remotes.length > 1 && ovpn.cert) {
-                    // set current config
-                    var data = {
-                        file : fileToLoad,
-                        description : me.description,
-                        current : ovpn.get(),
-                        original : ovpn.original(),
-                        archive : archive ? '1' : '0'
-                    };
-                    me.FEC.submit('cgi-bin/set_vpn.json', data)
-                    .then(response => {
-                        me.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('VPN config set');
-                            window.location.reload(true);
-                        } else {
-                            console.log('Error setting VPN config');
-                            me.dialogService.error('Ooops ! Error occured:\n' + response.message);
-                        }
-                    }).catch(error => {
-                        me.overlay.close();
-                        console.log('Error setting new VPN config');
-                        me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
-                    });
-                } else {
-                    me.overlay.close();
-                    throw 'Parse error';
-                }
-            } catch(error) {
+        fileReader.onload = function(fileLoadedEvent) {
+            if (!me.save(fileLoadedEvent.target.result, fileToLoad, null, true, set)) {
                 me.dialogs.error('Uploaded file caused problem during parse.');
             }
         };

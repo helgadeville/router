@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span>OpenVPN Configuration&nbsp;</span><span if.bind="file">&nbsp;file:&nbsp;${file}</span><br/>
+        <span>OpenVPN Configuration&nbsp;</span><span if.bind="file">&nbsp;${file}</span><br/>
         <form role="form" submit.delegate="submit()">
             <div class="div-border">
                 <div class="form-group">
@@ -12,14 +12,11 @@
                     <input type="password" value.bind="password" class="form-control" id="password" />
                 </div>
                 <div class="halign">
-                    <button class="btn btn-success" disabled.bind="!username || !password" click.delegate="setUserAndPass()">SET USERNAME & PASSWORD</button>
+                    <button class="btn btn-success" disabled.bind="!username || !password" click.delegate="setUserAndPass()">SET</button>
+                    <button class="btn btn-primary" disabled.bind="!username || !password" click.delegate="setUserAndPass(true)">SET & CONNECT</button>
                 </div>
             </div>
             <div class="div-border">
-                <div>
-                    <label for="desc">Description:</label>
-                    <input type="text" value.bind="desc" class="form-control" id="desc" />
-                </div>
                 <div>
                     <label>Remote servers:&nbsp;</label>
                 </div>
@@ -27,22 +24,17 @@
                     <input type="checkbox" value.bind="remote.remote" checked.bind="remote.active"/><label>&nbsp;${remote.remote}&nbsp; </label>
                 </div>
                 <div class="halign">
-                    <button class="btn btn-success" disabled.bind="!desc || !atLeastOneChecked()" click.delegate="setCurrent()">SET</button>
-                    <button class="btn btn-primary" disabled.bind="!desc || !atLeastOneChecked()" click.delegate="setArchive()">SET & SAVE</button>
+                    <button class="btn btn-success" disabled.bind="!this.original || !atLeastOneChecked()" click.delegate="set()">SET</button>
                 </div>
             </div>
             <div class="div-border">
                 <div>
-	                <label for="upload">Select OVPN File for Upload:</label>
-	                <input type="file" value.bind="upload" class="form-control" id="upload" />
+	                <label for="uploadFile">Select OVPN File for Upload:</label>
+	                <input type="file" value.bind="uploadFile" class="form-control" id="uploadFile" />
 	            </div><br/>
-	            <div if.bind="upload" class="form-group">
-    	            <label for="description">Enter short description of this file:</label>
-                    <input type="text" value.bind="description" class="form-control" id="description" />
-	            </div>
                 <div class="halign">
-                    <button class="btn btn-success" disabled.bind="!upload || !description" click.delegate="loadSet()">UPLOAD & SET</button>
-                    <button class="btn btn-primary" disabled.bind="!upload || !description" click.delegate="loadArchive()">UPLOAD & SET & SAVE</button>
+                    <button class="btn btn-primary" disabled.bind="!upload" click.delegate="upload()">UPLOAD ONLY</button>
+                    <button class="btn btn-success" disabled.bind="!upload" click.delegate="upload(true)">UPLOAD & SET</button>
                 </div>
             </div>
         </form>

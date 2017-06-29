@@ -3,34 +3,31 @@
         <span>${heading}</span><br/>
         <form role="form">
             <div class="div-border">
-                <div repeat.for="config of configs" class="mini-border">
-                    <div class="form-group">
-                        <label for="fileName${config.id}">File name:</label>
-                        <input type="text" value.bind="config.name" class="form-control" id="fileName${config.id}" disabled="disabled">
-                    </div>
-                    <div class="form-group">
-                        <label for="desc${config.id}">Description:</label>
-                        <input type="text" value.bind="config.desc" class="form-control" id="desc${config.id}" disabled="disabled">
-                    </div>
-                    <div class="halign">
-                        <button class="btn btn-default" name="${config.id}" click.delegate="download($event)">DOWNLOAD</button>
-	                    <button class="btn btn-success" name="$config.id}" click.delegate="set($event)">SET</button>
-	                    <button class="btn btn-danger" name="${config.id}" click.delegate="remove($event)">REMOVE</button>
-	                </div>
-                </div>
+                <table class="width100">
+                    <tr repeat.for="config of configs" class="mini-border width100">
+                        <td class="margin5">
+                            <div>
+                                <a href="" click.delegate="download($event)">${config}</a>
+                            </div>
+                        </td>
+                        <td class="fright margin5">
+                            <div>
+                                <button class="btn btn-default" name="${config}" click.delegate="download($event)">DOWNLOAD</button>
+                                <button class="btn btn-success" name="${config}" click.delegate="restore($event)">RESTORE</button>
+                                <button class="btn btn-danger" name="${config}" click.delegate="remove($event)">REMOVE</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="div-border">
                 <div>
-                    <label for="upload">Select OVPN File for Upload:</label>
-                    <input type="file" value.bind="upload" class="form-control" id="upload" />
+                    <label for="uploadFile">Select OVPN File for Upload:</label>
+                    <input type="file" value.bind="uploadFile" class="form-control" id="uploadFile" />
                 </div><br/>
-                <div if.bind="upload" class="form-group">
-                    <label for="description">Enter short description of this file:</label>
-                    <input type="text" value.bind="description" class="form-control" id="description" />
-                </div>
                 <div class="halign">
-                    <button class="btn btn-success" disabled.bind="!upload || !description" click.delegate="loadSet()">UPLOAD & SET</button>
-                    <button class="btn btn-primary" disabled.bind="!upload || !description" click.delegate="loadArchive()">UPLOAD & SET & SAVE</button>
+                    <button class="btn btn-primary" disabled.bind="!upload" click.delegate="upload()">UPLOAD ONLY</button>
+                    <button class="btn btn-success" disabled.bind="!upload" click.delegate="upload(true)">UPLOAD & SET</button>
                 </div>
             </div>
         </form>

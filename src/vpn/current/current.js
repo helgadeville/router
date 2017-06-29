@@ -17,40 +17,35 @@ export class VpnCurrent {
     }
     
     activate() {
-        var i = 2;
         this.overlay.open();
         this.http.get('cgi-bin/get_vpn_config.text')
-            .then(response => {
-                if (!--i) this.overlay.close();
-                this.original = response.response;
-            }).catch(error => {
-                if (!--i) this.overlay.close();
-                console.log('Error getting vpn config');
-            });
-        this.http.get('cgi-bin/get_vpn_current.text')
         .then(response => {
-            if (!--i) this.overlay.close();
+            this.overlay.close();
             var remotes = [];
             var lines = response.response.split('\n');
+            this.original = '';
             for(var j = 0 ; j < lines.length ; j++) {
                 var line = lines[j].trim();
                 if (!line) continue;
-                if (line.toLowerCase().indexOf('file=') === 0) {
-                    this.file = line.substring(5).trim();
+                var skip = false;
+                if (line.toLowerCase().indexOf('#user=') === 0) {
+                    this.username = line.substring(6).trim();
                 } else
-                if (line.toLowerCase().indexOf('description=') === 0) {
-                    this.desc = line.substring(12).trim();
+                if (line.toLowerCase().indexOf('#original-file ') === 0) {
+                    this.file = line.substring(15).trim();
+                    skip = true;
                 } else {
                     var active = line.indexOf('#') !== 0;
-                    if (!active) {
-                        line = line.substring(1).trim();
+                    var splt = active ? line.split(' ') : line.substring(1).trim().split(' ');
+                    if (splt && splt.length > 1 && splt[0].toLowerCase() === 'remote') {
+                        remotes.push({
+                            remote : splt[1],
+                            active : active
+                        });
                     }
-                    var splt = line.split(' ');
-                    if (!splt || splt.length < 2 || splt[0].toLowerCase() !== 'remote') continue;
-                    remotes.push({
-                        remote : splt[1],
-                        active : active
-                    });
+                }
+                if (!skip) {
+                    this.original += line + '\n';
                 }
             }
             remotes.sort(function(a,b) {
@@ -58,9 +53,10 @@ export class VpnCurrent {
             });
             this.remotes = remotes;
         }).catch(error => {
-            if (!--i) this.overlay.close();
+            this.overlay.close();
             console.log('Error getting vpn config');
         });
+        
     }
     
     atLeastOneChecked() {
@@ -75,11 +71,12 @@ export class VpnCurrent {
         return false;
     }
     
-    setUserAndPass() {
+    setUserAndPass(connect) {
         this.overlay.open();
         var data = {
             user: this.username,
-            pass: this.password
+            pass: this.password,
+            connect : connect ? '1' : '0'
         };
         this.FEC.submit('cgi-bin/set_vpn_auth.json', data)
         .then(response => {
@@ -97,25 +94,28 @@ export class VpnCurrent {
         });
     }
     
-    setCurrent() {
-        this.save(false);
+    set() {
+        if (!this.save(this.original, this.file, this.remotes, false, true)) {
+            this.dialogs.error('Configuration caused problem during parse.');
+        }
     }
     
-    setArchive() {
-        this.save(true);
-    }
-    
-    save(archive) {
-        // set current config
+    save(original, file, remotes, upload, set) {
         var ovpn = new OvpnReader();
-        ovpn.read(this.original);        
-        var data = {
-            file : this.file,
-            description : this.desc,
-            current : ovpn.get(this.remotes),
-            original : ovpn.original(),
-            archive : archive ? '1' : '0'
+        try {
+            ovpn.read(original, file);
+        } catch(error) {
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            return false;
         };
+        var data = {};
+        if (upload) {
+            data.file = file;
+            data.original = original;
+        }
+        if (set) {
+            data.current = ovpn.get(remotes);
+        }
         this.overlay.open();
         this.FEC.submit('cgi-bin/set_vpn.json', data)
         .then(response => {
@@ -134,53 +134,13 @@ export class VpnCurrent {
         });
     }
     
-    loadSet() {
-        load(false);
-    }
-    
-    loadArchive() {
-        load(true);
-    }
-    
-    load(archive) {
+    upload(set) {
         var me = this;
         this.overlay.open();
-        var fileToLoad = document.getElementById("upload").files[0];
+        var fileToLoad = document.getElementById("uploadFile").files[0];
         var fileReader = new FileReader();
-        fileReader.onload = function(fileLoadedEvent){
-            var textFromFileLoaded = fileLoadedEvent.target.result;
-            var ovpn = new OvpnReader();
-            try {
-                ovpn.read(textFromFileLoaded);
-                if (ovpn.common && ovpn.remotes.length > 1 && ovpn.cert) {
-                    // set current config
-                    var data = {
-                        file : fileToLoad,
-                        description : me.description,
-                        current : ovpn.get(),
-                        original : ovpn.original(),
-                        archive : archive ? '1' : '0'
-                    };
-                    me.FEC.submit('cgi-bin/set_vpn.json', data)
-                    .then(response => {
-                        me.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('VPN config set');
-                            window.location.reload(true);
-                        } else {
-                            console.log('Error setting VPN config');
-                            me.dialogService.error('Ooops ! Error occured:\n' + response.message);
-                        }
-                    }).catch(error => {
-                        me.overlay.close();
-                        console.log('Error setting new VPN config');
-                        me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
-                    });
-                } else {
-                    me.overlay.close();
-                    throw 'Parse error';
-                }
-            } catch(error) {
+        fileReader.onload = function(fileLoadedEvent) {
+            if (!me.save(fileLoadedEvent.target.result, fileToLoad, null, true, set)) {
                 me.dialogs.error('Uploaded file caused problem during parse.');
             }
         };
