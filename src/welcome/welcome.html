@@ -67,6 +67,8 @@
                                 <i if.bind="system.internet === 'offline'" class="fa fa-close fa-2x color-red valign"></i>
                                 <span if.bind="system.internet === 'online'">&nbsp;ONLINE</span>
                                 <span if.bind="system.internet === 'offline'">&nbsp;offline</span>
+                                <button if.bind="system.internet === 'online'" 
+                                        class="btn btn-success" click.delegate="publicIp()">CHECK PUBLIC IP</span>
                             </div>
                         </td>
                         <td class="width50 halign">
@@ -126,6 +128,10 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div if.bind="public" class="div-border public-address">
+                <label>Public address:</label><br/>
+                <span><b>IP:</b>&nbsp;${public.ip} <b>Country:</b>&nbsp;${public.country} <b>Region:</b>&nbsp;${public.region} <b>City:</b>&nbsp;${public.city}</span>
             </div>
         </div>
 	</section>

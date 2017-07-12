@@ -41,7 +41,7 @@
 	                </div>
 		        </form>
 	        </div>
-	        <div repeat.for="wifi of device.interfaces" class="div-border">
+	        <div repeat.for="wifi of device.interfaces" if.bind="wifi.network === 'lan'" class="div-border">
 			    <form role="form" submit.delegate="submit($event)" name="${wifi['#']}">
 			        <div class="form-group halign">
 			            <label><input type="checkbox" checked.bind="wifi.enabled" />&nbsp;Wireless Access Point Enabled</label>

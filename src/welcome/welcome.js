@@ -133,5 +133,22 @@ export class Welcome {
         this.router.navigate('/workmode');
     }
     
+    publicIp() {
+        var me = this;
+        me.http.get('cgi-bin/get_public_address.json')
+        .then(response => {
+            me.public = response.content;
+            if (me.publicGuard) {
+                window.clearTimeout(me.publicGuard);
+            }
+            me.publicGuard = window.setTimeout(function() {
+                me.public = null;
+                delete me.publicGuard;
+            }, 10000);
+        }).catch(error => {
+            console.log('Error getting status');
+        });
+    }
+    
 }
 

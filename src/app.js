@@ -14,6 +14,7 @@ export class App {
         config.map([
             { route: '', name: 'welcome', moduleId: './welcome/welcome', nav: true, title: '' },
             { route: 'workmode', name: 'workmode', moduleId: './workmode/workmode', nav: true, title: 'Internet Source' },
+            { route: 'dns', name: 'dns', moduleId: './dns/dns', nav: true, title: 'Name Servers' },
             { route: 'lan', name: 'lan', moduleId: './lan/lan', nav: true, title: 'LAN Settings' },
             { route: 'wifi', name: 'wifi', moduleId: './wifi/wifi', nav: true, title: 'Wireless Access Point' },
             { route: 'vpn', name: 'vpn', moduleId: './vpn/vpn', nav: true, title: 'VPN Settings' },

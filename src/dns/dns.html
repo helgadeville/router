@@ -1,0 +1,33 @@
+<template>
+    <section class="">
+        <div class="halign">
+            <h2>${heading}</h2>
+        </div>
+        <div class="div-border">
+            <label>DNS Servers (Name Servers)</label>
+            <div>
+                <label for="oldDns">Current DNS Setting</label>
+                <input type="text" value.bind="oldDns" class="form-control" id="oldDns" disabled="disabled">
+            </div>
+            <br/>
+            <label for="newDns">New DNS Selection</label>
+            <div class="halign">
+                <select value.bind="newDns" id="newDns" class="select-margin">
+                    <option repeat.for="dns of dnses"
+                            value="${dns}" model.bind="dns">${dns}</option>
+                </select>
+                <div class="halign">
+                    <ul>
+                        <li><span><small>For security reasons, only predefined public DNS servers are allowed.</small></span></li>
+                        <li><span><small>Never trust your local ISP DNS !</small></span></li>
+                    </ul>
+                </div>
+            </div>
+            <br/>
+            <div class="halign">
+                <button type="button" class="btn btn-danger" click.delegate="setDns()"
+                        disabled.bind="!newDns || newDns === 'do not change' || newDns === oldDns">SAVE SETTINGS</button>
+            </div>
+        </div>
+    </section>
+</template>
