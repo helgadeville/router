@@ -52,6 +52,15 @@ export class Welcome {
         return this.http.get('cgi-bin/welcome.json')
             .then(response => {
                 this.system = response.content;
+                if (this.system.internet !== this.previousInternet || this.system.VPN !== this.previousVPN) {
+                    this.previousInternet = this.system.internet;
+                    this.previousVPN = this.system.VPN;
+                    if (this.system.internet === 'online') {
+                        this.publicIp();
+                    } else {
+                        this.public = null;
+                    }
+                }
             }).catch(error => {
                 console.log('Error getting status');
             });
@@ -138,13 +147,6 @@ export class Welcome {
         me.http.get('cgi-bin/get_public_address.json')
         .then(response => {
             me.public = response.content;
-            if (me.publicGuard) {
-                window.clearTimeout(me.publicGuard);
-            }
-            me.publicGuard = window.setTimeout(function() {
-                me.public = null;
-                delete me.publicGuard;
-            }, 10000);
         }).catch(error => {
             console.log('Error getting status');
         });

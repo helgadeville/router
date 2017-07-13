@@ -23,13 +23,48 @@ export class WorkMode {
         .then(response => {
             me.overlay.close();
             me.protos = [ 'do not change', 'dhcp', 'static' ];
+            me.selected = response.content.selected;
             me.selection = response.content.selected;
             me.wans = response.content.wired;
             me.radios = response.content.wireless;
+            var devices = [];
+            for(var i = 0 ; i < me.wans.length ; i++) {
+                devices.push({
+                    name: me.wans[i].ifname,
+                    type: 'wired',
+                    description: 'TBD',
+                    src: me.wans[i]
+                });
+                if (me.wans[i].ifname === me.selection) {
+                    this.source = me.wans[i];
+                }
+            }
+            for(var i = 0 ; i < me.radios.length ; i++) {
+                devices.push({
+                    name: me.radios[i].ifname,
+                    type: 'radio device',
+                    description: 'TBD',
+                    src: me.radios[i]
+                });
+                if (me.radios[i].ifname === me.selection) {
+                    this.source = me.radios[i];
+                }
+            }
+            this.devices = devices;
         }).catch(error => {
             me.overlay.close();
             console.log('Error getting router work mode');
         });
+    }
+    
+    clickedDevice($event) {
+        var name = $event.currentTarget.model;
+        for(var i = 0 ; i < this.devices.length ; i++) {
+            if (this.devices[i].name === name) {
+                this.source = this.devices[i].src;
+            }
+        }
+        return true;
     }
     
     submit() {

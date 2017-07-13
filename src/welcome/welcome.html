@@ -67,8 +67,6 @@
                                 <i if.bind="system.internet === 'offline'" class="fa fa-close fa-2x color-red valign"></i>
                                 <span if.bind="system.internet === 'online'">&nbsp;ONLINE</span>
                                 <span if.bind="system.internet === 'offline'">&nbsp;offline</span>
-                                <button if.bind="system.internet === 'online'" 
-                                        class="btn btn-success" click.delegate="publicIp()">CHECK PUBLIC IP</span>
                             </div>
                         </td>
                         <td class="width50 halign">
