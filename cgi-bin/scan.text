@@ -1,0 +1,17 @@
+MAC: 00:1E:E5:97:70:4A
+ESSID: "sroka"
+Mode: Master  Channel: 1
+Signal: -69 dBm  Quality: 41/70
+Encryption: WPA PSK (TKIP)
+
+MAC: 72:5A:B6:8F:B7:BC
+ESSID: "wrona"
+Mode: Master  Channel: 1
+Signal: -86 dBm  Quality: 24/70
+Encryption: WPA PSK (TKIP)
+
+MAC: 00:0E:8E:12:5B:87
+ESSID: "medialoop4"
+Mode: Master  Channel: 8
+Signal: -93 dBm  Quality: 17/70
+Encryption: WEP Open/Shared (WEP-40, WEP-104)

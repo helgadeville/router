@@ -6,12 +6,42 @@
     <form role="form" submit.delegate="submit()">
     
         <div class="div-border">
-            <div repeat.for="device of devices">
-                <label>
-                    <input type="radio" name="currentDevice" model.bind="device.name" checked.bind="$parent.selection" click.delegate="clickedDevice($event)"/>
-                    ${device.name}&nbsp;(${device.type})-${device.description}
-                </label>
-            </div>
+            <div repeat.for="device of devices" class="mini-border">
+                <div class="form-group width100 halign label-border">
+	                <label>
+	                    <input class="bigradio" type="radio" name="currentDevice" model.bind="device.name" checked.bind="$parent.selection" click.delegate="clickedDevice($event)"/>
+	                    ${device.name}&nbsp;(${device.type})-${device.description}
+	                </label>
+	            </div>
+                <div if.bind="device.type === 'radio'">
+                    <div class="form-group halign">
+                        <label><input type="checkbox" checked.bind="device.enabled" />&nbsp;Radio Device Enabled</label>
+                        <span><small>&nbsp;(&nbsp;currently:&nbsp;</small></span>
+                        <i if.bind="!device.disabled" class="fa fa-wifi color-green valign"></i>
+                        <i if.bind="device.disabled" class="fa fa-close color-red valign"></i>
+                        <span><small>&nbsp;)</small></span>
+                    </div>
+                    <table class="width100">
+                        <tr class="width100">
+                            <td>
+                                <label for="${device.name}SSID">SSID:</label>
+                                <input id="${device.name}SSID" name="${device.name}SSID" type="text" class="form-control" />
+                            </td>
+                            <td>
+                                <label for="${device.name}encryption">Encryption:</label>
+                                <input id="${device.name}encryption" name="${device.name}encryption" class="form-control" />
+                            </td>
+                            <td>
+                                <label for="${device.name}passphrase">Password / key:</label>
+                                <input id="${device.name}passphrase" name="${device.name}passphrase" type="password" class="form-control" />
+                            </td>
+                        </tr>
+                    </table><br/>
+                    <div class="halign">
+                        <button class="btn btn-success" click.delegate="scan()">SCAN</button>
+                    </div>
+                </div>
+            </div><br/>
 
             <div class="">
                 <table class="width100">
@@ -30,7 +60,7 @@
                                             <label for="newProto${source.ifname}">New IP Assignment</label>
                                             <div>
                                                 <select value.bind="source.newProto" id="newProto${source.ifname}" class="select-margin">
-                                                    <option repeat.for="proto of $parent.protos"
+                                                    <option repeat.for="proto of protos"
                                                             value="${proto}" model.bind="proto">${proto}</option>
                                                 </select>
                                             </div>
@@ -109,6 +139,10 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+            <br/>
+            <div class="halign">
+                <button type="submit" class="btn btn-danger">SAVE SETTINGS</button>
             </div>
 
         </div>

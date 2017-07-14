@@ -202,8 +202,8 @@ section {
 }
 
 .bigradio {
-	transform: scale(2);
-	margin: 5px !important;
+	transform: scale(1.5);
+	margin: 10px !important;
 	vertical-align: middle;
 }
 
