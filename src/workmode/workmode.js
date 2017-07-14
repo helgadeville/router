@@ -174,6 +174,16 @@ export class WorkMode {
                     if (!result.wasCancelled) {
                         // TODO !!!
                         var chosen = result.output;
+                        // now setup proper device
+                        for(var i = 0 ; i < this.devices.length ; i++) {
+                            var dev = this.devices[i];
+                            if (dev.name === this.selection) {
+                                dev.ssid = chosen.ssid;
+                                dev.key = '';
+                                // TODO translate
+                                dev.encryption = chosen.encryption;
+                            }
+                        }
                     }
                 });
             }).catch(error => {

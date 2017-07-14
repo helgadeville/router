@@ -25,7 +25,8 @@
                         <tr class="width100">
                             <td>
                                 <label for="${device.name}SSID">SSID:</label>
-                                <input id="${device.name}SSID" name="${device.name}SSID" type="text" class="form-control" />
+                                <input id="${device.name}SSID" name="${device.name}SSID" type="text" class="form-control" 
+                                       value.bind="device.ssid"/>
                             </td>
                             <td>
                                 <label for="${device.name}encryption">Encryption:</label>
@@ -37,7 +38,7 @@
                             <td>
                                 <label for="${device.name}passphrase">Password / key:</label>
                                 <input id="${device.name}passphrase" name="${device.name}passphrase" type="password" class="form-control"
-                                       disabled.bind="device.encryption === 'open'" />
+                                       value.bind="device.key" disabled.bind="device.encryption === 'open'" />
                             </td>
                         </tr>
                     </table><br/>
