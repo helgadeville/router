@@ -29,11 +29,15 @@
                             </td>
                             <td>
                                 <label for="${device.name}encryption">Encryption:</label>
-                                <input id="${device.name}encryption" name="${device.name}encryption" class="form-control" />
+                                <select value.bind="device.encryption" id="newProto${source.ifname}" class="select-margin form-control">
+                                    <option repeat.for="enc of encryptions"
+                                            value="${enc.id}" model.bind="enc.id">${enc.name}</option>
+                                </select>
                             </td>
                             <td>
                                 <label for="${device.name}passphrase">Password / key:</label>
-                                <input id="${device.name}passphrase" name="${device.name}passphrase" type="password" class="form-control" />
+                                <input id="${device.name}passphrase" name="${device.name}passphrase" type="password" class="form-control"
+                                       disabled.bind="device.encryption === 'open'" />
                             </td>
                         </tr>
                     </table><br/>

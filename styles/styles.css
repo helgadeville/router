@@ -220,3 +220,7 @@ section {
 .public-address {
 	margin-top: 5px;
 }
+
+.tr-selected {
+	background-color: yellow;
+}

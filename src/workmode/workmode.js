@@ -1,18 +1,21 @@
-import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
-import {FormEncoder} from 'formencoder/formencoder';
-import {Dialogs} from 'modal/dialogs';
+import {inject} from 'aurelia-framework'
+import {HttpClient} from 'aurelia-http-client'
+import {FormEncoder} from 'formencoder/formencoder'
+import {Dialogs} from 'modal/dialogs'
+import {DialogService} from 'aurelia-dialog';
 import {Overlay} from 'overlay/overlay'
+import {Scan} from 'modal/Scan'
 
-@inject(HttpClient,FormEncoder,Dialogs,Overlay)
+@inject(HttpClient,FormEncoder,DialogService,Dialogs,Overlay)
 export class WorkMode {
     
     heading = 'Internet Source';
     
-    constructor(http, FEC, dialogs, overlay) {
+    constructor(http, FEC, dialogService, dialogs, overlay) {
         this.http = http;
         this.FEC = FEC;
-        this.dialogService = dialogs;
+        this.dialogService = dialogService;
+        this.dialogs = dialogs;
         this.overlay = overlay;
     }
     
@@ -44,13 +47,29 @@ export class WorkMode {
                     name: me.radios[i].ifname,
                     type: 'radio',
                     description: 'TBD',
-                    src: me.radios[i]
+                    src: me.radios[i],
+                    disabled: me.radios[i].disabled,
+                    enabled: !me.radios[i].disabled
                 });
                 if (me.radios[i].ifname === me.selection) {
                     this.source = me.radios[i];
                 }
             }
             this.devices = devices;
+            this.encryptions = [{
+                    id : 'open',
+                    name : 'Open (no encryption)'
+                }, {
+                    id : 'wep',
+                    name : 'WEP'
+                }, {
+                    id : 'psk2',
+                    name : 'WPA'
+                }, {
+                    id : 'psk2',
+                    name : 'WPA2'
+                }
+            ];
         }).catch(error => {
             me.overlay.close();
             console.log('Error getting router work mode');
@@ -65,42 +84,6 @@ export class WorkMode {
             }
         }
         return true;
-    }
-    
-    getParameters(line) {
-        var parameters = [ { 
-                name: 'MAC:',
-                single: true,
-                begin: true
-            }, {
-                name: 'ESSID:',
-                single: true
-            }, { 
-                name:'Mode:'
-            }, {
-                name: 'Channel:'
-            }, {
-                name: 'Signal:'
-            }, {
-                name: 'Quality:'
-            }, {
-                name: 'Encryption:',
-                single: true
-            }
-        ];
-        var obj = {};
-        var prm = {};
-        for(var i = 0 ; i < parameters.length ; i++) {
-            var param = parameters[i];
-            var idx = line.indexOf(param.name);
-            if (idx >= 0) {
-                if (param.single) {
-                    
-                } else {
-                    
-                }
-            }
-        }
     }
     
     scan() {
@@ -181,17 +164,27 @@ export class WorkMode {
                 if (current) {
                     aps.push(current);
                 }
-                // TODO
-                console.log(aps);
+                let dlg = this.dialogService.open( {
+                    viewModel: Scan, 
+                    model: {
+                        aps : aps
+                    }
+                });
+                dlg.whenClosed(result => {
+                    if (!result.wasCancelled) {
+                        // TODO !!!
+                        var chosen = result.output;
+                    }
+                });
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error scanning AP networks');
-                this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                this.dialogs.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
             });
     }
     
     submit() {
-        let dlg = this.dialogService.warning('You are about to change router work mode.\nAre you sure ?');
+        let dlg = this.dialogs.warning('You are about to change router work mode.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
                 // TODO
@@ -206,12 +199,12 @@ export class WorkMode {
                             // TODO
                         } else {
                             console.log('Error setting router work mode');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogs.error('Ooops ! Error occured:\n' + response.message);
                         }
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router work mode');
-                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogs.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
                     });
             }
         });

@@ -1,0 +1,46 @@
+<template>
+    <ai-dialog class="modal-container">
+        <ai-dialog-body>
+            <div class="modal-message">
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="${iconClass} modal-icon"></i>
+                            </td>
+                            <td>
+                                <div class="modal-span">
+                                    <span>Choose Access Point to join:</span>
+                                    <br/>
+                                    <table class="width100 lalign">
+                                        <tr>
+                                            <th colspan="2">
+                                                <span>SSID:</span>
+                                            </th>
+                                        </tr>
+                                        <tr repeat.for="ap of aps" class="width100 ${$parent.choice === $index ? 'tr-selected' : ''}">
+                                            <td>
+                                                <input type="radio" name="choice" model.bind="$index" checked.bind="$parent.choice" />
+                                            </td>
+                                            <td>
+                                                <span>${ap.ssid}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </ai-dialog-body>
+
+        <ai-dialog-footer>
+            <div class="modal-footer">
+                <button disabled.bind="choice === undefined" name="ok" class="btn btn-success" click.delegate="click($event)">OK</button>
+                <button name="cancel" class="btn btn-default" click.delegate="click($event)">Cancel</button>
+            </div>
+        </ai-dialog-footer>
+    
+    </ai-dialog>   
+</template>
