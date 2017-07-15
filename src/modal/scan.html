@@ -12,18 +12,48 @@
                                 <div class="modal-span">
                                     <span>Choose Access Point to join:</span>
                                     <br/>
-                                    <table class="width100 lalign">
+                                    <table class="width100 lalign nicetable">
                                         <tr>
                                             <th colspan="2">
                                                 <span>SSID:</span>
                                             </th>
+                                            <th>
+                                                <span>Channel:</span>
+                                            </th>
+                                            <th>
+                                                <span>Encryption:</span>
+                                            </th>
+                                            <th>
+                                                <span>MAC:</span>
+                                            </th>
+                                            <th>
+                                                <span>Quality:</span>
+                                            </th>
+                                            <th>
+                                                <span>Signal:</span>
+                                            </th>
                                         </tr>
-                                        <tr repeat.for="ap of aps" class="width100 ${$parent.choice === $index ? 'tr-selected' : ''}">
+                                        <tr repeat.for="ap of aps" class="width100 ${$parent.choice === $index ? 'tr-selected' : ''}" click.delegate="select($index)">
                                             <td>
                                                 <input type="radio" name="choice" model.bind="$index" checked.bind="$parent.choice" />
                                             </td>
                                             <td>
                                                 <span>${ap.ssid}</span>
+                                            </td>
+                                            <td>
+                                                <span>${ap.channel}</span>
+                                            </td>
+                                            <td>
+                                                <span>${ap.encryption}</span>
+                                            </td>
+                                            <td>
+                                                <span>${ap.mac}</span>
+                                            </td>
+                                            <td>
+                                                <span>${ap.quality}</span>
+                                            </td>
+                                            <td>
+                                                <span>${ap.signal}</span>
                                             </td>
                                         </tr>
                                     </table>

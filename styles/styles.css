@@ -224,3 +224,21 @@ section {
 .tr-selected {
 	background-color: yellow;
 }
+
+.nicetable {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.nicetable tr,
+.nicetable th,
+.nicetable td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.nicetable th,
+.nicetable td {
+	padding: 5px;
+	font-size: small;
+}

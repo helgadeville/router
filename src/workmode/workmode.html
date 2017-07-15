@@ -10,10 +10,10 @@
                 <div class="form-group width100 halign label-border">
 	                <label>
 	                    <input class="bigradio" type="radio" name="currentDevice" model.bind="device.name" checked.bind="$parent.selection" click.delegate="clickedDevice($event)"/>
-	                    ${device.name}&nbsp;(${device.type})-${device.description}
+	                    ${device.name}&nbsp;(${device.type})
 	                </label>
 	            </div>
-                <div if.bind="device.type === 'radio'">
+                <div if.bind="device.type === 'radio' && selection === device.name">
                     <div class="form-group halign">
                         <label><input type="checkbox" checked.bind="device.enabled" />&nbsp;Radio Device Enabled</label>
                         <span><small>&nbsp;(&nbsp;currently:&nbsp;</small></span>
@@ -38,12 +38,31 @@
                             <td>
                                 <label for="${device.name}passphrase">Password / key:</label>
                                 <input id="${device.name}passphrase" name="${device.name}passphrase" type="password" class="form-control"
-                                       value.bind="device.key" disabled.bind="device.encryption === 'open'" />
+                                       value.bind="device.key" disabled.bind="device.encryption === 'none'" />
                             </td>
                         </tr>
                     </table><br/>
                     <div class="halign">
                         <button class="btn btn-success" click.delegate="scan()">SCAN</button>
+                    </div><br/>
+                    <div class="div-border halign">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-warning fa-4x color-red"></i>
+                                </td>
+                                <td>
+				                    <div>
+				                        <span class="color-red">WARNING !</span><br/>
+				                        <span>
+				                           If the specified wireless point is not accessible after reboot/reloading network,
+				                           the router will disable it as internet source and revert to access-point only with
+				                           no internet mode.
+				                        </span>
+				                    </div>
+				                </td>
+				            </tr>
+				        </table>
                     </div>
                 </div>
             </div><br/>

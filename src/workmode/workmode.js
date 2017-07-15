@@ -35,7 +35,6 @@ export class WorkMode {
                 devices.push({
                     name: me.wans[i].ifname,
                     type: 'wired',
-                    description: 'TBD',
                     src: me.wans[i]
                 });
                 if (me.wans[i].ifname === me.selection) {
@@ -46,7 +45,6 @@ export class WorkMode {
                 devices.push({
                     name: me.radios[i].ifname,
                     type: 'radio',
-                    description: 'TBD',
                     src: me.radios[i],
                     disabled: me.radios[i].disabled,
                     enabled: !me.radios[i].disabled
@@ -57,13 +55,13 @@ export class WorkMode {
             }
             this.devices = devices;
             this.encryptions = [{
-                    id : 'open',
+                    id : 'none',
                     name : 'Open (no encryption)'
                 }, {
                     id : 'wep',
                     name : 'WEP'
                 }, {
-                    id : 'psk2',
+                    id : 'psk',
                     name : 'WPA'
                 }, {
                     id : 'psk2',
@@ -142,15 +140,15 @@ export class WorkMode {
                     // both signal and quality
                     if (signalIndex >= 0 && qualityIndex >= 0) {
                         if (qualityIndex > signalIndex) {
-                            current.signal = line.substring(signalIndex + 6, qualityIndex - 1).trim();
+                            current.signal = line.substring(signalIndex + 8, qualityIndex - 1).trim();
                             current.quality = line.substring(qualityIndex + 9).trim();
                         } else {
                             current.quality = line.substring(qualityIndex + 9, signalIndex - 1).trim();
-                            current.signal = line.substring(signalIndex + 6).trim();
+                            current.signal = line.substring(signalIndex + 8).trim();
                         }
                     } else {
                         if (modeIndex >= 0) {
-                            current.signal = line.substring(signalIndex + 6).trim();
+                            current.signal = line.substring(signalIndex + 8).trim();
                         }
                         if (channelIndex >= 0) {
                             current.quality = line.substring(qualityIndex + 9).trim();
@@ -180,8 +178,11 @@ export class WorkMode {
                             if (dev.name === this.selection) {
                                 dev.ssid = chosen.ssid;
                                 dev.key = '';
-                                // TODO translate
-                                dev.encryption = chosen.encryption;
+                                var wep = chosen.encryption.indexOf('WEP') >= 0;
+                                var wpa = chosen.encryption.indexOf('WPA') >= 0;
+                                var wpa2 = chosen.encryption.indexOf('WPA2') >= 0;
+                                dev.encryption = wpa2 ? 'psk2' : (wpa ? 'psk' : (wep ? 'wep' : 'none'));
+                                break;
                             }
                         }
                     }

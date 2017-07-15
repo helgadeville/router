@@ -13,6 +13,11 @@ export class Scan {
         this.aps = config.aps;
     }
     
+    select(idx) {
+        // get name
+        this.choice = idx;
+    }
+    
     click($event) {
         var btn = $event.currentTarget.name;
         // do sth
