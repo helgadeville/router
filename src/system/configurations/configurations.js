@@ -95,7 +95,6 @@ export class Configurations {
             this.dialogService.warning('You are about to restore system configration.\nAfter that, router will be rebooted.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
-                var name = $event.currentTarget.name;
                 var data = {
                     file : name
                 };
