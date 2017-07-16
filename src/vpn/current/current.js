@@ -95,7 +95,8 @@ export class VpnCurrent {
     }
     
     set() {
-        if (!this.save(this.original, this.file, this.remotes, false, true)) {
+        var result = this.save(this.original, this.file, this.remotes, false, true);
+        if (result) {
             this.dialogs.error('Configuration caused problem during parse.');
         }
     }
@@ -103,10 +104,13 @@ export class VpnCurrent {
     save(original, file, remotes, upload, set) {
         var ovpn = new OvpnReader();
         try {
-            ovpn.read(original, file);
+            var ret = ovpn.read(original, file);
+            if (ret) {
+                return ret;
+            }
         } catch(error) {
             this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
-            return false;
+            return error.statusText;
         };
         var data = {};
         if (upload) {
@@ -124,31 +128,111 @@ export class VpnCurrent {
                 console.log('VPN config set');
                 window.location.reload(true);
             } else {
-                console.log('Error setting VPN config');
+                console.log('Error setting VPN configuration');
                 this.dialogService.error('Ooops ! Error occured:\n' + response.message);
             }
         }).catch(error => {
             this.overlay.close();
-            console.log('Error setting new VPN config');
+            console.log('Error setting new VPN configuration');
             this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
         });
     }
     
-    upload(set) {
-        var me = this;
-        this.overlay.open();
-        var fileToLoad = document.getElementById("uploadFile").files[0];
-        var fileReader = new FileReader();
-        fileReader.onload = function(fileLoadedEvent) {
-            if (!me.save(fileLoadedEvent.target.result, fileToLoad, null, true, set)) {
-                me.dialogs.error('Uploaded file caused problem during parse.');
+    uploadSingle(inputId) {
+        var fileToLoad = document.getElementById(inputId).files[0];
+        if (fileToLoad) {
+            var promise = new Promise((resolve, reject) => {
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    resolve(fileLoadedEvent.target.result);
+                };
+                fileReader.onerror = function() {
+                    reject();
+                };
+                fileReader.readAsText(fileToLoad, "UTF-8");
+            });
+            return promise;
+        }
+    }
+    
+    extractBeginEnd(input) {
+        var inside = false;
+        var output = '';
+        var lines = input.split('\n');
+        for(var i = 0 ; i < input.length ; i++) {
+            var line = lines[i].trim();
+            if (!inside && line.indexOf('-----BEGIN') === 0) {
+                inside = true;
             }
-        };
-        fileReader.onerror = function() {
-            me.overlay.close();
-            me.dialogs.error('Failed to upload file.');
-        };
-        fileReader.readAsText(fileToLoad, "UTF-8");
+            if (inside) {
+                output += line + '\n';
+                if (line.indexOf('-----END') === 0) {
+                    inside = false;
+                }
+            }
+        }
+        return output;
+    }
+    
+    upload(set) {
+        var promises = [];
+        var fileToLoad = document.getElementById("uploadFile").files[0];
+        var promisesAndExpected = [{
+            id : 'uploadFile',
+            expected : 'ovpn',
+        }, {
+            id: 'uploadCert',
+            expected: '<ca>'
+        }, {
+            id: 'clientCert',
+            expected: '<cert>'
+        }, {
+            id: 'clientKey',
+            expected: '<key>'
+        }, {
+            id: 'tlsAuth',
+            expected: '<tls-auth>'
+        }];
+        this.overlay.open();
+        for(var i = 0 ; i < promisesAndExpected.length ; i++) {
+            var pie = promisesAndExpected[i];
+            var promise = this.uploadSingle(pie.id);
+            if (promise) {
+                pie.promiseIndex = promises.length;
+                promises.push(promise);
+            } else {
+                pie.promiseIndex = -1;
+            }
+        }
+        Promise.all(promises)
+        .then(values => {
+            var masterFile = '';
+            for(var i = 0 ; i < promisesAndExpected.length ; i++) {
+                var pie = promisesAndExpected[i];
+                if (pie.promiseIndex >= 0) {
+                    var value = values[pie.promiseIndex];
+                    switch(pie.expected) {
+                    case 'ovpn':
+                        masterFile += value + '\n';
+                        break;
+                    case '<ca>':
+                    case '<cert>':
+                    case '<key>':
+                    case '<tls-auth>':
+                        masterFile += pie.expected + '\n' + this.extractBeginEnd() + '\n</' + pie.expected.substring(1) + '\n';
+                        break;
+                    }
+                }
+            }
+            this.overlay.close();
+            var result = this.save(masterFile, fileToLoad, null, true, set);
+            if (this.save(masterFile, fileToLoad, null, true, set)) {
+                this.dialogs.error('Uploaded file caused problem during parse:\n' + result);
+            }
+        }).catch(error => {
+            this.overlay.close();
+            this.dialogs.error('Failed to upload file(s).');
+        });
     }
     
 }

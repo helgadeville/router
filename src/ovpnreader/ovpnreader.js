@@ -8,15 +8,17 @@ export class OvpnReader {
     cert = null;
     
     // lines that need to be changed or removed, no space after auth-user-pass here !
-    special = [ 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
+    special = [ 'ca ', 'cert ', 'key ', 'tls-auth ', 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
+    certs = [ '<ca>', '<cert>', '<key>', '<tls-auth>' ];
     
     read(txt, fileName) {
         this.original = txt;
         this.fileName = fileName;
         var lines = txt.split('\n');
+        var hasCerts = {};
         var newLines = [];
         var newCert = [];
-        var isCert = false;
+        var isCert = null;
         for(var i = 0 ; i < lines.length ; i++) {
             var line = lines[i].trim();
             if (!line) continue;
@@ -53,17 +55,26 @@ export class OvpnReader {
                     specials.push(line);
                     continue;
                 }
-                // now check for certificate
-                if (lowCase.indexOf('<ca>' === 0)) {
-                    isCert = true;
-                    newCert.push(line);
-                } else {
+                // now check for certificate(s)
+                for(var cc = 0 ; cc < this.certs.length ; cc++) {
+                    var chk = this.certs[cc];
+                    if (lowCase.indexOf(chk) === 0) {
+                        if (hasCerts[chk]) {
+                            return 'Duplicated certificate: ' + chk;
+                        }
+                        hasCerts[chk] = true;
+                        isCert = '</' + chk.substring(1);
+                        newCert.push(line);
+                        break;
+                    }
+                }
+                if (!isCert) {
                     newLines.push(line);
                 }
             } else {
                 newCert.push(line);
-                if (line.toLowerCase().indexOf('</ca>') === 0) {
-                    isCert = false;
+                if (line.toLowerCase().indexOf(isCert) === 0) {
+                    isCert = null;
                 }
             }
         }
@@ -78,7 +89,15 @@ export class OvpnReader {
             cert += newCert[i];
         }
         this.cert = cert;
-        return this.common && this.allRemotes && this.cert ? true : false;
+        if (!this.common) {
+            return 'Could not parse main configuration file.';
+        }
+        if (!this.allRemotes) {
+            return 'No remote server address specified.';
+        }
+        if (!this.cert || !hasCerts['<ca>']) {
+            return 'No server certificate specified.';
+        }
     }
     
     original() {
