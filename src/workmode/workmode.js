@@ -1,8 +1,9 @@
 import {inject} from 'aurelia-framework'
+import {computedFrom} from 'aurelia-framework'
 import {HttpClient} from 'aurelia-http-client'
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs'
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog'
 import {Overlay} from 'overlay/overlay'
 import {Scan} from 'modal/Scan'
 
@@ -22,7 +23,7 @@ export class WorkMode {
     activate() {
         var me = this;
         me.overlay.open();
-        me.http.get('cgi-bin/get_work_mode.json')
+        me.http.get('cgi-bin/get_workmode.json')
         .then(response => {
             me.overlay.close();
             me.protos = [ 'do not change', 'dhcp', 'static' ];
@@ -32,23 +33,32 @@ export class WorkMode {
             me.radios = response.content.wireless;
             var devices = [];
             for(var i = 0 ; i < me.wans.length ; i++) {
-                devices.push({
-                    name: me.wans[i].ifname,
+                var cable = me.wans[i];
+                var device = {
+                    name: cable.ifname,
                     type: 'wired',
-                    src: me.wans[i]
-                });
+                    src: cable
+                };
+                cable.parent = device;
+                devices.push(device);
                 if (me.wans[i].ifname === me.selection) {
                     this.source = me.wans[i];
                 }
             }
             for(var i = 0 ; i < me.radios.length ; i++) {
-                devices.push({
-                    name: me.radios[i].ifname,
+                var radio = me.radios[i];
+                var device = {
+                    name: radio.ifname,
                     type: 'radio',
-                    src: me.radios[i],
-                    disabled: me.radios[i].disabled,
-                    enabled: !me.radios[i].disabled
-                });
+                    src: radio,
+                    ssid: radio.ssid,
+                    encryption: radio.encryption,
+                    key: radio.key,
+                    disabled: radio.disabled,
+                    enabled: !radio.disabled
+                };
+                radio.parent = device;
+                devices.push(device);
                 if (me.radios[i].ifname === me.selection) {
                     this.source = me.radios[i];
                 }
@@ -194,20 +204,80 @@ export class WorkMode {
             });
     }
     
+    encryptionChanged(how) {
+        if (how === 'none') {
+            this.source.parent.key = '';
+        }
+    }
+    
+    @computedFrom('source.newProto', 'source.newIp', 'source.newMask', 'source.parent.encryption', 'source.parent.key')
+    get checkButton() {
+        var src = this.source;
+        var regex = new RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
+        if (src.newProto === 'static') {
+            if ((!src.ip && !src.newIp) || (src.newIp && !regex.test(src.newIp))) {
+                return false;
+            }
+            if ((!src.mask && !src.newMask) || (src.newMask && !regex.test(src.newMask))) {
+                return false;
+            }
+        }
+        if (src.parent.type === 'radio') {
+            if (src.parent.encryption !== 'none' && !src.parent.key) {
+                return false;
+            }
+            if ((src.parent.encryption === 'psk' || src.parent.encryption === 'psk2') && src.parent.key.length < 8) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     submit() {
         let dlg = this.dialogs.warning('You are about to change router work mode.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
-                // TODO
                 let data = {
+                    device : this.source.ifname,
+                    proto : this.source.newProto ? this.source.newProto : this.source.proto
                 };
+                if (data.proto === 'static') {
+                    data.ipaddr = this.source.newIp ? this.source.newIp : this.source.ip;
+                    data.netmask = this.source.newMask ? this.source.newMask : this.source.mask;
+                }
+                if (this.source.newMac) {
+                    data.mac = this.source.newMac;
+                }
+                if (this.source.parent.type === 'radio') {
+                    // something has changed if both sides are equal
+                    if (this.source.enabled === this.source.disabled) {
+                        data.enable = this.source.enabled;
+                    }
+                    data.ssid = this.source.parent.ssid;
+                    data.encryption = this.source.parent.encryption;
+                    if (data.encryption !== 'none') {
+                        data.key = this.source.parent.key;
+                    }
+                }
                 this.overlay.open();
-                this.FEC.submit('cgi-bin/set_work_mode.json', data)
+                this.FEC.submit('cgi-bin/set_workmode.json', data)
                     .then(response => {
                         this.overlay.close();
                         if (response.content.status === "0") {
                             console.log('Router work mode set');
-                            // TODO
+                            var me = this;
+                            this.overlay.open('Router is rebooting', true);
+                            this.v = 0;
+                            this.ival = window.setInterval(function() {
+                                if (++me.v <= 100) {
+                                    me.overlay.setPercent(me.v);
+                                } else {
+                                    window.clearInterval(me.ival);
+                                    me.overlay.close();
+                                    console.log('reload');
+                                    window.location.href = window.location.origin;
+                                }
+                            }, 500);
                         } else {
                             console.log('Error setting router work mode');
                             this.dialogs.error('Ooops ! Error occured:\n' + response.message);

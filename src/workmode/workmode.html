@@ -30,7 +30,8 @@
                             </td>
                             <td>
                                 <label for="${device.name}encryption">Encryption:</label>
-                                <select value.bind="device.encryption" id="newProto${source.ifname}" class="select-margin form-control">
+                                <select value.bind="device.encryption" id="${device.name}encryption" class="form-control"
+                                    change.delegate="encryptionChanged(device.encryption)">
                                     <option repeat.for="enc of encryptions"
                                             value="${enc.id}" model.bind="enc.id">${enc.name}</option>
                                 </select>
@@ -166,7 +167,7 @@
             </div>
             <br/>
             <div class="halign">
-                <button type="submit" class="btn btn-danger">SAVE SETTINGS</button>
+                <button type="submit" class="btn btn-danger" disabled.bind="!checkButton">SAVE SETTINGS</button>
             </div>
 
         </div>
