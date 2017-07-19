@@ -84,7 +84,7 @@
                                         <td>
                                             <label for="newProto${source.ifname}">New IP Assignment</label>
                                             <div>
-                                                <select value.bind="source.newProto" id="newProto${source.ifname}" class="select-margin">
+                                                <select value.bind="source.newProto" id="newProto${source.ifname}" class="form-control">
                                                     <option repeat.for="proto of protos"
                                                             value="${proto}" model.bind="proto">${proto}</option>
                                                 </select>

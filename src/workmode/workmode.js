@@ -212,6 +212,9 @@ export class WorkMode {
     @computedFrom('source.newProto', 'source.newIp', 'source.newMask', 'source.parent.encryption', 'source.parent.key')
     get checkButton() {
         var src = this.source;
+        if (!src) {
+            return false;
+        }
         var regex = new RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
         if (src.newProto === 'static') {
             if ((!src.ip && !src.newIp) || (src.newIp && !regex.test(src.newIp))) {

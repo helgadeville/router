@@ -12,7 +12,7 @@
             <br/>
             <label for="newDns">New DNS Selection</label>
             <div class="halign">
-                <select value.bind="newDns" id="newDns" class="select-margin">
+                <select value.bind="newDns" id="newDns" class="form-control">
                     <option repeat.for="dns of dnses"
                             value="${dns}" model.bind="dns">${dns}</option>
                 </select>
