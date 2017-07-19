@@ -54,8 +54,7 @@ export class WorkMode {
                     ssid: radio.ssid,
                     encryption: radio.encryption,
                     key: radio.key,
-                    disabled: radio.disabled,
-                    enabled: !radio.disabled
+                    disabled: radio.disabled
                 };
                 radio.parent = device;
                 devices.push(device);
@@ -239,6 +238,7 @@ export class WorkMode {
             if (!result.wasCancelled) {
                 let data = {
                     device : this.source.ifname,
+                    type : this.source.parent.type,
                     proto : this.source.newProto ? this.source.newProto : this.source.proto
                 };
                 if (data.proto === 'static') {
@@ -249,10 +249,6 @@ export class WorkMode {
                     data.mac = this.source.newMac;
                 }
                 if (this.source.parent.type === 'radio') {
-                    // something has changed if both sides are equal
-                    if (this.source.enabled === this.source.disabled) {
-                        data.enable = this.source.enabled;
-                    }
                     data.ssid = this.source.parent.ssid;
                     data.encryption = this.source.parent.encryption;
                     if (data.encryption !== 'none') {
