@@ -65,7 +65,31 @@ export class Configurations {
         if (fName.toLowerCase().indexOf('.cgz') !== fName.length - 4) {
             fName += '.cgz';
         }
-        // TODO
+        let dlg = 
+            this.dialogService.warning('Save current configuration - are  you sure ?');
+        dlg.whenClosed(result => {
+            if (!result.wasCancelled) {
+                var data = {
+                    file : fName
+                };
+                this.overlay.open();
+                this.FEC.submit('cgi-bin/save_current_config.json', data)
+                .then(response => {
+                    this.overlay.close();
+                    if (response.content.status === "0") {
+                        this.fileName = '';
+                        this.activate();
+                    } else {
+                        console.log('Error saving current system configuration !');
+                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                    }
+                }).catch(error => {
+                    this.overlay.close();
+                    console.log('Error saving current configuration !');
+                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                });
+            }
+        });
     }
     
     download($event) {
@@ -84,7 +108,7 @@ export class Configurations {
             dl.click();
         }).catch(error => {
             this.overlay.close();
-            console.log('Error setting new VPN config');
+            console.log('Error downloading saved configuration !');
             this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
         });
     }
@@ -136,21 +160,27 @@ export class Configurations {
         var data = {
             file : name
         };
-        this.overlay.open();
-        this.FEC.submit('cgi-bin/remove_system.json', data)
-        .then(response => {
-            this.overlay.close();
-            if (response.content.status === "0") {
-                console.log('System configuration removed');
-                window.location.reload(true);
-            } else {
-                console.log('Error removing system configuration');
-                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+        let dlg = 
+            this.dialogService.warning('You are about to remove system configration ' + name + '.\nAre you sure ?');
+        dlg.whenClosed(result => {
+            if (!result.wasCancelled) {
+                this.overlay.open();
+                this.FEC.submit('cgi-bin/remove_system.json', data)
+                .then(response => {
+                    this.overlay.close();
+                    if (response.content.status === "0") {
+                        console.log('System configuration removed');
+                        this.activate();
+                    } else {
+                        console.log('Error removing system configuration');
+                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                    }
+                }).catch(error => {
+                    this.overlay.close();
+                    console.log('Error removing system configuration');
+                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                });
             }
-        }).catch(error => {
-            this.overlay.close();
-            console.log('Error removing system configuration');
-            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
         });
     }
     

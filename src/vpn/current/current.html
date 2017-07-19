@@ -18,13 +18,14 @@
             </div>
             <div class="div-border">
                 <div>
-                    <label>Remote servers:&nbsp;</label>
+                    <label>Remote servers:&nbsp;(&nbsp;<input type="checkbox" change.delegate="selUnselAll($event.target.checked)"/>&nbsp;select/unselect all)</label>
                 </div>
                 <div repeat.for="remote of remotes" class="iblock">
-                    <input type="checkbox" value.bind="remote.remote" checked.bind="remote.active"/><label>&nbsp;${remote.remote}&nbsp; </label>
+                    <input type="checkbox" change.delegate="selUnselRemote($event.target.checked)"
+                           value.bind="remote.remote" checked.bind="remote.active"/><label>&nbsp;${remote.remote}&nbsp; </label>
                 </div>
                 <div class="halign">
-                    <button class="btn btn-success" disabled.bind="!this.original || !atLeastOneChecked()" click.delegate="set()">SET</button>
+                    <button class="btn btn-success" disabled.bind="!original || remotesSelected <= 0" click.delegate="set()">SET</button>
                 </div>
             </div>
             <div class="div-border">

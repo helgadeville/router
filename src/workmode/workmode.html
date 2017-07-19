@@ -38,7 +38,9 @@
                             </td>
                             <td>
                                 <label for="${device.name}passphrase">Password / key:</label>
-                                <input id="${device.name}passphrase" name="${device.name}passphrase" type="password" class="form-control"
+                                <label>&nbsp;(&nbsp;<input type="checkbox" checked.bind="device.pass_visible"/>&nbsp;show password&nbsp;)</label>
+                                <input id="${device.name}passphrase" name="${device.name}passphrase"
+                                       type="${device.pass_visible ? 'text' : 'password'}" class="form-control"
                                        value.bind="device.key" disabled.bind="device.encryption === 'none'" />
                             </td>
                         </tr>

@@ -179,7 +179,6 @@ export class WorkMode {
                 });
                 dlg.whenClosed(result => {
                     if (!result.wasCancelled) {
-                        // TODO !!!
                         var chosen = result.output;
                         // now setup proper device
                         for(var i = 0 ; i < this.devices.length ; i++) {

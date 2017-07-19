@@ -1,7 +1,7 @@
-import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
+import {inject} from 'aurelia-framework'
+import {HttpClient} from 'aurelia-http-client'
 import {FormEncoder} from 'formencoder/formencoder'
-import {Dialogs} from 'modal/dialogs';
+import {Dialogs} from 'modal/dialogs'
 import {Overlay} from 'overlay/overlay'
 import {OvpnReader} from 'ovpnreader/ovpnreader'
 
@@ -17,6 +17,7 @@ export class VpnCurrent {
     }
     
     activate() {
+        this.remotesSelected = 0;
         this.overlay.open();
         this.http.get('cgi-bin/get_vpn_config.text')
         .then(response => {
@@ -42,6 +43,9 @@ export class VpnCurrent {
                             remote : splt[1],
                             active : active
                         });
+                        if (active) {
+                            this.remotesSelected++;
+                        }
                     }
                 }
                 if (!skip) {
@@ -59,18 +63,21 @@ export class VpnCurrent {
         
     }
     
-    atLeastOneChecked() {
-        if (!this.remotes) {
-            return false;
-        }
+    selUnselAll(how) {
         for(var i = 0 ; i < this.remotes.length ; i++) {
-            if (this.remotes[i].active) {
-                return true;
-            }
+            this.remotes[i].active = how;
         }
-        return false;
+        this.remotesSelected = how ? this.remotes.length : 0;
     }
     
+    selUnselRemote(how) {
+        if (how) {
+            this.remotesSelected++;
+        } else {
+            this.remotesSelected--;
+        }
+    }
+        
     setUserAndPass(connect) {
         this.overlay.open();
         var data = {
