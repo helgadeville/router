@@ -101,7 +101,7 @@ export class Configurations {
             file : name
         };
         this.overlay.open();
-        this.FEC.submit('cgi-bin/get_system_config.json', data)
+        this.FEC.submit('cgi-bin/get_system_config.bin', data)
         .then(response => {
             this.overlay.close();
             // response.response is text, force download
@@ -117,7 +117,7 @@ export class Configurations {
     }
     
     restore($event) {
-        var name = $event.currentTarget.name;
+        var name = $event === 'factory' || $event === 'default' ? $event : $event.currentTarget.name;
         let dlg = 
             this.dialogService.warning('You are about to restore system configration.\nAfter that, router will be rebooted.\nAre you sure ?');
         dlg.whenClosed(result => {
@@ -164,7 +164,7 @@ export class Configurations {
             file : name
         };
         let dlg = 
-            this.dialogService.warning('You are about to remove system configration ' + name + '.\nAre you sure ?');
+            this.dialogService.warning('You are about to remove system configuration ' + name + '.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
                 this.overlay.open();
@@ -185,6 +185,70 @@ export class Configurations {
                 });
             }
         });
+    }
+        
+    loadSet(archive) {
+        var me = this;
+        var fileToLoad = document.getElementById('upload').files[0];
+        if (fileToLoad.toLowerCase() === 'default' || fileToLoad.toLowerCase() === 'factory') {
+            return;
+        }
+        if (fileToLoad) {
+            var fileReader = new FileReader();
+            fileReader.onload = function(fileLoadedEvent) {
+                let dlg = 
+                    me.dialogService.warning('Are you sure to upload and set configuration ' + fileToLoad + ' ?');
+                dlg.whenClosed(result => {
+                    if (!result.wasCancelled) {
+                        var arrayBuffer = fileLoadedEvent.target.result;
+                        var base64 = btoa(
+                                new Uint8Array(arrayBuffer)
+                                  .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                              );
+                        var data = {
+                            file : fileToLoad,
+                            data : base64,
+                            archive : archive
+                        };
+                        me.overlay.open();
+                        me.FEC.submit('cgi-bin/upload_system_config.json', data)
+                        .then(response => {
+                            me.overlay.close();
+                            if (response.content.status === "0") {
+                                console.log('System configuration uploaded');
+                                me.overlay.open('Router is rebooting', true);
+                                me.v = 0;
+                                me.ival = window.setInterval(function() {
+                                    if (++me.v <= 100) {
+                                        me.overlay.setPercent(me.v);
+                                    } else {
+                                        window.clearInterval(me.ival);
+                                        me.overlay.close();
+                                        console.log('reload');
+                                        window.location.href = window.location.origin;
+                                    }
+                                }, 500);
+                            } else {
+                                console.log('Error uploading system configuration');
+                                me.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            }
+                        }).catch(error => {
+                            me.overlay.close();
+                            console.log('Error uploading system configuration');
+                            me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        });
+                    }});
+            };
+            fileReader.onerror = function() {
+                console.log('Error uploading system configuration');
+                this.dialogService.error('Ooops ! Error occured when trying to upload file.');
+            };
+            fileReader.readAsArrayBuffer(fileToLoad);
+        }
+    }
+    
+    loadArchive() {
+        loadSet(true);
     }
     
 }

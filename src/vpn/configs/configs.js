@@ -32,7 +32,7 @@ export class VpnConfigs {
                 this.configs = configs;
             }).catch(error => {
                 this.overlay.close();
-                console.log('Error getting router work mode');
+                console.log('Error getting VPN configurations');
             });
     }
     
