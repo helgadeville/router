@@ -44,11 +44,17 @@ export class Configurations {
             return false;
         }
         // check special chars
-        if (this.fileName.indexOf('/') >= 0 || this.fileName.indexOf('\\') >= 0 || this.fileName.indexOf('?') >= 0 || this.fileName.indexOf('*') >= 0) {
+        if (this.fileName.indexOf('/') >= 0 
+            || this.fileName.indexOf('\\') >= 0 
+            || this.fileName.indexOf('?') >= 0 
+            || this.fileName.indexOf('*') >= 0
+            || this.fileName.indexOf('\"') >= 0
+            || this.fileName.indexOf('\'') >= 0
+            || this.fileName.indexOf('\`') >= 0) {
             return false;
         }
         // check reserved
-        if (this.fileName === 'default') {
+        if (this.fileName === 'factory' || this.fileName === 'default') {
             return false;
         }
         // check if exists
@@ -62,9 +68,6 @@ export class Configurations {
     
     saveCurrent() {
         var fName = this.fileName;
-        if (fName.toLowerCase().indexOf('.cgz') !== fName.length - 4) {
-            fName += '.cgz';
-        }
         let dlg = 
             this.dialogService.warning('Save current configuration - are  you sure ?');
         dlg.whenClosed(result => {
