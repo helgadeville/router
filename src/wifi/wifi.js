@@ -37,10 +37,12 @@ export class Wireless {
                 // setup new properties as old ones
                 for(var i = 0 ; i < devices.length ; i++) {
                     var device = devices[i];
+                    device.disabled = device.disabled && device.disabled === '1' ? true : false;
                     device.enabled = !device.disabled;
                     for(var j = 0 ; j < device.interfaces.length ; j++) {
                         var wifi = device.interfaces[j];
                         wifi.devicename = device['#'];
+                        wifi.disabled = wifi.disabled && wifi.disabled === '1' ? true : false;
                         wifi.enabled = !wifi.disabled;
                     }
                 }

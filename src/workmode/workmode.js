@@ -5,7 +5,7 @@ import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs'
 import {DialogService} from 'aurelia-dialog'
 import {Overlay} from 'overlay/overlay'
-import {Scan} from 'modal/Scan'
+import {Scan} from 'modal/scan'
 
 @inject(HttpClient,FormEncoder,DialogService,Dialogs,Overlay)
 export class WorkMode {
@@ -47,6 +47,7 @@ export class WorkMode {
             }
             for(var i = 0 ; i < me.radios.length ; i++) {
                 var radio = me.radios[i];
+                radio.disabled = radio.disabled && radio.disabled === '1' ? true : false;
                 var device = {
                     name: radio.ifname,
                     type: 'radio',

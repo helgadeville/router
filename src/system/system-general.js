@@ -40,7 +40,7 @@ export class SystemGeneral {
     poll_status() {
         return this.http.get('cgi-bin/system.text')
             .then(response => {
-                this.info = response.content;
+                this.info = response.response;
             }).catch(error => {
                 console.log('Error getting status');
             });
