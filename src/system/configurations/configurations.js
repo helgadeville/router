@@ -168,7 +168,7 @@ export class Configurations {
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
                 this.overlay.open();
-                this.FEC.submit('cgi-bin/remove_system.json', data)
+                this.FEC.submit('cgi-bin/remove_system_config.json', data)
                 .then(response => {
                     this.overlay.close();
                     if (response.content.status === "0") {
@@ -207,8 +207,10 @@ export class Configurations {
                               );
                         var data = {
                             file : fileToLoad,
-                            data : base64,
-                            archive : archive
+                            data : base64
+                        }
+                        if (archive) {
+                            data.archive = 'yes'
                         };
                         me.overlay.open();
                         me.FEC.submit('cgi-bin/upload_system_config.json', data)

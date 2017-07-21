@@ -97,7 +97,7 @@ export class VpnConfigs {
                     file : name
                 };
                 this.overlay.open();
-                this.FEC.submit('cgi-bin/remove_vpn.json', data)
+                this.FEC.submit('cgi-bin/remove_vpn_config.json', data)
                 .then(response => {
                     this.overlay.close();
                     if (response.content.status === "0") {
@@ -136,7 +136,7 @@ export class VpnConfigs {
             data.current = ovpn.get(remotes);
         }
         this.overlay.open();
-        this.FEC.submit('cgi-bin/set_vpn.json', data)
+        this.FEC.submit('cgi-bin/set_vpn_config.json', data)
         .then(response => {
             this.overlay.close();
             if (response.content.status === "0") {
