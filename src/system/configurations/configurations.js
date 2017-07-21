@@ -101,12 +101,13 @@ export class Configurations {
             file : name
         };
         this.overlay.open();
-        this.FEC.submit('cgi-bin/get_system_config.bin', data)
+        this.FEC.submit('cgi-bin/get_system_config.bin', data, 'arraybuffer')
         .then(response => {
             this.overlay.close();
-            // response.response is text, force download
+            // response.response is blob
+            var blob = new Blob([response.response], {type:'octet/stream'});
             var dl = document.createElement('a');
-            dl.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(response.response));
+            dl.href = window.URL.createObjectURL(blob);
             dl.setAttribute('download', name);
             dl.click();
         }).catch(error => {

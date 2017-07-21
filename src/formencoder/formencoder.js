@@ -22,7 +22,7 @@ export class FormEncoder {
         return urlEncodedData;
     }
     
-    submit(url, data) {
+    submit(url, data, responseType) {
         let rq = this.http.createRequest(url);
         let enc = this.encode(data);
         if (!this.debug) {
@@ -33,6 +33,9 @@ export class FormEncoder {
             rq.asGet();
             console.log('POST->GET: ' + url);
             console.log(data);
+        }
+        if (responseType) {
+            rq.withResponseType(responseType);
         }
         return rq.send();
     }

@@ -7,7 +7,7 @@
                     <tr repeat.for="config of configs" class="mini-border width100">
                         <td class="margin5">
                             <div>
-                                <a href="" click.delegate="download($event)">${config}</a>
+                                <a name="${config}" click.delegate="download($event)">${config}</a>
                             </div>
                         </td>
                         <td class="fright margin5">

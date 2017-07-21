@@ -35,7 +35,7 @@
                     <tr repeat.for="config of configs" class="mini-border width100">
                         <td class="margin5">
                             <div>
-                                <a href="./cgi-bin/download/${config}">${config}</a>
+                                <a name="${config}" click.delegate="download($event)">${config}</a>
                             </div>
                         </td>
                         <td class="fright margin5">
