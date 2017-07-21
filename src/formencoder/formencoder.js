@@ -5,7 +5,7 @@ import {HttpClient} from 'aurelia-http-client';
 
 export class FormEncoder {
     
-    debug = true;
+    debug = false;
 
     constructor(http) {
         this.http = http;
