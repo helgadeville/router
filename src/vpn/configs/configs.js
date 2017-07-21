@@ -3,6 +3,7 @@ import {HttpClient} from 'aurelia-http-client';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
+import {OvpnReader} from 'ovpnreader/ovpnreader'
 
 @inject(HttpClient,FormEncoder,Dialogs,Overlay)
 
@@ -58,6 +59,7 @@ export class VpnConfigs {
     }
     
     restore($event) {
+        var me = this;
         var name = $event.currentTarget.name;
         let dlg = 
             this.dialogService.warning('You are about to restore VPN configration.\nAre you sure ?');
@@ -67,27 +69,28 @@ export class VpnConfigs {
                 var data = {
                     file : name
                 };
-                this.overlay.open();
-                this.FEC.submit('cgi-bin/get_vpn_config.text', data)
+                me.overlay.open();
+                me.FEC.submit('cgi-bin/get_vpn_config.text', data)
                 .then(response => {
-                    this.overlay.close();
+                    me.overlay.close();
                     // response.response is text
-                    if (!this.save(original, name, null, false, true)) {
-                        this.dialogService.error('Could not parse target configuration.');
+                    if (!me.save(response.response, name, null, false, true)) {
+                        me.dialogService.error('Could not parse target configuration.');
                     } else {
                         console.log('VPN configuration restored.');
-                        window.location.reload(true);
+                        me.activate();
                     }
                 }).catch(error => {
-                    this.overlay.close();
+                    me.overlay.close();
                     console.log('Error setting new VPN configuration');
-                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                    me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
                 });
             }
         });
     }
     
     remove($event) {
+        var me = this;
         var name = $event.currentTarget.name;
         let dlg = 
             this.dialogService.warning('You are about to remove stored VPN configration.\nThis operation is not reversible.\nAre you sure ?');
@@ -96,21 +99,21 @@ export class VpnConfigs {
                 var data = {
                     file : name
                 };
-                this.overlay.open();
-                this.FEC.submit('cgi-bin/remove_vpn_config.json', data)
+                me.overlay.open();
+                me.FEC.submit('cgi-bin/remove_vpn_config.json', data)
                 .then(response => {
-                    this.overlay.close();
+                    me.overlay.close();
                     if (response.content.status === "0") {
                         console.log('VPN configuration removed');
-                        window.location.reload(true);
+                        me.activate();
                     } else {
                         console.log('Error removing VPN configuration');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        me.dialogService.error('Ooops ! Error occured:\n' + response.message);
                     }
                 }).catch(error => {
-                    this.overlay.close();
+                    me.overlay.close();
                     console.log('Error removing VPN configuration');
-                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                    me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
                 });
             }
         });
@@ -141,7 +144,7 @@ export class VpnConfigs {
             this.overlay.close();
             if (response.content.status === "0") {
                 console.log('VPN config set');
-                window.location.reload(true);
+                this.activate();
             } else {
                 console.log('Error setting VPN configuration');
                 this.dialogService.error('Ooops ! Error occured:\n' + response.message);
@@ -221,6 +224,7 @@ export class VpnConfigs {
         }
         Promise.all(promises)
         .then(values => {
+            this.uploadFile = ''; this.uploadCert = ''; this.clientCert = ''; this.clientKey = ''; this.tlsAuth = '';
             var masterFile = '';
             for(var i = 0 ; i < promisesAndExpected.length ; i++) {
                 var pie = promisesAndExpected[i];
@@ -242,11 +246,11 @@ export class VpnConfigs {
             this.overlay.close();
             var result = this.save(masterFile, fileToLoad, null, true, set);
             if (this.save(masterFile, fileToLoad, null, true, set)) {
-                this.dialogs.error('Uploaded file caused problem during parse:\n' + result);
+                this.dialogService.error('Uploaded file caused problem during parse:\n' + result);
             }
         }).catch(error => {
             this.overlay.close();
-            this.dialogs.error('Failed to upload file(s).');
+            this.dialogService.error('Failed to upload file(s).');
         });
     }
     

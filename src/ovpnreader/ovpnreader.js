@@ -4,7 +4,7 @@ export class OvpnReader {
     
     common = '';
     remotes = [];
-    specials = [];
+    specials = {};
     cert = null;
     
     // lines that need to be changed or removed, no space after auth-user-pass here !
@@ -35,7 +35,7 @@ export class OvpnReader {
                 var lowCase = line.toLowerCase();
                 // extract remotes even when commented
                 if (lowCase.indexOf('remote ') === 0) {
-                    remotes.push({
+                    this.remotes.push({
                         remote : line,
                         active : !commented
                     });
@@ -43,16 +43,16 @@ export class OvpnReader {
                     continue;
                 }
                 // now need to check for special lines
-                var spec = false;
+                var spec = null;
                 for(var j = 0 ; j < lowCase.length ; j++) {
                     if (lowCase.indexOf(this.special[j]) === 0) {
-                        spec = true;
+                        spec = this.special[j];
                         break;
                     }
                 }
                 // skip special line
                 if (spec) {
-                    specials.push(line);
+                    this.specials[spec] = line;
                     continue;
                 }
                 // now check for certificate(s)
@@ -92,7 +92,7 @@ export class OvpnReader {
         if (!this.common) {
             return 'Could not parse main configuration file.';
         }
-        if (!this.allRemotes) {
+        if (!this.remotes) {
             return 'No remote server address specified.';
         }
         if (!this.cert || !hasCerts['<ca>']) {
@@ -120,7 +120,9 @@ export class OvpnReader {
         if (this.fileName) {
             output += '#original-file ' + this.fileName + '\n';
         }
-        output += 'auth-user-pass /etc/openvpn/auth.txt\n';
+        if (this.specials['auth-user-pass']) {
+            output += 'auth-user-pass /etc/openvpn/auth.txt\n';
+        }
         output += 'log /var/log/openvpn.log\n';
         output += 'status /var/log/openvpn-status.log\n';
         output += 'script-security 2\n';

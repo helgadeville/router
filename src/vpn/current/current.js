@@ -87,17 +87,17 @@ export class VpnCurrent {
         };
         this.FEC.submit('cgi-bin/set_vpn_auth.json', data)
         .then(response => {
-            me.overlay.close();
+            this.overlay.close();
             if (response.content.status === "0") {
                 console.log('VPN username & password set');
             } else {
                 console.log('Error setting VPN username & password');
-                me.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
             }
         }).catch(error => {
-            me.overlay.close();
+            this.overlay.close();
             console.log('Error setting new VPN username/password');
-            me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
         });
     }
     
