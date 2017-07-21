@@ -32,7 +32,7 @@ export class VpnCurrent {
                 if (line.toLowerCase().indexOf('#user=') === 0) {
                     this.username = line.substring(6).trim();
                 } else
-                if (line.toLowerCase().indexOf('#original-file ') === 0) {
+                if (line.toLowerCase().indexOf('#original-file=') === 0) {
                     this.file = line.substring(15).trim();
                     skip = true;
                 } else {

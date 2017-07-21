@@ -8,7 +8,7 @@ export class OvpnReader {
     cert = null;
     
     // lines that need to be changed or removed, no space after auth-user-pass here !
-    special = [ 'ca ', 'cert ', 'key ', 'tls-auth ', 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
+    special = [ 'ca ', 'cert ', 'key ', 'tls-auth ', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
     certs = [ '<ca>', '<cert>', '<key>', '<tls-auth>' ];
     
     read(txt, fileName) {
@@ -118,10 +118,10 @@ export class OvpnReader {
         }
         // now special lines [ 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
         if (this.fileName) {
-            output += '#original-file ' + this.fileName + '\n';
+            output += '#original-file=' + this.fileName + '\n';
         }
         if (this.specials['auth-user-pass']) {
-            output += 'auth-user-pass /etc/openvpn/auth.txt\n';
+            output += 'auth-user-pass /etc/openvpn/.auth.txt\n';
         }
         output += 'log /var/log/openvpn.log\n';
         output += 'status /var/log/openvpn-status.log\n';
