@@ -94,8 +94,10 @@ export class WorkMode {
         return true;
     }
     
-    scan() {
+    scan($event) {
+        var name = $event.currentTarget.name;
         let data = {
+            device : name
         };
         this.overlay.open();
         this.FEC.submit('cgi-bin/scan.text', data)
@@ -242,7 +244,7 @@ export class WorkMode {
                 let data = {
                     device : this.source.ifname,
                     type : this.source.parent.type,
-                    proto : this.source.newProto ? this.source.newProto : this.source.proto
+                    proto : this.source.newProto && this.source.newProto !== 'do not change' ? this.source.newProto : this.source.proto
                 };
                 if (data.proto === 'static') {
                     data.ipaddr = this.source.newIp ? this.source.newIp : this.source.ip;
