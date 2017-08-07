@@ -106,10 +106,8 @@ export class OvpnReader {
     
     get(rmts) {
         // now remotes
-        if (rmts == undefined) {
-            rmts = this.remotes;
-        }
-        var output = this.output + '\n';
+        rmts = !rmts ? this.remotes : rmts;
+        var output = this.common + '\n';
         for(var i = 0 ; i < rmts.length ; i++) {
             var rmt = rmts[i];
             if (rmt.active) {
@@ -118,7 +116,7 @@ export class OvpnReader {
         }
         // now special lines [ 'original-file', 'auth-user-pass', 'log ', 'status ', 'script-security ', 'up ', 'down ' ];
         if (this.fileName) {
-            output += '#original-file=' + this.fileName + '\n';
+            output = '#original-file=' + this.fileName + '\n' + output;
         }
         if (this.specials['auth-user-pass']) {
             output += 'auth-user-pass /etc/openvpn/.auth.txt\n';
