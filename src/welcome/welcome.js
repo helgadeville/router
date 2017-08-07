@@ -88,7 +88,7 @@ export class Welcome {
                             window.clearInterval(me.ival);
                             me.overlay.close();
                             console.log('reload');
-                            window.location.reload(true);
+                            this.activate();
                         }
                     }, 60);
                 }).catch(error => {

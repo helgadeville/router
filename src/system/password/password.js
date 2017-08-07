@@ -49,7 +49,7 @@ export class Password {
                         if (response.content.status === "0") {
                             console.log('Router password set');
                             this.oldUser = this.newUser;
-                            window.location.reload(true);
+                            this.activate();
                         } else {
                             console.log('Error setting router password');
                             this.dialogService.error('Ooops ! Error occured:\n' + response.message);

@@ -244,8 +244,7 @@ export class VpnConfigs {
                 }
             }
             this.overlay.close();
-            var result = this.save(masterFile, fileToLoad, null, true, set);
-            if (this.save(masterFile, fileToLoad, null, true, set)) {
+            if (this.save(masterFile, fileToLoad.name, null, true, set)) {
                 this.dialogService.error('Uploaded file caused problem during parse:\n' + result);
             }
         }).catch(error => {

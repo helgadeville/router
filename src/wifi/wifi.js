@@ -121,7 +121,7 @@ export class Wireless {
                                     window.clearInterval(me.ival);
                                     me.overlay.close();
                                     console.log('reload');
-                                    window.location.reload(true);
+                                    me.activate();
                                 }
                             }, 60);
                         } else {
@@ -186,7 +186,7 @@ export class Wireless {
                                     window.clearInterval(me.ival);
                                     me.overlay.close();
                                     console.log('reload');
-                                    window.location.reload(true);
+                                    me.activate();
                                 }
                             }, 60);
                         } else {

@@ -131,10 +131,10 @@ export class WorkMode {
                                 dev.ssid = chosen.ssid;
                                 dev.encryption = chosen.encryption;
                                 dev.key = chosen.key;
-                                dev.proto = chosen.proto;
-                                dev.ipaddr = chosen.ipaddr;
-                                dev.netmask = chosen.netmask;
-                                dev.mac = chosen.mac;
+                                dev.newProto = chosen.proto;
+                                dev.newIp = chosen.ipaddr;
+                                dev.newMask = chosen.netmask;
+                                dev.newMac = chosen.mac;
                                 break;
                             }
                         }
@@ -340,7 +340,7 @@ export class WorkMode {
                             this.v = 0;
                             this.ival = window.setInterval(function() {
                                 if (++me.v <= timeout) {
-                                    me.overlay.setPercent(me.v);
+                                    me.overlay.setPercent(Math.round(100 * me.v / timeout));
                                 } else {
                                     window.clearInterval(me.ival);
                                     me.overlay.close();

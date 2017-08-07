@@ -62,7 +62,7 @@ export class Dns {
                         this.overlay.close();
                         if (response.content.status === "0") {
                             console.log('DNS set');
-                            window.location.reload(true);
+                            this.activate();
                         } else {
                             console.log('Error setting router DNS');
                             this.dialogService.error('Ooops ! Error occured:\n' + response.message);

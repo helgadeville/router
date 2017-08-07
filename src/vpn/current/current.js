@@ -128,12 +128,12 @@ export class VpnCurrent {
             data.current = ovpn.get(remotes);
         }
         this.overlay.open();
-        this.FEC.submit('cgi-bin/set_vpn.json', data)
+        this.FEC.submit('cgi-bin/set_vpn_config.json', data)
         .then(response => {
             this.overlay.close();
             if (response.content.status === "0") {
                 console.log('VPN config set');
-                window.location.reload(true);
+                this.activate();
             } else {
                 console.log('Error setting VPN configuration');
                 this.dialogService.error('Ooops ! Error occured:\n' + response.message);
@@ -213,6 +213,7 @@ export class VpnCurrent {
         }
         Promise.all(promises)
         .then(values => {
+            this.uploadFile = ''; this.uploadCert = ''; this.clientCert = ''; this.clientKey = ''; this.tlsAuth = '';
             var masterFile = '';
             for(var i = 0 ; i < promisesAndExpected.length ; i++) {
                 var pie = promisesAndExpected[i];
@@ -232,8 +233,7 @@ export class VpnCurrent {
                 }
             }
             this.overlay.close();
-            var result = this.save(masterFile, fileToLoad, null, true, set);
-            if (this.save(masterFile, fileToLoad, null, true, set)) {
+            if (this.save(masterFile, fileToLoad.name, null, true, set)) {
                 this.dialogs.error('Uploaded file caused problem during parse:\n' + result);
             }
         }).catch(error => {
