@@ -74,7 +74,7 @@ export class VpnConfigs {
                 .then(response => {
                     me.overlay.close();
                     // response.response is text
-                    if (!me.save(response.response, name, null, false, true)) {
+                    if (me.save(response.response, name, null, false, true)) {
                         me.dialogService.error('Could not parse target configuration.');
                     } else {
                         console.log('VPN configuration restored.');

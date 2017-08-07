@@ -2,7 +2,7 @@
     <div>
         <span>${heading}</span><br/>
         <form role="form">
-            <div class="div-border">
+            <div class="div-border" if.bind="configs.length > 0">
                 <table class="width100">
                     <tr repeat.for="config of configs" class="mini-border width100">
                         <td class="margin5">
