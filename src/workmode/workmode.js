@@ -6,6 +6,7 @@ import {Dialogs} from 'modal/dialogs'
 import {DialogService} from 'aurelia-dialog'
 import {Overlay} from 'overlay/overlay'
 import {Scan} from 'modal/scan'
+import {Saved} from 'modal/saved'
 
 @inject(HttpClient,FormEncoder,DialogService,Dialogs,Overlay)
 export class WorkMode {
@@ -42,6 +43,9 @@ export class WorkMode {
                 cable.parent = device;
                 devices.push(device);
                 if (me.wans[i].ifname === me.selection) {
+                    if (!me.wans[i].proto) {
+                        me.wans[i].proto = 'dhcp';
+                    }
                     this.source = me.wans[i];
                 }
             }
@@ -60,11 +64,14 @@ export class WorkMode {
                 radio.parent = device;
                 devices.push(device);
                 if (me.radios[i].ifname === me.selection) {
-                    this.source = me.radios[i];
+                    if (!me.radios[i].proto) {
+                        me.radios[i].proto = 'dhcp';
+                    }
+                    me.source = me.radios[i];
                 }
             }
-            this.devices = devices;
-            this.encryptions = [{
+            me.devices = devices;
+            me.encryptions = [{
                     id : 'none',
                     name : 'Open (no encryption)'
                 }, {
@@ -92,6 +99,53 @@ export class WorkMode {
             }
         }
         return true;
+    }
+    
+    saved($event) {
+        var name = $event.currentTarget.name;
+        let data = {
+            device : name
+        };
+        this.overlay.open();
+        this.FEC.submit('cgi-bin/get_stations.json', data)
+            .then(response => {
+                this.overlay.close();
+                var stations = response.content;
+                if (!stations) {
+                    this.dialogs.info('There are no saved stations.');
+                    return;
+                }
+                let dlg = this.dialogService.open( {
+                    viewModel: Saved, 
+                    model: {
+                        aps : stations
+                    }
+                });
+                dlg.whenClosed(result => {
+                    if (!result.wasCancelled) {
+                        var chosen = result.output;
+                        // now setup proper device
+                        for(var i = 0 ; i < this.devices.length ; i++) {
+                            var dev = this.devices[i];
+                            if (dev.name === this.selection) {
+                                dev.ssid = chosen.ssid;
+                                dev.encryption = chosen.encryption;
+                                dev.key = chosen.key;
+                                dev.proto = chosen.proto;
+                                dev.ipaddr = chosen.ipaddr;
+                                dev.netmask = chosen.netmask;
+                                dev.mac = chosen.mac;
+                                break;
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                this.overlay.close();
+                console.log('Error retrieving saved stations');
+                this.dialogs.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            });
     }
     
     scan($event) {
@@ -244,7 +298,8 @@ export class WorkMode {
                 let data = {
                     device : this.source.ifname,
                     type : this.source.parent.type,
-                    proto : this.source.newProto && this.source.newProto !== 'do not change' ? this.source.newProto : this.source.proto
+                    proto : this.source.newProto && this.source.newProto !== 'do not change' ? this.source.newProto
+                                 : (this.source.proto ? this.source.proto : 'dhcp')
                 };
                 if (data.proto === 'static') {
                     data.ipaddr = this.source.newIp ? this.source.newIp : this.source.ip;
@@ -266,11 +321,25 @@ export class WorkMode {
                         this.overlay.close();
                         if (response.content.status === "0") {
                             console.log('Router work mode set');
+                            var msg = '';
+                            var timeout = 0;
+                            if (response.content.reboot === 'full') {
+                                msg = 'Network is restarting';
+                                timeout = 10;
+                            } else
+                            if (response.content.reboot === 'cable') {
+                                msg = 'Network is reloading';
+                                timeout = 5;
+                            } else
+                            if (response.content.reboot === 'wifi') {
+                                msg = 'Updating wifi setting';
+                                timeout = 5;
+                            }
                             var me = this;
-                            this.overlay.open('Router is rebooting', true);
+                            this.overlay.open(msg, true);
                             this.v = 0;
                             this.ival = window.setInterval(function() {
-                                if (++me.v <= 100) {
+                                if (++me.v <= timeout) {
                                     me.overlay.setPercent(me.v);
                                 } else {
                                     window.clearInterval(me.ival);
