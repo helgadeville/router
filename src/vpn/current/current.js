@@ -1,16 +1,13 @@
 import {inject} from 'aurelia-framework'
-import {HttpClient} from 'aurelia-http-client'
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs'
 import {Overlay} from 'overlay/overlay'
 import {OvpnReader} from 'ovpnreader/ovpnreader'
 
-@inject(HttpClient,FormEncoder,Dialogs,Overlay)
-
+@inject(FormEncoder,Dialogs,Overlay)
 export class VpnCurrent {
     
-    constructor(http, FEC, dialogs, overlay) {
-        this.http = http;
+    constructor(FEC, dialogs, overlay) {
         this.FEC = FEC;
         this.dialogs = dialogs;
         this.overlay = overlay;
@@ -19,7 +16,7 @@ export class VpnCurrent {
     activate() {
         this.remotesSelected = 0;
         this.overlay.open();
-        this.http.get('cgi-bin/get_vpn_config.text')
+        this.FEC.get('cgi-bin/get_vpn_config.text')
         .then(response => {
             this.overlay.close();
             var remotes = [];

@@ -1,17 +1,15 @@
 import {inject} from 'aurelia-framework'
-import {HttpClient} from 'aurelia-http-client'
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs'
 import {Overlay} from 'overlay/overlay'
 import {DnsHelper} from 'dns/dnshelper'
 
-@inject(HttpClient,FormEncoder,Dialogs,Overlay,DnsHelper)
+@inject(FormEncoder,Dialogs,Overlay,DnsHelper)
 export class Dns {
     
     heading = 'Domain Name Servers';
     
-    constructor(http, FEC, dialogs, overlay, dnshelp) {
-        this.http = http;
+    constructor(FEC, dialogs, overlay, dnshelp) {
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;
@@ -21,7 +19,7 @@ export class Dns {
     activate() {
         var me = this;
         me.overlay.open();
-        me.http.get('cgi-bin/get_dns.text')
+        me.FEC.get('cgi-bin/get_dns.text')
         .then(response => {
             me.overlay.close();
             var dnses = [ 'do not change' ];

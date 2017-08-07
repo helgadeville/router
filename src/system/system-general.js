@@ -1,15 +1,15 @@
-import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
-@inject(HttpClient)
+import {inject} from 'aurelia-framework'
+import {FormEncoder} from 'formencoder/formencoder'
 
+@inject(FormEncoder)
 export class SystemGeneral {
     
     heading = 'System General Information';
     
     poll_freq = 2000;
     
-    constructor(http) {
-        this.http = http;
+    constructor(FEC) {
+        this.FEC = FEC;
     }
     
     activate() {
@@ -38,7 +38,7 @@ export class SystemGeneral {
     }
     
     poll_status() {
-        return this.http.get('cgi-bin/system.text')
+        return this.FEC.get('cgi-bin/system.text')
             .then(response => {
                 this.info = response.response;
             }).catch(error => {

@@ -1,6 +1,5 @@
 import {inject} from 'aurelia-framework'
 import {computedFrom} from 'aurelia-framework'
-import {HttpClient} from 'aurelia-http-client'
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs'
 import {DialogService} from 'aurelia-dialog'
@@ -8,13 +7,12 @@ import {Overlay} from 'overlay/overlay'
 import {Scan} from 'modal/scan'
 import {Saved} from 'modal/saved'
 
-@inject(HttpClient,FormEncoder,DialogService,Dialogs,Overlay)
+@inject(FormEncoder,DialogService,Dialogs,Overlay)
 export class WorkMode {
     
     heading = 'Internet Source';
     
-    constructor(http, FEC, dialogService, dialogs, overlay) {
-        this.http = http;
+    constructor(FEC, dialogService, dialogs, overlay) {
         this.FEC = FEC;
         this.dialogService = dialogService;
         this.dialogs = dialogs;
@@ -24,7 +22,7 @@ export class WorkMode {
     activate() {
         var me = this;
         me.overlay.open();
-        me.http.get('cgi-bin/get_workmode.json')
+        me.FEC.get('cgi-bin/get_workmode.json')
         .then(response => {
             me.overlay.close();
             me.protos = [ 'do not change', 'dhcp', 'static' ];

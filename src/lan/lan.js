@@ -1,18 +1,16 @@
 import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
 import {UciReader} from 'configreader/ucireader'
 
-@inject(HttpClient,FormEncoder,Dialogs,Overlay,UciReader)
+@inject(FormEncoder,Dialogs,Overlay,UciReader)
 
 export class LAN {
     
     heading = 'LAN Settings';
     
-    constructor(http, FEC, dialogs, overlay, ucireader) {
-        this.http = http;
+    constructor(FEC, dialogs, overlay, ucireader) {
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;
@@ -21,7 +19,7 @@ export class LAN {
     
     activate() {
         this.overlay.open();
-        return this.http.get('cgi-bin/get_lan.text')
+        return this.FEC.get('cgi-bin/get_lan.text')
             .then(response => {
                 this.overlay.close();
                 var config = this.creader.read(response.response);

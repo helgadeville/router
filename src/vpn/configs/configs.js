@@ -1,18 +1,16 @@
 import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
 import {OvpnReader} from 'ovpnreader/ovpnreader'
 
-@inject(HttpClient,FormEncoder,Dialogs,Overlay)
+@inject(FormEncoder,Dialogs,Overlay)
 
 export class VpnConfigs {
     
     heading = 'OpenVPN Template Configurations';
     
-    constructor(http, FEC, dialogs, overlay) {
-        this.http = http;
+    constructor(FEC, dialogs, overlay) {
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;
@@ -20,7 +18,7 @@ export class VpnConfigs {
     
     activate() {
         this.overlay.open();
-        return this.http.get('cgi-bin/get_vpn_configurations.text')
+        return this.FEC.get('cgi-bin/get_vpn_configurations.text')
             .then(response => {
                 this.overlay.close();
                 var cfgs = response.response.split('\n');

@@ -31,9 +31,20 @@ export class FormEncoder {
             rq.withContent(enc);
         } else {
             rq.asGet();
+            rq.withParams({ _t: new Date().getTime() });
             console.log('POST->GET: ' + url);
             console.log(data);
         }
+        if (responseType) {
+            rq.withResponseType(responseType);
+        }
+        return rq.send();
+    }
+    
+    get(url, responseType) {
+        let rq = this.http.createRequest(url);
+        rq.asGet();
+        rq.withParams({ _t: new Date().getTime() });
         if (responseType) {
             rq.withResponseType(responseType);
         }

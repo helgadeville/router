@@ -1,16 +1,15 @@
-import {inject} from 'aurelia-framework';
-import {Dialogs} from 'modal/dialogs';
-import {HttpClient} from 'aurelia-http-client';
+import {inject} from 'aurelia-framework'
+import {Dialogs} from 'modal/dialogs'
+import {FormEncoder} from 'formencoder/formencoder'
 import {Overlay} from 'overlay/overlay'
 
-@inject(HttpClient,Dialogs,Overlay)
-
+@inject(FormEncoder,Dialogs,Overlay)
 export class Reboot {
     
   heading = 'Reboot the system';
   
-  constructor(httpClient, dialogService,overlay) {
-      this.http = httpClient;
+  constructor(FEC, dialogService,overlay) {
+      this.FEC = FEC;
       this.dialogService = dialogService;
       this.overlay = overlay;
   }
@@ -20,7 +19,7 @@ export class Reboot {
       dlg.whenClosed(result => {
           if (!result.wasCancelled) {
              console.log('reboot requested');
-             this.http.get('cgi-bin/reboot.json')
+             this.FEC.get('cgi-bin/reboot.json')
              .then(response => {
                  if (response.content.status === "0") {
                      console.log('Reboot success');

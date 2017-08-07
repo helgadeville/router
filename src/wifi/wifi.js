@@ -1,12 +1,11 @@
 import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
 import {Md5ValueConverter} from 'aurelia-utility-converters';
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
 import {UciReader} from 'configreader/ucireader'
 
-@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay,UciReader)
+@inject(Md5ValueConverter,FormEncoder,Dialogs,Overlay,UciReader)
 
 /**
  * A class that displays WIFI config
@@ -17,8 +16,7 @@ export class Wireless {
     
     heading = 'Wireless Access Point';
     
-    constructor(http, MD5VC, FEC, dialogs, overlay, ucireader) {
-        this.http = http;
+    constructor(MD5VC, FEC, dialogs, overlay, ucireader) {
         this.MD5VC = MD5VC;
         this.FEC = FEC;
         this.dialogService = dialogs;
@@ -28,7 +26,7 @@ export class Wireless {
     
     activate() {
         this.overlay.open();
-        return this.http.get('cgi-bin/get_wireless.text')
+        return this.FEC.get('cgi-bin/get_wireless.text')
             .then(response => {
                 this.overlay.close();
                 var config = this.creader.read(response.response);

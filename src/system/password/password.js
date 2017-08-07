@@ -1,18 +1,16 @@
-import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
-import {Md5ValueConverter} from 'aurelia-utility-converters';
+import {inject} from 'aurelia-framework'
+import {Md5ValueConverter} from 'aurelia-utility-converters'
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
 
-@inject(HttpClient,Md5ValueConverter,FormEncoder,Dialogs,Overlay)
+@inject(Md5ValueConverter,FormEncoder,Dialogs,Overlay)
 
 export class Password {
 
     heading = 'Password Change Utility';
     
-    constructor(http, MD5VC, FEC, dialogs, overlay) {
-        this.http = http;
+    constructor(MD5VC, FEC, dialogs, overlay) {
         this.MD5VC = MD5VC;
         this.FEC = FEC;
         this.dialogService = dialogs;
@@ -21,7 +19,7 @@ export class Password {
     
     activate() {
         this.overlay.open();
-        return this.http.get('cgi-bin/get_user_name.json')
+        return this.FEC.get('cgi-bin/get_user_name.json')
             .then(response => {
                 this.overlay.close();
                 this.oldUser = response.content.name;

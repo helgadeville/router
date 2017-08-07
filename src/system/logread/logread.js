@@ -1,12 +1,12 @@
-import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
+import {inject} from 'aurelia-framework'
+import {FormEncoder} from 'formencoder/formencoder'
 import {Overlay} from 'overlay/overlay'
-@inject(HttpClient, Overlay)
 
+@inject(FormEncoder, Overlay)
 export class LogRead {
     
-    constructor(http,overlay) {
-        this.http = http;
+    constructor(FEC,overlay) {
+        this.FEC = FEC;
         this.overlay = overlay;
     }
     
@@ -16,7 +16,7 @@ export class LogRead {
     
     refresh() {
         this.overlay.open();
-        this.http.get('cgi-bin/logread.text')
+        this.FEC.get('cgi-bin/logread.text')
         .then(response => {
             this.overlay.close();
             this.logread = response.content;

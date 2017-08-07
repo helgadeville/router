@@ -1,9 +1,9 @@
-import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-http-client';
-import {Dialogs} from 'modal/dialogs';
+import {inject} from 'aurelia-framework'
+import {FormEncoder} from 'formencoder/formencoder'
+import {Dialogs} from 'modal/dialogs'
 import {Overlay} from 'overlay/overlay'
-@inject(HttpClient, Dialogs, Overlay)
 
+@inject(FormEncoder, Dialogs, Overlay)
 export class VpnGeneral {
     
     heading = 'General Information';
@@ -12,8 +12,8 @@ export class VpnGeneral {
     
     poll_freq = 1000;
     
-    constructor(http, dialogs, overlay) {
-        this.http = http;
+    constructor(FEC, dialogs, overlay) {
+        this.FEC = FEC;
         this.dialogs = dialogs;
         this.overlay = overlay;
     }
@@ -47,7 +47,7 @@ export class VpnGeneral {
         if (this.skip_poll) {
             return;
         }
-        return this.http.get('cgi-bin/vpnstatus.text')
+        return this.FEC.get('cgi-bin/vpnstatus.text')
             .then(response => {
                 var txt = response.content;
                 if (txt) {
@@ -66,7 +66,7 @@ export class VpnGeneral {
         dlg.whenClosed(result => {
             if (!result.wasCancelled && result.output === 'yes') {
                 this.skip_poll = true;
-                this.http.get('cgi-bin/vpntoggle.json')
+                this.FEC.get('cgi-bin/vpntoggle.json')
                 .then(response => {
                     // do nothing
                     this.skip_poll = false;
@@ -85,7 +85,7 @@ export class VpnGeneral {
         dlg.whenClosed(result => {
             if (!result.wasCancelled && result.output === 'yes') {
                 this.skip_poll = true;
-                this.http.get('cgi-bin/vpnrestart.json')
+                this.FEC.get('cgi-bin/vpnrestart.json')
                 .then(response => {
                     // do nothing
                     this.skip_poll = false;

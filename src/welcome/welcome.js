@@ -1,20 +1,18 @@
-import {inject} from 'aurelia-framework';
-import {Router} from 'aurelia-router';
-import {HttpClient} from 'aurelia-http-client';
+import {inject} from 'aurelia-framework'
+import {Router} from 'aurelia-router'
 import {FormEncoder} from 'formencoder/formencoder'
-import {Dialogs} from 'modal/dialogs';
+import {Dialogs} from 'modal/dialogs'
 import {Overlay} from 'overlay/overlay'
-@inject(Router, HttpClient, FormEncoder, Dialogs, Overlay)
 
+@inject(Router, FormEncoder, Dialogs, Overlay)
 export class Welcome {
 
     skip_poll = false;
     
     poll_freq = 1000;
     
-    constructor(router, http, FEC, dialogs, overlay) {
+    constructor(router, FEC, dialogs, overlay) {
         this.router = router;
-        this.http = http;
         this.FEC = FEC;
         this.dialogs = dialogs;
         this.overlay = overlay;
@@ -49,7 +47,7 @@ export class Welcome {
         if (this.skip_poll) {
             return;
         }
-        return this.http.get('cgi-bin/welcome.json')
+        return this.FEC.get('cgi-bin/welcome.json')
             .then(response => {
                 this.system = response.content;
                 if (this.system.internet !== this.previousInternet || this.system.VPN !== this.previousVPN) {
@@ -106,7 +104,7 @@ export class Welcome {
         dlg.whenClosed(result => {
             if (!result.wasCancelled && result.output === 'yes') {
                 this.skip_poll = true;
-                this.http.get('cgi-bin/vpntoggle.json')
+                this.FEC.get('cgi-bin/vpntoggle.json')
                 .then(response => {
                     // do nothing
                     this.skip_poll = false;
@@ -125,7 +123,7 @@ export class Welcome {
         dlg.whenClosed(result => {
             if (!result.wasCancelled && result.output === 'yes') {
                 this.skip_poll = true;
-                this.http.get('cgi-bin/vpnrestart.json')
+                this.FEC.get('cgi-bin/vpnrestart.json')
                 .then(response => {
                     // do nothing
                     this.skip_poll = false;
@@ -144,7 +142,7 @@ export class Welcome {
     
     publicIp() {
         var me = this;
-        me.http.get('cgi-bin/get_public_address.json')
+        me.FEC.get('cgi-bin/get_public_address.json')
         .then(response => {
             me.public = response.content;
         }).catch(error => {
