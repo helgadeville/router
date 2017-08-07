@@ -86,7 +86,7 @@ export class OvpnReader {
         this.common = output;
         var cert = '';
         for(var i = 0 ; i < newCert.length ; i++) {
-            cert += newCert[i];
+            cert += newCert[i] + '\n';
         }
         this.cert = cert;
         if (!this.common) {

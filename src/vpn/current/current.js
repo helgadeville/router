@@ -120,12 +120,13 @@ export class VpnCurrent {
             return error.statusText;
         };
         var data = {};
+        var rx = new RegExp(/\n/,'g');
         if (upload) {
             data.file = file;
-            data.original = original;
+            data.original = original.replace(rx, '\r');
         }
         if (set) {
-            data.current = ovpn.get(remotes);
+            data.current = ovpn.get(remotes).replace(rx, '\r');;
         }
         this.overlay.open();
         this.FEC.submit('cgi-bin/set_vpn_config.json', data)
@@ -151,7 +152,8 @@ export class VpnCurrent {
             var promise = new Promise((resolve, reject) => {
                 var fileReader = new FileReader();
                 fileReader.onload = function(fileLoadedEvent) {
-                    resolve(fileLoadedEvent.target.result);
+                    var rx = new RegExp(/\r/, 'g');
+                    resolve(fileLoadedEvent.target.result.replace(rx, ''));
                 };
                 fileReader.onerror = function() {
                     reject();
