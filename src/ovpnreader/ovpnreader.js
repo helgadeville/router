@@ -42,6 +42,10 @@ export class OvpnReader {
                     // and skip
                     continue;
                 }
+                // if commented - skip line
+                if (commented) {
+                    continue;
+                }
                 // now need to check for special lines
                 var spec = null;
                 for(var j = 0 ; j < lowCase.length ; j++) {
