@@ -87,6 +87,7 @@ export class VpnCurrent {
             this.overlay.close();
             if (response.content.status === "0") {
                 console.log('VPN username & password set');
+                this.password = '';
             } else {
                 console.log('Error setting VPN username & password');
                 this.dialogService.error('Ooops ! Error occured:\n' + response.message);
