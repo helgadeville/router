@@ -327,11 +327,11 @@ export class WorkMode {
                             } else
                             if (response.content.reboot === 'cable') {
                                 msg = 'Network is reloading';
-                                timeout = 5;
+                                timeout = 10;
                             } else
                             if (response.content.reboot === 'wifi') {
                                 msg = 'Updating wifi setting';
-                                timeout = 5;
+                                timeout = 10;
                             }
                             var me = this;
                             this.overlay.open(msg, true);
