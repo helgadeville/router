@@ -303,7 +303,7 @@ export class WorkMode {
                     data.ipaddr = this.source.newIp ? this.source.newIp : this.source.ip;
                     data.netmask = this.source.newMask ? this.source.newMask : this.source.mask;
                 }
-                if (this.source.newMac) {
+                if (this.source.newMac || this.source.newMacReset) {
                     data.mac = this.source.newMac;
                 }
                 if (this.source.parent.type === 'radio') {
