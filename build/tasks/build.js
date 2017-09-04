@@ -41,6 +41,14 @@ gulp.task('build-texts', function() {
     .pipe(gulp.dest(paths.cgiOutput));
 });
 
+//copies changed image files to the output directory
+gulp.task('build-imgs', function() {
+  return gulp.src(paths.imgs)
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(changed(paths.master, {extension: '.png'}))
+    .pipe(gulp.dest(paths.imgOutput));
+});
+
 // copies changed html files to the output directory
 gulp.task('build-html', function() {
   return gulp.src(paths.html)
@@ -65,7 +73,7 @@ gulp.task('build-css', function() {
 gulp.task('build', function(callback) {
   return runSequence(
     'clean',
-    ['build-system', 'build-jsons', 'build-texts', 'build-html', 'build-css'],
+    ['build-system', 'build-jsons', 'build-texts', 'build-imgs', 'build-html', 'build-css'],
     callback
   );
 });
