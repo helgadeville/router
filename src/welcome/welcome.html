@@ -123,7 +123,7 @@
 				                                <button if.bind="(!$parent.system.apwisp3g || $parent.system.apwisp3g === 'none') && device.state === 'disabled'"
 				                                        name="${device['#']}"
 				                                        class="btn btn-success btn-xs" click.delegate="wifi($event, true)">ENABLE</button>
-				                                <button if.bind="(!parent.system.apwisp3g || $parent.system.apwisp3g === 'none') && device.state === 'enabled'" class="btn btn-danger btn-xs" 
+				                                <button if.bind="(!$parent.system.apwisp3g || $parent.system.apwisp3g === 'none') && device.state === 'enabled'" class="btn btn-danger btn-xs" 
 				                                        name="${device['#']}"
 				                                        click.delegate="wifi($event, false)">DISABLE</button>
 				                            </div>
