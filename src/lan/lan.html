@@ -3,6 +3,24 @@
 	    <div class="halign">
 	        <h2>${heading}</h2>
 	    </div>
+        <div class="div-border halign">
+            <table class="width100">
+                <tr>
+                    <td>
+                        <i class="fa fa-warning fa-4x color-red"></i>
+                    </td>
+                    <td>
+                        <div>
+                            <span class="color-red">WARNING !</span><br/>
+                            <span>
+                               Usually You do NOT need to change those settings.
+                               They affect the way this router clients are given IP address and router IP address visible from the clients.
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
 	    <div repeat.for="lan of lans" class="div-border">
 	        <form role="form" submit.delegate="submit($event)" name="${lan['#']}">
 		        <div class="form-group">
