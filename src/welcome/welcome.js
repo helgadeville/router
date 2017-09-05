@@ -66,33 +66,34 @@ export class Welcome {
     
     wifi($event, arg) {
         var dev = $event.currentTarget.name;
+        var me = this;
         let dlg = 
-            this.dialogs.question('Are you sure ?');
+            me.dialogs.question('Are you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled && result.output === 'yes') {
-                this.skip_poll = true;
+                me.skip_poll = true;
                 let data = {
                     device: dev,
                     disabled: arg ? '0' : '1'
                 };
-                this.FEC.submit('cgi-bin/set_radio.json', data)
+                me.FEC.submit('cgi-bin/set_radio.json', data)
                 .then(response => {
-                    this.overlay.open('Network is reloading', true);
-                    this.v = 0;
-                    this.ival = window.setInterval(function() {
+                    me.overlay.open('Network is reloading', true);
+                    me.v = 0;
+                    me.ival = window.setInterval(function() {
                         if (++me.v <= 100) {
                             me.overlay.setPercent(me.v);
                         } else {
                             window.clearInterval(me.ival);
                             me.overlay.close();
                             console.log('reload');
-                            this.activate();
+                            me.activate();
                         }
                     }, 60);
                 }).catch(error => {
-                    this.skip_poll = false;
+                    me.skip_poll = false;
                     console.log('Error setting radio device');
-                    this.dialogs.error('Error during operation.');
+                    me.dialogs.error('Error during operation.');
                 });
             }
         });

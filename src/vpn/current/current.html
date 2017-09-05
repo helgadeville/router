@@ -8,8 +8,9 @@
                     <input type="text" value.bind="username" class="form-control" id="username" />
                 </div>
                 <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" value.bind="password" class="form-control" id="password" />
+                    <label for="password">Password:&nbsp</label>
+                    <label>&nbsp;(&nbsp;<input type="checkbox" checked.bind="pass_visible"/>&nbsp;show password&nbsp;)</label>
+                    <input type="${pass_visible ? 'text' : 'password'}" value.bind="password" class="form-control" id="password" />
                 </div>
                 <div class="halign">
                     <button class="btn btn-success" disabled.bind="!username || !password" click.delegate="setUserAndPass()">SET</button>

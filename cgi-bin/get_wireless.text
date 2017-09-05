@@ -1,3 +1,5 @@
+apwisp3g=hw-switch
+apwisp3g.mode=ap
 radio0=wifi-device
 radio0.type='mac80211'
 radio0.channel='11'

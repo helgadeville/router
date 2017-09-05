@@ -13,11 +13,12 @@
 		            </div>
 	                <div class="form-group">
 	                    <div class="form-group halign">
-                            <label><input type="checkbox" checked.bind="device.enabled" />&nbsp;Radio Device Enabled</label>
-                            <span><small>&nbsp;(&nbsp;currently:&nbsp;</small></span>
+                            <label if.bind="$parent.hwswitch === 'none'"><input type="checkbox" checked.bind="device.enabled" />&nbsp;Radio Device Enabled</label>
+                            <label if.bind="$parent.hwswitch !== 'none'">&nbsp;Radio Device ${device.enabled ? 'Enabled' : 'Disabled'}</label>
+                            <span if.bind="$parent.hwswitch === 'none'"><small>&nbsp;(&nbsp;currently:&nbsp;</small></span>
 	                        <i if.bind="!device.disabled" class="fa fa-wifi color-green valign"></i>
 	                        <i if.bind="device.disabled" class="fa fa-close color-red valign"></i>
-	                        <span><small>&nbsp;)</small></span>
+	                        <span if.bind="$parent.hwswitch === 'none'"><small>&nbsp;)</small></span>
                         </div>
 	                    <table class="width100">
 	                        <tr class="width100">
@@ -44,11 +45,12 @@
 	        <div repeat.for="wifi of device.interfaces" if.bind="wifi.network === 'lan'" class="div-border">
 			    <form role="form" submit.delegate="submit($event)" name="${wifi['#']}">
 			        <div class="form-group halign">
-			            <label><input type="checkbox" checked.bind="wifi.enabled" />&nbsp;Wireless Access Point Enabled</label>
-			            <span><small>&nbsp;(&nbsp;currently:&nbsp;</small></span>
+			            <label if.bind="$parent.$parent.hwswitch === 'none'"><input type="checkbox" checked.bind="wifi.enabled" />&nbsp;Wireless Access Point Enabled</label>
+			            <label if.bind="$parent.$parent.hwswitch !== 'none'">&nbsp;Wireless Access Point ${wifi.enabled ? 'Enabled' : 'Disabled'}</label>
+			            <span if.bind="$parent.$parent.hwswitch === 'none'"><small>&nbsp;(&nbsp;currently:&nbsp;</small></span>
 			            <i if.bind="!wifi.disabled" class="fa fa-wifi color-green valign"></i>
                         <i if.bind="wifi.disabled" class="fa fa-close color-red valign"></i>
-                        <span><small>&nbsp;)</small></span>
+                        <span if.bind="$parent.$parent.hwswitch === 'none'"><small>&nbsp;)</small></span>
                     </div>
 			        <div class="form-group">
 			            <label for="oldSsid${wifi['#']}">Current SSID name</label>

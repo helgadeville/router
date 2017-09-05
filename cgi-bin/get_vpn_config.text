@@ -1,4 +1,5 @@
 #user=ala@ma.kota.pl
+#pass=somePassword
 #original-file=vyprvpn.ovpn
 client
 dev tun

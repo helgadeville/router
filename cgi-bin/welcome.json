@@ -5,5 +5,6 @@
 "up":" 09:46:31 up 3 days, 16:58,  load average: 0.00, 0.01, 0.00",
 "date":"Tue Jun 27 09:46:31 UTC 2017",
 "internet":"online",
+"apwisp3g":"ap",
 "wireless":[{"#":"radio0","state":"enabled"},{"#":"radio1","state":"disabled"},{"#":"radio2","state":"enabled"}],
 "workmode":"wired access-point","VPN":"up"}

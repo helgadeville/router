@@ -30,6 +30,18 @@ export class Wireless {
             .then(response => {
                 this.overlay.close();
                 var config = this.creader.read(response.response);
+                // setup page not to show ena/disable sections when hw switch present
+                this.hwswitch = 'none';
+                var switches = config['hw-switch'];
+                if (switches) {
+                    for(var t = 0 ; t < switches.length ; t++) {
+                        var sw = switches[t];
+                        if (sw['#'] === 'apwisp3g') {
+                            this.hwswitch = sw.mode;
+                            break;
+                        }
+                    }
+                }
                 // need to rewrite returned object to array
                 var devices = this.decode(config);
                 // setup new properties as old ones

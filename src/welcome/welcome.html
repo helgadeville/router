@@ -99,17 +99,37 @@
                     <tr class="width100">
                         <td class="width50 halign">
                             <div class="div-border">
-	                            <div repeat.for="device of system.wireless" class="mini-border">
-	                                <span><small>${device['#']}</small></span>
-	                                <i if.bind="device.state === 'enabled'" class="fa fa-wifi color-green valign"></i>
-	                                <i if.bind="device.state === 'disabled'" class="fa fa-close color-red valign"></i>
-	                                <button if.bind="device.state === 'disabled'"
-	                                        name="${device['#']}"
-	                                        class="btn btn-success btn-xs" click.delegate="wifi($event, true)">ENABLE</button>
-	                                <button if.bind="device.state === 'enabled'" class="btn btn-danger btn-xs" 
-	                                        name="${device['#']}"
-	                                        click.delegate="wifi($event, false)">DISABLE</button>
-	                            </div>
+                                <table class="width100">
+                                    <tr>
+                                        <td if.bind="system.apwisp3g && system.apwisp3g !== 'none'" class="width50">
+                                            <div if.bind="system.apwisp3g === '3g'">
+                                               <span><small>Internet from Wifi, wire output and repeater</small></span>
+                                               <img src="../img/mode_switch_3g.png" height="40px"/>
+                                            </div>
+                                            <div if.bind="system.apwisp3g === 'wisp'">
+                                               <span><small>Internet from Wifi, wire output only</small></span>
+                                               <img src="../img/mode_switch_wisp.png" height="40px"/>
+                                            </div>
+                                            <div if.bind="system.apwisp3g === 'ap'">
+                                               <span><small>Wired Internet, access point</small></span>
+                                               <img src="../img/mode_switch_ap.png" height="40px"/>
+                                            </div>
+                                        </td>
+                                        <td>
+				                            <div repeat.for="device of system.wireless" class="mini-border">
+				                                <span><small>${device['#']}</small></span>
+				                                <i if.bind="device.state === 'enabled'" class="fa fa-wifi color-green valign"></i>
+				                                <i if.bind="device.state === 'disabled'" class="fa fa-close color-red valign"></i>
+				                                <button if.bind="(!$parent.system.apwisp3g || $parent.system.apwisp3g === 'none') && device.state === 'disabled'"
+				                                        name="${device['#']}"
+				                                        class="btn btn-success btn-xs" click.delegate="wifi($event, true)">ENABLE</button>
+				                                <button if.bind="(!parent.system.apwisp3g || $parent.system.apwisp3g === 'none') && device.state === 'enabled'" class="btn btn-danger btn-xs" 
+				                                        name="${device['#']}"
+				                                        click.delegate="wifi($event, false)">DISABLE</button>
+				                            </div>
+				                        </td>
+				                    </tr>
+				                </table>
 	                        </div>
                         </td>
                         <td class="width50 halign">
