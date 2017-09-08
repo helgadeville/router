@@ -207,10 +207,10 @@ export class Configurations {
                         var data = {
                             file : fileToLoad,
                             data : base64
-                        }
+                        };
                         if (archive) {
                             data.archive = 'yes'
-                        };
+                        }
                         me.overlay.open();
                         me.FEC.submit('cgi-bin/upload_system_config.json', data)
                         .then(response => {
