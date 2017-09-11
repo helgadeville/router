@@ -18,6 +18,7 @@ export class App {
             { route: 'lan', name: 'lan', moduleId: './lan/lan', nav: true, title: 'LAN Settings' },
             { route: 'wifi', name: 'wifi', moduleId: './wifi/wifi', nav: true, title: 'Wireless Access Point' },
             { route: 'vpn', name: 'vpn', moduleId: './vpn/vpn', nav: true, title: 'VPN Settings' },
+            { route: 'storage', name: 'storage', moduleId: './storage/storage', nav: true, title: 'Storage' },
             { route: 'system', name: 'system', moduleId: './system/system', nav: true, title: 'System' }
         ]);
 

@@ -54,6 +54,7 @@ export class Wireless {
                         wifi.devicename = device['#'];
                         wifi.disabled = wifi.disabled && wifi.disabled === '1' ? true : false;
                         wifi.enabled = !wifi.disabled;
+                        wifi.isolate = wifi.isolate && wifi.isolate === '1' ? true : false;
                     }
                 }
                 // bind
@@ -179,6 +180,9 @@ export class Wireless {
                 }
                 if (wifi.newKey) {
                     data.key = wifi.newKey;
+                }
+                if (wifi.isolate) {
+                    data.isolate = wifi.isolate;
                 }
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_wireless.json', data)

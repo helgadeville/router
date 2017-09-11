@@ -15,6 +15,7 @@ default_radio0.ssid='Gargoyleum'
 default_radio0.encryption='psk2'
 default_radio0.key='Alamak0ta'
 default_radio0.disabled='1'
+default_radio0.isolate='1'
 wan=wifi-iface
 wan.device='radio0'
 wan.network='wan'

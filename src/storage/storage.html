@@ -1,0 +1,75 @@
+<template>
+    <div>
+        <span>${heading}</span><br/>
+        
+        <div if.bind="storage.status !== 'enabled'" class="div-border halign">
+            <table class="width100">
+                <tr>
+                    <td>
+                        <i class="fa fa-warning fa-4x color-red"></i>
+                    </td>
+                    <td>
+                        <div>
+                            <span class="color-red">WARNING !</span><br/>
+                            <span>
+                               Usually You do NOT need to change those settings.
+                               They affect the way this router clients are given IP address and router IP address visible from the clients.
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div if.bind="storage.status === 'enabled'" class="halign">
+            <div>
+                <span>Storage status:</span>
+            </div>
+            <div class="div-border">
+                <table class="width100 halign">
+                    <tr>
+                        <th colspan="3" class="halign">
+                            <a target="_blank" href="ftp://router">Access Storage via Browser Using This Link</a><br/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="halign">
+                            <span>Capacity:</span>
+                        </th>
+                        <th class="halign">
+                            <span>Used (mem / %):</span>
+                        </th>
+                        <th class="halign">
+                            <span>Available:</span>
+                        </th>
+	                </tr>
+	                <tr>
+                        <td>
+                            <span>${storage.total}</span>
+                        </td>
+                        <td>
+                            <span>${storage.used} / ${storage.percent}</span>
+                        </td>
+                        <td>
+                            <span>${storage.total}</span>
+                        </td>
+	                </tr>
+	                <tr>
+	                   <td colspan="3">
+	                       <br/>
+	                   </td>
+	                </tr>
+	                <tr>
+	                   <td colspan="3">
+    	                   <i if.bind="storage.readonly === 'no'" class="fa fa-warning fa-2x color-red valign"><small>Read-Write Access&nbsp;</small></i>
+    	                   <i if.bind="storage.readonly !== 'no'" class="fa fa-deafness fa-2x color-green valign"><small>Read-Only Access&nbsp;</small></i>
+	                       <button if.bind="storage.readonly === 'no'" class="btn btn-success" click.delegate="setStorage(true)">SET READONLY</button>
+	                       <button if.bind="storage.readonly !== 'no'" class="btn btn-danger" click.delegate="setStorage(false)">MAKE WRITEABLE</button>
+	                   </td>
+	                </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</template>
