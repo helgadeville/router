@@ -55,6 +55,7 @@ export class Wireless {
                         wifi.disabled = wifi.disabled && wifi.disabled === '1' ? true : false;
                         wifi.enabled = !wifi.disabled;
                         wifi.isolate = wifi.isolate && wifi.isolate === '1' ? true : false;
+                        wifi.hidden = wifi.hidden && wifi.hidden === '1' ? true : false;
                     }
                 }
                 // bind
@@ -183,6 +184,9 @@ export class Wireless {
                 }
                 if (wifi.isolate) {
                     data.isolate = wifi.isolate;
+                }
+                if (wifi.hidden) {
+                    data.hidden = wifi.hidden;
                 }
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_wireless.json', data)
