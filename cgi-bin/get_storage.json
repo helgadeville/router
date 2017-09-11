@@ -4,5 +4,6 @@
 "used":"1.8G",
 "available":"9.2G",
 "percent":"17%",
-"readonly":"no"
+"readonly":"no",
+"router":"10.10.10.10"
 }
