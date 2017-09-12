@@ -29,7 +29,7 @@ export class Upgrade {
       }
   }
   
-  upgrade_continue(target) {
+  upgrade_continue(arrayBuffer) {
       let dlg = this.dialogService.warning('Are you sure to upgrade the router ?');
       dlg.whenClosed(result => {
           if (!result.wasCancelled) {
