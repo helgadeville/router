@@ -23,28 +23,34 @@ export class FormEncoder {
     }
     
     submit(url, data, responseType) {
-        let rq = this.http.createRequest(url);
         let enc = this.encode(data);
-        if (!this.debug) {
-            rq.withHeader('Content-Type', 'application/x-www-form-urlencoded');
-            rq.asPost();
-            rq.withContent(enc);
-        } else {
-            rq.asGet();
-            rq.withParams({ _t: new Date().getTime() });
-            console.log('POST->GET: ' + url);
-            console.log(data);
-        }
-        if (responseType) {
-            rq.withResponseType(responseType);
-        }
-        return rq.send();
+        return this.post(url, enc, 'application/x-www-form-urlencoded', responseType);
     }
     
     get(url, responseType) {
         let rq = this.http.createRequest(url);
         rq.asGet();
         rq.withParams({ _t: new Date().getTime() });
+        if (responseType) {
+            rq.withResponseType(responseType);
+        }
+        return rq.send();
+    }
+    
+    post(url, data, contentType, responseType) {
+        let rq = this.http.createRequest(url);
+        if (!this.debug) {
+            if (contentType) {
+                rq.withHeader('Content-Type', contentType);
+            }
+            rq.asPost();
+            rq.withContent(data);
+        } else {
+            rq.asGet();
+            rq.withParams({ _t: new Date().getTime() });
+            console.log('POST->GET: ' + url);
+            console.log(data);
+        }
         if (responseType) {
             rq.withResponseType(responseType);
         }
