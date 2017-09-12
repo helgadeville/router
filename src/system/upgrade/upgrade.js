@@ -38,7 +38,7 @@ export class Upgrade {
                  data : base64
              };
              console.log('upgrade requested');
-             this.FEC.submit('cgi-bin/upgrade.json')
+             this.FEC.submit('cgi-bin/upgrade.json', data)
              .then(response => {
                  if (response.content.status === "0") {
                      console.log('Upgrade success');
