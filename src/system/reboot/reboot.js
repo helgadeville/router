@@ -38,7 +38,7 @@ export class Reboot {
                      }, 500);
                  } else {
                      console.log('Error on reboot');
-                     this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                     this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                  }
              }).catch(error => {
                  console.log('Error on reboot');

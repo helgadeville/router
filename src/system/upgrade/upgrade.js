@@ -57,7 +57,7 @@ export class Upgrade {
                      }, 500);
                  } else {
                      console.log('Error on upgrade');
-                     this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                     this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                  }
              }).catch(error => {
                  console.log('Error on upgrade');

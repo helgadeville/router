@@ -348,7 +348,7 @@ export class WorkMode {
                             }, 500);
                         } else {
                             console.log('Error setting router work mode');
-                            this.dialogs.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogs.error('Ooops ! Error occured:\n' + response.content.message);
                         }
                     }).catch(error => {
                         this.overlay.close();

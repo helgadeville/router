@@ -106,7 +106,7 @@ export class VpnConfigs {
                         me.activate();
                     } else {
                         console.log('Error removing VPN configuration');
-                        me.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        me.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                     }
                 }).catch(error => {
                     me.overlay.close();
@@ -146,7 +146,7 @@ export class VpnConfigs {
                 this.activate();
             } else {
                 console.log('Error setting VPN configuration');
-                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
             }
         }).catch(error => {
             this.overlay.close();

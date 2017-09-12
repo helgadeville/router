@@ -82,7 +82,7 @@ export class Configurations {
                         this.activate();
                     } else {
                         console.log('Error saving current system configuration !');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                     }
                 }).catch(error => {
                     this.overlay.close();
@@ -146,7 +146,7 @@ export class Configurations {
                         }, 500);
                     } else {
                         console.log('Error restoring system configuration');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                     }
                 }).catch(error => {
                     this.overlay.close();
@@ -175,7 +175,7 @@ export class Configurations {
                         this.activate();
                     } else {
                         console.log('Error removing system configuration');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                        this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                     }
                 }).catch(error => {
                     this.overlay.close();
@@ -231,7 +231,7 @@ export class Configurations {
                                 }, 500);
                             } else {
                                 console.log('Error uploading system configuration');
-                                me.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                                me.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                             }
                         }).catch(error => {
                             me.overlay.close();

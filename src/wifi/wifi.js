@@ -138,7 +138,7 @@ export class Wireless {
                             }, 60);
                         } else {
                             console.log('Error setting router radio');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                         }
                     }).catch(error => {
                         this.overlay.close();
@@ -209,7 +209,7 @@ export class Wireless {
                             }, 60);
                         } else {
                             console.log('Error setting router wireless');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                         }
                     }).catch(error => {
                         this.overlay.close();

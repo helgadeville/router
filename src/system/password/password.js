@@ -50,7 +50,7 @@ export class Password {
                             this.activate();
                         } else {
                             console.log('Error setting router password');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                         }
                     }).catch(error => {
                         this.overlay.close();

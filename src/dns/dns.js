@@ -63,7 +63,7 @@ export class Dns {
                             this.activate();
                         } else {
                             console.log('Error setting router DNS');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                         }
                     }).catch(error => {
                         this.overlay.close();

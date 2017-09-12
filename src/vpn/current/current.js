@@ -91,7 +91,7 @@ export class VpnCurrent {
                 console.log('VPN username & password set');
             } else {
                 console.log('Error setting VPN username & password');
-                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
             }
         }).catch(error => {
             this.overlay.close();
@@ -136,7 +136,7 @@ export class VpnCurrent {
                 this.activate();
             } else {
                 console.log('Error setting VPN configuration');
-                this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
             }
         }).catch(error => {
             this.overlay.close();

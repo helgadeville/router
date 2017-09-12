@@ -118,7 +118,7 @@ export class LAN {
                             }, 200);
                         } else {
                             console.log('Error setting router LAN');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.message);
+                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                         }
                     }).catch(error => {
                         this.overlay.close();
