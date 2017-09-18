@@ -2,7 +2,16 @@
   <section>
     <div class="halign">
         <h2>${heading}</h2>
-        <button class="btn btn-danger" click.delegate="reboot()">REBOOT</button>
+        <div class="halign div-border">
+	        <div class="halign mini-border">
+	            <label for="restart">Restart router services - soft reboot if something does not work correctly</label><br/>
+	            <button if="restart" class="btn btn-warning" click.delegate="restart()">RESTART</button>
+	        </div><br/>
+	        <div class="halign mini-border">
+	            <label for="reboot">Reboot the router - equivalent of turn off / on</label><br/>
+	            <button if="reboot" class="btn btn-danger" click.delegate="reboot()">REBOOT</button>
+	        </div>
+	    </div>
     </div>
   </section>
 </template>

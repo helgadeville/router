@@ -147,7 +147,7 @@ export class WorkMode {
     }
     
     scan($event) {
-        var name = $event.currentTarget.name;
+        var name = $event.currentTarget ? $event.currentTarget.name : $event.target.name;
         let data = {
             device : name
         };
@@ -235,18 +235,27 @@ export class WorkMode {
                 dlg.whenClosed(result => {
                     if (!result.wasCancelled) {
                         var chosen = result.output;
-                        // now setup proper device
-                        for(var i = 0 ; i < this.devices.length ; i++) {
-                            var dev = this.devices[i];
-                            if (dev.name === this.selection) {
-                                dev.ssid = chosen.ssid;
-                                dev.key = '';
-                                var wep = chosen.encryption.indexOf('WEP') >= 0;
-                                var wpa = chosen.encryption.indexOf('WPA') >= 0;
-                                var wpa2 = chosen.encryption.indexOf('WPA2') >= 0;
-                                dev.encryption = wpa2 ? 'psk2' : (wpa ? 'psk' : (wep ? 'wep' : 'none'));
-                                break;
+                        if (chosen) {
+                            // now setup proper device
+                            for(var i = 0 ; i < this.devices.length ; i++) {
+                                var dev = this.devices[i];
+                                if (dev.name === this.selection) {
+                                    dev.ssid = chosen.ssid;
+                                    dev.key = '';
+                                    var wep = chosen.encryption.indexOf('WEP') >= 0;
+                                    var wpa = chosen.encryption.indexOf('WPA') >= 0;
+                                    var wpa2 = chosen.encryption.indexOf('WPA2') >= 0;
+                                    dev.encryption = wpa2 ? 'psk2' : (wpa ? 'psk' : (wep ? 'wep' : 'none'));
+                                    break;
+                                }
                             }
+                        } else {
+                            // rescan
+                            var me = this;
+                            var event = $event;
+                            setTimeout(function() {
+                                me.scan(event);
+                            }, 0);
                         }
                     }
                 });
@@ -320,19 +329,7 @@ export class WorkMode {
                         if (response.content.status === "0") {
                             console.log('Router work mode set');
                             var msg = '';
-                            var timeout = 0;
-                            if (response.content.reboot === 'full') {
-                                msg = 'Network is restarting';
-                                timeout = 10;
-                            } else
-                            if (response.content.reboot === 'cable') {
-                                msg = 'Network is reloading';
-                                timeout = 10;
-                            } else
-                            if (response.content.reboot === 'wifi') {
-                                msg = 'Updating wifi setting';
-                                timeout = 10;
-                            }
+                            var timeout = 10;
                             var me = this;
                             this.overlay.open(msg, true);
                             this.v = 0;

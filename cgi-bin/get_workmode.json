@@ -4,6 +4,7 @@
 {
 "ifname":"eth1",
 "proto":"dhcp",
+"hwaddr":"30:b2:11:33:44:55",
 "mac":"84:16:F9:88:D0:5F",
 "ip":"192.168.1.237",
 "mask":"255.255.255.0"
@@ -18,6 +19,7 @@
 "ssid":"SomeWifi",
 "encryption":"psk",
 "key":"AKeyToWifi",
+"hwaddr":"30:b2:11:33:44:55",
 "mac":"11:5C:2A:88:11:01",
 "disabled":"1"
 }

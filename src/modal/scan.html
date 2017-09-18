@@ -67,6 +67,7 @@
 
         <ai-dialog-footer>
             <div class="modal-footer">
+                <button name="rescan" class="btn btn-warning fleft" click.delegate="rescan($event)">Re-scan</button>
                 <button disabled.bind="choice === undefined" name="ok" class="btn btn-success" click.delegate="click($event)">OK</button>
                 <button name="cancel" class="btn btn-default" click.delegate="click($event)">Cancel</button>
             </div>

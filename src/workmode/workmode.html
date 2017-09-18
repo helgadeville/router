@@ -114,7 +114,7 @@
                                             <label for="newMac${source.ifname}">New MAC</label>
                                             <input type="text" disabled.bind="source.newMacReset" value.bind="source.newMac" class="form-control" id="newMac${source.ifname}" pattern="^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$">
                                             <input type="checkbox" checked.bind="source.newMacReset" change.delegate="source.newMac=''" id="newMacReset${source.ifName}">
-                                            <label for="newMacReset${source.ifName}">&nbsp;Reset MAC address to default</label>
+                                            <label for="newMacReset${source.ifName}">&nbsp;Reset MAC address to default ${source.hwaddr}</label>
                                             <ul>
                                                 <li><span><small>if not sure, leave empty</small></span></li>
                                             </ul>

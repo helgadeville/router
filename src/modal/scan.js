@@ -18,6 +18,10 @@ export class Scan {
         this.choice = idx;
     }
     
+    rescan() {
+        this.controller.ok();
+    }
+    
     click($event) {
         var btn = $event.currentTarget.name;
         // do sth

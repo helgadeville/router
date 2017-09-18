@@ -14,6 +14,42 @@ export class Reboot {
       this.overlay = overlay;
   }
   
+  restart() {
+      let dlg = this.dialogService.warning('Are you sure to restart router services ?');
+      dlg.whenClosed(result => {
+          if (!result.wasCancelled) {
+             console.log('restart requested');
+             this.FEC.get('cgi-bin/restart.json')
+             .then(response => {
+                 if (response.content.status === "0") {
+                     console.log('Restart success');
+                     var me = this;
+                     this.overlay.open('Waiting for router', true);
+                     this.v = 0;
+                     this.ival = window.setInterval(function() {
+                         if (++me.v <= 20) {
+                             me.overlay.setPercent(me.v * 5);
+                         } else {
+                             window.clearInterval(me.ival);
+                             me.overlay.close();
+                             console.log('restart');
+                             window.location.href = window.location.origin;
+                         }
+                     }, 500);
+                 } else {
+                     console.log('Error on restart');
+                     this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
+                 }
+             }).catch(error => {
+                 console.log('Error on restart');
+                 this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+             });
+          } else {
+             console.log('cancelled');
+          }
+       });
+  }
+  
   reboot() {
       let dlg = this.dialogService.warning('Are you sure to reboot the router ?');
       dlg.whenClosed(result => {
