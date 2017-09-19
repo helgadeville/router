@@ -19,14 +19,16 @@ export class Reboot {
       dlg.whenClosed(result => {
           if (!result.wasCancelled) {
              console.log('restart requested');
+             this.overlay.open();
              this.FEC.get('cgi-bin/restart.json')
              .then(response => {
+                 this.overlay.close();
                  if (response.content.status === "0") {
                      console.log('Restart success');
                      var me = this;
-                     this.overlay.open('Waiting for router', true);
-                     this.v = 0;
-                     this.ival = window.setInterval(function() {
+                     me.overlay.open('Waiting for router', true);
+                     me.v = 0;
+                     me.ival = window.setInterval(function() {
                          if (++me.v <= 20) {
                              me.overlay.setPercent(me.v * 5);
                          } else {
@@ -41,8 +43,10 @@ export class Reboot {
                      this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                  }
              }).catch(error => {
+                 this.overlay.close();
                  console.log('Error on restart');
                  this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                 window.location.href = window.location.origin;
              });
           } else {
              console.log('cancelled');
@@ -55,14 +59,16 @@ export class Reboot {
       dlg.whenClosed(result => {
           if (!result.wasCancelled) {
              console.log('reboot requested');
+             this.overlay.open();
              this.FEC.get('cgi-bin/reboot.json')
              .then(response => {
+                 this.overlay.close();
                  if (response.content.status === "0") {
                      console.log('Reboot success');
                      var me = this;
-                     this.overlay.open('Router is rebooting', true);
-                     this.v = 0;
-                     this.ival = window.setInterval(function() {
+                     me.overlay.open('Router is rebooting', true);
+                     me.v = 0;
+                     me.ival = window.setInterval(function() {
                          if (++me.v <= 100) {
                              me.overlay.setPercent(me.v);
                          } else {
@@ -77,8 +83,10 @@ export class Reboot {
                      this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
                  }
              }).catch(error => {
+                 this.overlay.close();
                  console.log('Error on reboot');
                  this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                 window.location.href = window.location.origin;
              });
           } else {
              console.log('cancelled');
