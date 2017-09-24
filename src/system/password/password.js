@@ -40,6 +40,9 @@ export class Password {
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_password.json', data)
                     .then(response => {
+                        this.oldPassword = '';
+                        this.newPassword = '';
+                        this.newPassword2 = '';
                         this.overlay.close();
                         if (response.content.status === "0") {
                             console.log('Router password set');
