@@ -27,7 +27,6 @@ module.exports = {
         "aurelia-history-browser",
         "aurelia-logging-console",
         "aurelia-dialog",
-        "aurelia-utility-converters",
         "bootstrap",
         "bootstrap/css/bootstrap.css!text",
         "fetch",
