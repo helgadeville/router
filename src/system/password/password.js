@@ -1,17 +1,14 @@
 import {inject} from 'aurelia-framework'
-import {Md5ValueConverter} from 'aurelia-utility-converters'
 import {FormEncoder} from 'formencoder/formencoder'
 import {Dialogs} from 'modal/dialogs';
 import {Overlay} from 'overlay/overlay'
 
-@inject(Md5ValueConverter,FormEncoder,Dialogs,Overlay)
-
+@inject(FormEncoder,Dialogs,Overlay)
 export class Password {
 
     heading = 'Password Change Utility';
     
-    constructor(MD5VC, FEC, dialogs, overlay) {
-        this.MD5VC = MD5VC;
+    constructor(FEC, dialogs, overlay) {
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;
@@ -37,8 +34,8 @@ export class Password {
                 let data = {
                     'oldUser': this.oldUser,
                     'newUser': this.newUser,
-                    'old': this.MD5VC.md5(this.oldPassword),
-                    'new': this.MD5VC.md5(this.newPassword)
+                    'old': this.oldPassword,
+                    'new': this.newPassword
                 };
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_password.json', data)

@@ -1,23 +1,18 @@
-import {inject} from 'aurelia-framework';
-import {Md5ValueConverter} from 'aurelia-utility-converters';
+import {inject} from 'aurelia-framework'
 import {FormEncoder} from 'formencoder/formencoder'
-import {Dialogs} from 'modal/dialogs';
+import {Dialogs} from 'modal/dialogs'
 import {Overlay} from 'overlay/overlay'
 import {UciReader} from 'configreader/ucireader'
 
-@inject(Md5ValueConverter,FormEncoder,Dialogs,Overlay,UciReader)
-
 /**
  * A class that displays WIFI config
- * TODO: rewrite HTML for multiple devices
  */
-
+@inject(FormEncoder,Dialogs,Overlay,UciReader)
 export class Wireless {
     
     heading = 'Wireless Access Point';
     
-    constructor(MD5VC, FEC, dialogs, overlay, ucireader) {
-        this.MD5VC = MD5VC;
+    constructor(FEC, dialogs, overlay, ucireader) {
         this.FEC = FEC;
         this.dialogService = dialogs;
         this.overlay = overlay;

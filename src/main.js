@@ -6,7 +6,6 @@ export function configure(aurelia) {
     .standardConfiguration()
     .developmentLogging();
   aurelia.use.plugin('aurelia-dialog');
-  aurelia.use.plugin('aurelia-utility-converters');
 
   // start application
   aurelia.start().then(() => aurelia.setRoot());
