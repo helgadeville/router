@@ -20,7 +20,6 @@ export class Password {
             .then(response => {
                 this.overlay.close();
                 this.oldUser = response.content.name;
-                this.newUser = response.content.name;
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error getting router user name');
@@ -33,7 +32,7 @@ export class Password {
             if (!result.wasCancelled) {
                 let data = {
                     'oldUser': this.oldUser,
-                    'newUser': this.newUser,
+                    'newUser': this.newUser ? this.newUser : this.oldUser,
                     'old': this.oldPassword,
                     'new': this.newPassword
                 };
