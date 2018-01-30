@@ -58,17 +58,12 @@ export class Dns {
                 this.FEC.submit('cgi-bin/set_dns.json', data)
                     .then(response => {
                         this.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('DNS set');
-                            this.activate();
-                        } else {
-                            console.log('Error setting router DNS');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                        }
+                        console.log('DNS set');
+                        this.activate();
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router DNS');
-                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogService.error('Ooops ! Error occured:\n' + error);
                     });
             }
         });

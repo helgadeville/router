@@ -100,30 +100,25 @@ export class LAN {
                 this.FEC.submit('cgi-bin/set_lan.json', data)
                     .then(response => {
                         this.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('Router LAN set');
-                            var me = this;
-                            this.overlay.open('Network is reloading', true);
-                            this.v = 0;
-                            this.ival = window.setInterval(function() {
-                                if (++me.v <= 100) {
-                                    me.overlay.setPercent(me.v);
-                                } else {
-                                    window.clearInterval(me.ival);
-                                    me.overlay.close();
-                                    console.log('reload');
-                                    var newURL = window.location.protocol + "//" + newIp + "/" + window.location.hash;
-                                    window.location.href = newURL;
-                                }
-                            }, 200);
-                        } else {
-                            console.log('Error setting router LAN');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                        }
+                        console.log('Router LAN set');
+                        var me = this;
+                        this.overlay.open('Network is reloading', true);
+                        this.v = 0;
+                        this.ival = window.setInterval(function() {
+                            if (++me.v <= 100) {
+                                me.overlay.setPercent(me.v);
+                            } else {
+                                window.clearInterval(me.ival);
+                                me.overlay.close();
+                                console.log('reload');
+                                var newURL = window.location.protocol + "//" + newIp + "/" + window.location.hash;
+                                window.location.href = newURL;
+                            }
+                        }, 200);
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router LAN');
-                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogService.error('Ooops ! Error occured:\n' + error);
                     });
             }
         });

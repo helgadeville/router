@@ -23,29 +23,24 @@ export class Reboot {
              this.FEC.get('cgi-bin/restart.json')
              .then(response => {
                  this.overlay.close();
-                 if (response.content.status === "0") {
-                     console.log('Restart success');
-                     var me = this;
-                     me.overlay.open('Waiting for router', true);
-                     me.v = 0;
-                     me.ival = window.setInterval(function() {
-                         if (++me.v <= 20) {
-                             me.overlay.setPercent(me.v * 5);
-                         } else {
-                             window.clearInterval(me.ival);
-                             me.overlay.close();
-                             console.log('restart');
-                             window.location.href = window.location.origin;
-                         }
-                     }, 500);
-                 } else {
-                     console.log('Error on restart');
-                     this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                 }
+                 console.log('Restart success');
+                 var me = this;
+                 me.overlay.open('Waiting for router', true);
+                 me.v = 0;
+                 me.ival = window.setInterval(function() {
+                     if (++me.v <= 20) {
+                         me.overlay.setPercent(me.v * 5);
+                     } else {
+                         window.clearInterval(me.ival);
+                         me.overlay.close();
+                         console.log('restart');
+                         window.location.href = window.location.origin;
+                     }
+                 }, 500);
              }).catch(error => {
                  this.overlay.close();
                  console.log('Error on restart');
-                 this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                 this.dialogService.error('Ooops ! Error occured:\n' + error);
                  window.location.href = window.location.origin;
              });
           } else {
@@ -63,29 +58,24 @@ export class Reboot {
              this.FEC.get('cgi-bin/reboot.json')
              .then(response => {
                  this.overlay.close();
-                 if (response.content.status === "0") {
-                     console.log('Reboot success');
-                     var me = this;
-                     me.overlay.open('Router is rebooting', true);
-                     me.v = 0;
-                     me.ival = window.setInterval(function() {
-                         if (++me.v <= 100) {
-                             me.overlay.setPercent(me.v);
-                         } else {
-                             window.clearInterval(me.ival);
-                             me.overlay.close();
-                             console.log('reload');
-                             window.location.href = window.location.origin;
-                         }
-                     }, 500);
-                 } else {
-                     console.log('Error on reboot');
-                     this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                 }
+                 console.log('Reboot success');
+                 var me = this;
+                 me.overlay.open('Router is rebooting', true);
+                 me.v = 0;
+                 me.ival = window.setInterval(function() {
+                     if (++me.v <= 100) {
+                         me.overlay.setPercent(me.v);
+                     } else {
+                         window.clearInterval(me.ival);
+                         me.overlay.close();
+                         console.log('reload');
+                         window.location.href = window.location.origin;
+                     }
+                 }, 500);
              }).catch(error => {
                  this.overlay.close();
                  console.log('Error on reboot');
-                 this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                 this.dialogService.error('Ooops ! Error occured:\n' + error);
                  window.location.href = window.location.origin;
              });
           } else {

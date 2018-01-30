@@ -7,9 +7,9 @@ import {OvpnReader} from 'ovpnreader/ovpnreader'
 @inject(FormEncoder,Dialogs,Overlay)
 export class VpnCurrent {
     
-    constructor(FEC, dialogs, overlay) {
+    constructor(FEC, dialogService, overlay) {
         this.FEC = FEC;
-        this.dialogs = dialogs;
+        this.dialogService = dialogService;
         this.overlay = overlay;
     }
     
@@ -87,88 +87,81 @@ export class VpnCurrent {
         this.FEC.submit('cgi-bin/set_vpn_auth.json', data)
         .then(response => {
             this.overlay.close();
-            if (response.content.status === "0") {
-                console.log('VPN username & password set');
-            } else {
-                console.log('Error setting VPN username & password');
-                this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-            }
+            console.log('VPN username & password set');
         }).catch(error => {
             this.overlay.close();
             console.log('Error setting new VPN username/password');
-            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            this.dialogService.error('Ooops ! Error occured:\n' + error);
         });
     }
     
-    set() {
-        var result = this.save(this.original, this.file, this.remotes, false, true);
-        if (result) {
-            this.dialogs.error('Configuration caused problem during parse.');
-        }
-    }
-    
-    save(original, file, remotes, upload, set) {
+    setAll(original, file, remotes, upload, set) {
         var ovpn = new OvpnReader();
         try {
             var ret = ovpn.read(original, file);
             if (ret) {
-                return ret;
+                return new Promise(function(resolve, reject) { reject(ret); });
             }
         } catch(error) {
-            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
-            return error.statusText;
+            return new Promise(function(resolve, reject) { reject(error.message); });
         };
         var data = {};
         var rx = new RegExp(/\n/,'g');
         if (upload) {
             data.file = file;
-            data.original = original.replace(rx, '\r');
+            data.original = original.replace(rx, '\r');;
         }
         if (set) {
             data.current = ovpn.get(remotes).replace(rx, '\r');;
         }
+        return this.FEC.submit('cgi-bin/set_vpn_config.json', data);
+    }
+    
+    save(original, file, remotes, upload, set) {
         this.overlay.open();
-        this.FEC.submit('cgi-bin/set_vpn_config.json', data)
+        this.setAll(original, file, remotes, upload, set)
         .then(response => {
             this.overlay.close();
-            if (response.content.status === "0") {
-                console.log('VPN config set');
-                this.activate();
-            } else {
-                console.log('Error setting VPN configuration');
-                this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-            }
+            console.log('VPN config set');
+            this.activate();
         }).catch(error => {
             this.overlay.close();
             console.log('Error setting new VPN configuration');
-            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            this.dialogService.error('Ooops ! Error occured:\n' + error);
         });
     }
     
     uploadSingle(inputId) {
-        var fileToLoad = document.getElementById(inputId).files[0];
-        if (fileToLoad) {
-            var promise = new Promise((resolve, reject) => {
-                var fileReader = new FileReader();
-                fileReader.onload = function(fileLoadedEvent) {
-                    var rx = new RegExp(/\r/, 'g');
-                    resolve(fileLoadedEvent.target.result.replace(rx, ''));
-                };
-                fileReader.onerror = function() {
-                    reject();
-                };
-                fileReader.readAsText(fileToLoad, "UTF-8");
-            });
-            return promise;
+        var promises = [];
+        var files = document.getElementById(inputId).files;
+        for(var i = 0 ; i < files.length ; i++) {
+            var fileToLoad = files[i];
+            if (fileToLoad) {
+                var promise = new Promise((resolve, reject) => {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function(fileLoadedEvent) {
+                        var rx = new RegExp(/\r/, 'g');
+                        resolve({
+                            name: fileToLoad.name,
+                            data: fileLoadedEvent.target.result.replace(rx,'')
+                        });
+                    };
+                    fileReader.onerror = function() {
+                        reject();
+                    };
+                    fileReader.readAsText(fileToLoad, "UTF-8");
+                });
+                promises.push(promise);
+            }
         }
+        return promises;
     }
     
     extractBeginEnd(input) {
         var inside = false;
         var output = '';
-        var lines = input.split('\n');
-        for(var i = 0 ; i < input.length ; i++) {
-            var line = lines[i].trim();
+        input.split('\n').forEach(line => {
+            var line = line.trim();
             if (!inside && line.indexOf('-----BEGIN') === 0) {
                 inside = true;
             }
@@ -178,68 +171,76 @@ export class VpnCurrent {
                     inside = false;
                 }
             }
-        }
+        });
         return output;
     }
     
     upload(set) {
         var promises = [];
-        var fileToLoad = document.getElementById("uploadFile").files[0];
-        var promisesAndExpected = [{
+        var promisesAndExpected = { 'ovpn' : {
             id : 'uploadFile',
-            expected : 'ovpn',
-        }, {
+            promiseIndex: []
+        }, 'ca' : {
             id: 'uploadCert',
-            expected: '<ca>'
-        }, {
+            promiseIndex: []
+        }, 'cert' : {
             id: 'clientCert',
-            expected: '<cert>'
-        }, {
+            promiseIndex: []
+        }, 'key' : {
             id: 'clientKey',
-            expected: '<key>'
-        }, {
+            promiseIndex: []
+        }, 'tls-auth' : {
             id: 'tlsAuth',
-            expected: '<tls-auth>'
-        }];
+            promiseIndex: []
+        }};
         this.overlay.open();
-        for(var i = 0 ; i < promisesAndExpected.length ; i++) {
-            var pie = promisesAndExpected[i];
-            var promise = this.uploadSingle(pie.id);
-            if (promise) {
-                pie.promiseIndex = promises.length;
-                promises.push(promise);
-            } else {
-                pie.promiseIndex = -1;
-            }
+        for(var expected in promisesAndExpected) {
+            var pae = promisesAndExpected[expected];
+            var newPromises = this.uploadSingle(pae.id);
+            newPromises.forEach(promise => {
+                if (promise) {
+                    pae.promiseIndex.push(promises.length);
+                    promises.push(promise);
+                }
+            });
         }
         Promise.all(promises)
         .then(values => {
-            this.uploadFile = ''; this.uploadCert = ''; this.clientCert = ''; this.clientKey = ''; this.tlsAuth = '';
-            var masterFile = '';
-            for(var i = 0 ; i < promisesAndExpected.length ; i++) {
-                var pie = promisesAndExpected[i];
-                if (pie.promiseIndex >= 0) {
-                    var value = values[pie.promiseIndex];
-                    switch(pie.expected) {
-                    case 'ovpn':
-                        masterFile += value + '\n';
-                        break;
-                    case '<ca>':
-                    case '<cert>':
-                    case '<key>':
-                    case '<tls-auth>':
-                        masterFile += pie.expected + '\n' + this.extractBeginEnd() + '\n</' + pie.expected.substring(1) + '\n';
-                        break;
+            var ovpns = [];
+            var extra = '';
+            for(var expected in promisesAndExpected) {
+                var pae = promisesAndExpected[expected];
+                pae.promiseIndex.forEach(idx => {
+                    var value = values[idx];
+                    switch(expected) {
+                        case 'ovpn':
+                            ovpns.push(value);
+                            break;
+                        default:
+                            extra += '<' + expected + '>\n' + this.extractBeginEnd(value.data) + '</' + expected + '>\n';
                     }
+                });
+            }
+            var newPromises = [];
+            ovpns.forEach(ovpn => {
+                if (ovpn && ovpn.data) {
+                    if (extra) {
+                        ovpn.data += '\n' + extra;
+                    }
+                    newPromises.push(this.setAll(ovpn.data, ovpn.name, null, true, set));
                 }
-            }
+            });
+            Promise.all(newPromises)
+            .then(() => {
+                this.uploadFile = ''; this.uploadCert = ''; this.clientCert = ''; this.clientKey = ''; this.tlsAuth = '';
+                this.overlay.close();
+            }, error => {
+                this.overlay.close();
+                this.dialogService.error('Uploaded file caused problem during parse:\n' + error);
+            });
+        }, error => {
             this.overlay.close();
-            if (this.save(masterFile, fileToLoad.name, null, true, set)) {
-                this.dialogs.error('Uploaded file caused problem during parse:\n' + result);
-            }
-        }).catch(error => {
-            this.overlay.close();
-            this.dialogs.error('Failed to upload file(s).');
+            this.dialogService.error('Failed to upload file(s):\n' + error);
         });
     }
     

@@ -43,18 +43,13 @@ export class Password {
                         this.newPassword = '';
                         this.newPassword2 = '';
                         this.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('Router password set');
-                            this.oldUser = this.newUser;
-                            this.activate();
-                        } else {
-                            console.log('Error setting router password');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                        }
+                        console.log('Router password set');
+                        this.oldUser = this.newUser;
+                        this.activate();
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router password');
-                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogService.error('Ooops ! Error occured:\n' + error);
                     });
             }
         });

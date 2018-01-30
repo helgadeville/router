@@ -39,30 +39,25 @@ export class Upgrade {
              this.FEC.post('cgi-bin/upgrade.json', base64, 'application/base64')
              .then(response => {
                  this.overlay.close();
-                 if (response.content.status === "0") {
-                     console.log('Upgrade success');
-                     var me = this;
-                     me.uploadFile = '';
-                     me.overlay.open('Router is rebooting', true);
-                     me.v = 0;
-                     me.ival = window.setInterval(function() {
-                         if (++me.v <= 100) {
-                             me.overlay.setPercent(me.v);
-                         } else {
-                             window.clearInterval(me.ival);
-                             me.overlay.close();
-                             console.log('reload');
-                             window.location.href = window.location.origin;
-                         }
-                     }, 500);
-                 } else {
-                     console.log('Error on upgrade');
-                     this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                 }
+                 console.log('Upgrade success');
+                 var me = this;
+                 me.uploadFile = '';
+                 me.overlay.open('Router is rebooting', true);
+                 me.v = 0;
+                 me.ival = window.setInterval(function() {
+                     if (++me.v <= 100) {
+                         me.overlay.setPercent(me.v);
+                     } else {
+                         window.clearInterval(me.ival);
+                         me.overlay.close();
+                         console.log('reload');
+                         window.location.href = window.location.origin;
+                     }
+                 }, 500);
              }).catch(error => {
                  this.overlay.close();
                  console.log('Error on upgrade');
-                 this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                 this.dialogService.error('Ooops ! Error occured:\n' + error);
              });
           } else {
              console.log('cancelled');

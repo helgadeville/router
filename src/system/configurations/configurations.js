@@ -77,17 +77,12 @@ export class Configurations {
                 this.FEC.submit('cgi-bin/save_current_config.json', data)
                 .then(response => {
                     this.overlay.close();
-                    if (response.content.status === "0") {
-                        this.fileName = '';
-                        this.activate();
-                    } else {
-                        console.log('Error saving current system configuration !');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                    }
+                    this.fileName = '';
+                    this.activate();
                 }).catch(error => {
                     this.overlay.close();
                     console.log('Error saving current configuration !');
-                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                    this.dialogService.error('Ooops ! Error occured:\n' + error);
                 });
             }
         });
@@ -111,7 +106,7 @@ export class Configurations {
         }).catch(error => {
             this.overlay.close();
             console.log('Error downloading saved configuration !');
-            this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+            this.dialogService.error('Ooops ! Error occured:\n' + error);
         });
     }
     
@@ -128,30 +123,25 @@ export class Configurations {
                 this.FEC.submit('cgi-bin/set_system_config.json', data)
                 .then(response => {
                     this.overlay.close();
-                    if (response.content.status === "0") {
-                        console.log('System configuration restored');
-                        // full reboot required !
-                        var me = this;
-                        this.overlay.open('Router is rebooting', true);
-                        this.v = 0;
-                        this.ival = window.setInterval(function() {
-                            if (++me.v <= 100) {
-                                me.overlay.setPercent(me.v);
-                            } else {
-                                window.clearInterval(me.ival);
-                                me.overlay.close();
-                                console.log('reload');
-                                window.location.href = window.location.origin;
-                            }
-                        }, 500);
-                    } else {
-                        console.log('Error restoring system configuration');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                    }
+                    console.log('System configuration restored');
+                    // full reboot required !
+                    var me = this;
+                    this.overlay.open('Router is rebooting', true);
+                    this.v = 0;
+                    this.ival = window.setInterval(function() {
+                        if (++me.v <= 100) {
+                            me.overlay.setPercent(me.v);
+                        } else {
+                            window.clearInterval(me.ival);
+                            me.overlay.close();
+                            console.log('reload');
+                            window.location.href = window.location.origin;
+                        }
+                    }, 500);
                 }).catch(error => {
                     this.overlay.close();
                     console.log('Error restoring system configuration');
-                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                    this.dialogService.error('Ooops ! Error occured:\n' + error);
                 });
             }
         });
@@ -170,17 +160,12 @@ export class Configurations {
                 this.FEC.submit('cgi-bin/remove_system_config.json', data)
                 .then(response => {
                     this.overlay.close();
-                    if (response.content.status === "0") {
-                        console.log('System configuration removed');
-                        this.activate();
-                    } else {
-                        console.log('Error removing system configuration');
-                        this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                    }
+                    console.log('System configuration removed');
+                    this.activate();
                 }).catch(error => {
                     this.overlay.close();
                     console.log('Error removing system configuration');
-                    this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                    this.dialogService.error('Ooops ! Error occured:\n' + error);
                 });
             }
         });
@@ -215,28 +200,23 @@ export class Configurations {
                         me.FEC.submit('cgi-bin/upload_system_config.json', data)
                         .then(response => {
                             me.overlay.close();
-                            if (response.content.status === "0") {
-                                console.log('System configuration uploaded');
-                                me.overlay.open('Router is rebooting', true);
-                                me.v = 0;
-                                me.ival = window.setInterval(function() {
-                                    if (++me.v <= 100) {
-                                        me.overlay.setPercent(me.v);
-                                    } else {
-                                        window.clearInterval(me.ival);
-                                        me.overlay.close();
-                                        console.log('reload');
-                                        window.location.href = window.location.origin;
-                                    }
-                                }, 500);
-                            } else {
-                                console.log('Error uploading system configuration');
-                                me.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                            }
+                            console.log('System configuration uploaded');
+                            me.overlay.open('Router is rebooting', true);
+                            me.v = 0;
+                            me.ival = window.setInterval(function() {
+                                if (++me.v <= 100) {
+                                    me.overlay.setPercent(me.v);
+                                } else {
+                                    window.clearInterval(me.ival);
+                                    me.overlay.close();
+                                    console.log('reload');
+                                    window.location.href = window.location.origin;
+                                }
+                            }, 500);
                         }).catch(error => {
                             me.overlay.close();
                             console.log('Error uploading system configuration');
-                            me.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                            me.dialogService.error('Ooops ! Error occured:\n' + error);
                         });
                     }});
             };

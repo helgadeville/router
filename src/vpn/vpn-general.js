@@ -73,7 +73,7 @@ export class VpnGeneral {
                 }).catch(error => {
                     this.skip_poll = false;
                     console.log('Error toggling vpn');
-                    this.dialogs.error('Error during operation.');
+                    this.dialogs.error('Error during operation:\n' + error);
                 });
             }
         });
@@ -92,7 +92,7 @@ export class VpnGeneral {
                 }).catch(error => {
                     this.skip_poll = false;
                     console.log('Error restarting vpn');
-                    this.dialogs.error('Error during operation.');
+                    this.dialogs.error('Error during operation:\n' + error);
                 });
             }
         });

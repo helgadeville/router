@@ -116,29 +116,24 @@ export class Wireless {
                 this.FEC.submit('cgi-bin/set_radio.json', data)
                     .then(response => {
                         this.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('Router wireless set');
-                            var me = this;
-                            this.overlay.open('Network is reloading', true);
-                            this.v = 0;
-                            this.ival = window.setInterval(function() {
-                                if (++me.v <= 100) {
-                                    me.overlay.setPercent(me.v);
-                                } else {
-                                    window.clearInterval(me.ival);
-                                    me.overlay.close();
-                                    console.log('reload');
-                                    me.activate();
-                                }
-                            }, 60);
-                        } else {
-                            console.log('Error setting router radio');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                        }
+                        console.log('Router wireless set');
+                        var me = this;
+                        this.overlay.open('Network is reloading', true);
+                        this.v = 0;
+                        this.ival = window.setInterval(function() {
+                            if (++me.v <= 100) {
+                                me.overlay.setPercent(me.v);
+                            } else {
+                                window.clearInterval(me.ival);
+                                me.overlay.close();
+                                console.log('reload');
+                                me.activate();
+                            }
+                        }, 60);
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router radio');
-                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogService.error('Ooops ! Error occured:\n' + error);
                     });
             }
         });
@@ -187,29 +182,24 @@ export class Wireless {
                 this.FEC.submit('cgi-bin/set_wireless.json', data)
                     .then(response => {
                         this.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('Router wireless set');
-                            var me = this;
-                            this.overlay.open('Network is reloading', true);
-                            this.v = 0;
-                            this.ival = window.setInterval(function() {
-                                if (++me.v <= 100) {
-                                    me.overlay.setPercent(me.v);
-                                } else {
-                                    window.clearInterval(me.ival);
-                                    me.overlay.close();
-                                    console.log('reload');
-                                    me.activate();
-                                }
-                            }, 60);
-                        } else {
-                            console.log('Error setting router wireless');
-                            this.dialogService.error('Ooops ! Error occured:\n' + response.content.message);
-                        }
+                        console.log('Router wireless set');
+                        var me = this;
+                        this.overlay.open('Network is reloading', true);
+                        this.v = 0;
+                        this.ival = window.setInterval(function() {
+                            if (++me.v <= 100) {
+                                me.overlay.setPercent(me.v);
+                            } else {
+                                window.clearInterval(me.ival);
+                                me.overlay.close();
+                                console.log('reload');
+                                me.activate();
+                            }
+                        }, 60);
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router wireless');
-                        this.dialogService.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogService.error('Ooops ! Error occured:\n' + error);
                     });
             }
         });

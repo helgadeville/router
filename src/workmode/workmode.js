@@ -142,7 +142,7 @@ export class WorkMode {
             .catch(error => {
                 this.overlay.close();
                 console.log('Error retrieving saved stations');
-                this.dialogs.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                this.dialogs.error('Ooops ! Error occured:\n' + error);
             });
     }
     
@@ -262,7 +262,7 @@ export class WorkMode {
             }).catch(error => {
                 this.overlay.close();
                 console.log('Error scanning AP networks');
-                this.dialogs.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                this.dialogs.error('Ooops ! Error occured:\n' + error);
             });
     }
     
@@ -332,31 +332,26 @@ export class WorkMode {
                 this.FEC.submit('cgi-bin/set_workmode.json', data)
                     .then(response => {
                         this.overlay.close();
-                        if (response.content.status === "0") {
-                            console.log('Router work mode set');
-                            var msg = '';
-                            var timeout = 10;
-                            var me = this;
-                            this.overlay.open(msg, true);
-                            this.v = 0;
-                            this.ival = window.setInterval(function() {
-                                if (++me.v <= timeout) {
-                                    me.overlay.setPercent(Math.round(100 * me.v / timeout));
-                                } else {
-                                    window.clearInterval(me.ival);
-                                    me.overlay.close();
-                                    console.log('reload');
-                                    window.location.href = window.location.origin;
-                                }
-                            }, 500);
-                        } else {
-                            console.log('Error setting router work mode');
-                            this.dialogs.error('Ooops ! Error occured:\n' + response.content.message);
-                        }
+                        console.log('Router work mode set');
+                        var msg = '';
+                        var timeout = 10;
+                        var me = this;
+                        this.overlay.open(msg, true);
+                        this.v = 0;
+                        this.ival = window.setInterval(function() {
+                            if (++me.v <= timeout) {
+                                me.overlay.setPercent(Math.round(100 * me.v / timeout));
+                            } else {
+                                window.clearInterval(me.ival);
+                                me.overlay.close();
+                                console.log('reload');
+                                window.location.href = window.location.origin;
+                            }
+                        }, 500);
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router work mode');
-                        this.dialogs.error('Ooops ! Error occured:\n' + error.statusCode + '/' + error.statusText + '\n' + error.response);
+                        this.dialogs.error('Ooops ! Error occured:\n' + error);
                     });
             }
         });

@@ -26,33 +26,33 @@
                            value.bind="remote.remote" checked.bind="remote.active"/><label>&nbsp;${remote.remote}&nbsp; </label>
                 </div>
                 <div class="halign">
-                    <button class="btn btn-success" disabled.bind="!original || remotesSelected <= 0" click.delegate="set()">SET</button>
+                    <button class="btn btn-success" disabled.bind="!original || remotesSelected <= 0" click.delegate="save(original, file, remotes, false, true)">SET</button>
                 </div>
             </div>
             <div class="div-border">
                 <div>
                     <label for="uploadFile">Select OVPN File for Upload:</label>
-                    <input type="file" value.bind="uploadFile" class="form-control" id="uploadFile" accept=".ovpn" />
+                    <input type="file" files.bind="uploadFiles" class="form-control" id="uploadFile" accept=".ovpn" multiple/>
                 </div>
                 <div>
                     <label for="uploadCert">Select Server Certificate File for Upload (optional):</label>
-                    <input type="file" value.bind="uploadCert" class="form-control" id="uploadCert" accept=".crt"/>
+                    <input type="file" class="form-control" id="uploadCert" accept=".crt"/>
                 </div>
                 <div>
                     <label for="clientCert">Select Client Certificate File for Upload (optional):</label>
-                    <input type="file" value.bind="clientCert" class="form-control" id="clientCert" accept=".crt" />
+                    <input type="file" class="form-control" id="clientCert" accept=".crt" />
                 </div>
                 <div>
                     <label for="clientKey">Select Client Key File for Upload (optional):</label>
-                    <input type="file" value.bind="clientKey" class="form-control" id="clientKey" accept=".key" />
+                    <input type="file" class="form-control" id="clientKey" accept=".key" />
                 </div>
                 <div>
                     <label for="tlsAuth">Select TLS Key File for Upload (optional):</label>
-                    <input type="file" value.bind="tlsAuth" class="form-control" id="tlsAuth"  accept=".key" />
+                    <input type="file" class="form-control" id="tlsAuth"  accept=".key" />
                 </div><br/>
                 <div class="halign">
-                    <button class="btn btn-primary" disabled.bind="!uploadFile" click.delegate="upload()">UPLOAD ONLY</button>
-                    <button class="btn btn-success" disabled.bind="!uploadFile" click.delegate="upload(true)">UPLOAD & SET</button>
+                    <button class="btn btn-primary" disabled.bind="!uploadFiles" click.delegate="upload()">UPLOAD ONLY</button>
+                    <button class="btn btn-success" disabled.bind="!uploadFiles || uploadFiles.length > 1" click.delegate="upload(true)">UPLOAD & SET</button>
                 </div>
             </div>
         </form>
