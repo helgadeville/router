@@ -251,8 +251,13 @@ export class VpnConfigs {
             });
             Promise.all(newPromises)
             .then(() => {
-                this.uploadFile = ''; this.uploadCert = ''; this.clientCert = ''; this.clientKey = ''; this.tlsAuth = '';
-                this.overlay.close();
+                document.getElementById('uploader').reset();
+                if (set) {
+                    window.location.reload();
+                } else {
+                    this.overlay.close();
+                    this.activate();
+                }
             }, error => {
                 this.overlay.close();
                 this.dialogService.error('Uploaded file caused problem during parse:\n' + error);
