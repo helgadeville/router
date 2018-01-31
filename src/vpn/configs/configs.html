@@ -23,23 +23,23 @@
             <div class="div-border">
                 <div>
                     <label for="uploadFile">Select OVPN File for Upload:</label>
-                    <input type="file" files.bind="uploadFiles" class="form-control" id="uploadFile" accept=".ovpn" multiple/>
+                    <input type="file" files.bind="uploadFiles" value.bind="uploadFiles" class="form-control" id="uploadFile" accept=".ovpn" multiple/>
                 </div>
                 <div>
                     <label for="uploadCert">Select Server Certificate File for Upload (optional):</label>
-                    <input type="file" class="form-control" id="uploadCert" accept=".crt"/>
+                    <input type="file" class="form-control" value.bind="uploadCert" id="uploadCert" accept=".crt"/>
                 </div>
                 <div>
                     <label for="clientCert">Select Client Certificate File for Upload (optional):</label>
-                    <input type="file" class="form-control" id="clientCert" accept=".crt" />
+                    <input type="file" class="form-control" value.bind="clientCert" id="clientCert" accept=".crt" />
                 </div>
                 <div>
                     <label for="clientKey">Select Client Key File for Upload (optional):</label>
-                    <input type="file" class="form-control" id="clientKey" accept=".key" />
+                    <input type="file" class="form-control" value.bind="clientKey" id="clientKey" accept=".key" />
                 </div>
                 <div>
                     <label for="tlsAuth">Select TLS Key File for Upload (optional):</label>
-                    <input type="file" class="form-control" id="tlsAuth"  accept=".key" />
+                    <input type="file" class="form-control" value.bind="tlsAuth" id="tlsAuth"  accept=".key" />
                 </div><br/>
                 <div class="halign">
                     <button class="btn btn-primary" disabled.bind="!uploadFiles" click.delegate="upload()">UPLOAD ONLY</button>

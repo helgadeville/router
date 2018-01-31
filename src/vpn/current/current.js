@@ -138,11 +138,12 @@ export class VpnCurrent {
             var fileToLoad = files[i];
             if (fileToLoad) {
                 var promise = new Promise((resolve, reject) => {
+                    var thisFileName = fileToLoad.name;
                     var fileReader = new FileReader();
                     fileReader.onload = function(fileLoadedEvent) {
                         var rx = new RegExp(/\r/, 'g');
                         resolve({
-                            name: fileToLoad.name,
+                            name: thisFileName,
                             data: fileLoadedEvent.target.result.replace(rx,'')
                         });
                     };
