@@ -26,17 +26,24 @@ export class Dns {
             dnses = dnses.concat(me.dnshelper.names);
             var ipsRaw = response.response.split('\n');
             var ips  = [];
+            var peer = false;
             if (ipsRaw) {
                 for(var i = 0 ; i < ipsRaw.length ; i++) {
                     if (ipsRaw[i]) {
-                        ips.push(ipsRaw[i]);
+                        if (ipsRaw[i] === 'peer') {
+                            peer = true;
+                        } else {
+                            ips.push(ipsRaw[i]);
+                        }
                     }
                 }
             }
             var name =me.dnshelper.nameFromIp(ips);
             me.dnses = dnses;
+            me.oldPeer = peer;
             me.oldDns = name;
             me.newDns = name ? 'do not change' : dnses[0];
+            me.newPeer = peer;
         }).catch(error => {
             me.overlay.close();
             console.log('Error getting DNS');
@@ -47,10 +54,14 @@ export class Dns {
         let dlg = this.dialogService.warning('You are about to change router DNS setting.\nAre you sure ?');
         dlg.whenClosed(result => {
             if (!result.wasCancelled) {
-                var dnses = this.dnshelper.ipFromName(this.newDns);
-                let data = {
-                    dns1 : dnses[0]
-                };
+                var dnses = this.dnshelper.ipFromName(this.newDns !== 'do not change' ? this.newDns : this.oldDns);
+                let data = {};
+                if (this.newPeer) {
+                    data.peer = true;
+                }
+                if (dnses[0]) {
+                    data.dns1 = dnses[0]
+                }
                 if (dnses[1]) {
                     data.dns2 = dnses[1];
                 }
@@ -69,4 +80,7 @@ export class Dns {
         });
     }
     
+    useIspClick() {
+        console.log('click !');
+    }
 }

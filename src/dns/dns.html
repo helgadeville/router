@@ -7,7 +7,11 @@
             <label>DNS Servers (Name Servers)</label>
             <div>
                 <label for="oldDns">Current DNS Setting</label>
-                <input type="text" value.bind="oldDns" class="form-control" id="oldDns" disabled="disabled">
+                <input type="text" value.bind="oldDns" class="form-control" id="oldDns" disabled="disabled" />
+            </div>
+            <div class="halign">
+                <input type="checkbox" checked.bind="oldPeer" id="oldPeer" disabled="disabled" />
+                <label for="oldPeer">&nbsp;Using ISP DNS'es</label>
             </div>
             <br/>
             <label for="newDns">New DNS Selection</label>
@@ -18,15 +22,19 @@
                 </select>
                 <div class="halign">
                     <ul>
-                        <li><span><small>For security reasons, only predefined public DNS servers are allowed.</small></span></li>
+                        <li><span><small>For security reasons, we recommend to use ONLY predefined public DNS servers.</small></span></li>
                         <li><span><small>Never trust your local ISP DNS !</small></span></li>
                     </ul>
+                </div>
+                <div class="halign">
+                    <input id="newPeer" type="checkbox" checked.bind="newPeer" change.delegate="useIspClick()" \>
+                    <label for="newPeer">&nbsp;Use ISP DNS'es (not recommended)</label>
                 </div>
             </div>
             <br/>
             <div class="halign">
                 <button type="button" class="btn btn-danger" click.delegate="setDns()"
-                        disabled.bind="!newDns || newDns === 'do not change' || newDns === oldDns">SAVE SETTINGS</button>
+                        disabled.bind="!newDns || ((newDns === 'do not change' || newDns === oldDns) && newPeer == oldPeer)">SAVE SETTINGS</button>
             </div>
         </div>
     </section>
