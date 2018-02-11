@@ -235,7 +235,7 @@ export class VpnCurrent {
             .then(() => {
                 document.getElementById('uploader').reset();
                 if (set) {
-                    window.location.reload();
+                    window.location.reload(true);
                 } else {
                     this.overlay.close();
                     this.activate();

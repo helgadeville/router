@@ -75,7 +75,7 @@ export class VpnConfigs {
                     me.setAll(response.response, name, null, false, true)
                     .then(() => {
                         console.log('VPN configuration restored.');
-                        window.location.reload();
+                        window.location.reload(true);
                     }, error => {
                         me.dialogService.error('Could not parse target configuration:\n' + error);
                     });
@@ -253,7 +253,7 @@ export class VpnConfigs {
             .then(() => {
                 document.getElementById('uploader').reset();
                 if (set) {
-                    window.location.reload();
+                    window.location.reload(true);
                 } else {
                     this.overlay.close();
                     this.activate();

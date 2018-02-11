@@ -52,6 +52,7 @@ export class Upgrade {
                          me.overlay.close();
                          console.log('reload');
                          window.location.href = window.location.origin;
+                         window.location.reload(true);
                      }
                  }, 500);
              }).catch(error => {

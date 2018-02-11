@@ -68,9 +68,20 @@ export class Dns {
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_dns.json', data)
                     .then(response => {
+                        var me = this;
                         this.overlay.close();
                         console.log('DNS set');
-                        this.activate();
+                        this.overlay.open('Network is reloading', true);
+                        this.v = 0;
+                        this.ival = window.setInterval(function() {
+                            if (++me.v <= 100) {
+                                me.overlay.setPercent(me.v);
+                            } else {
+                                window.clearInterval(me.ival);
+                                me.overlay.close();
+                                me.activate();
+                            }
+                        }, 200);
                     }).catch(error => {
                         this.overlay.close();
                         console.log('Error setting router DNS');
