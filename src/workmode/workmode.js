@@ -108,7 +108,7 @@ export class WorkMode {
         this.FEC.submit('cgi-bin/get_stations.json', data)
             .then(response => {
                 this.overlay.close();
-                var stations = response.content;
+                var stations = response.content.data;
                 if (!stations) {
                     this.dialogs.info('There are no saved stations.');
                     return;
