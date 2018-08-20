@@ -1,4 +1,5 @@
 {
+"name":"SYSTEM_NAME",
 "system":"Atheros AR9330 rev 1",
 "machine":"TP-LINK TL-MR3220 v2",
 "cpu":"MIPS 24Kc V7.4",

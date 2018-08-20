@@ -1,0 +1,20 @@
+<template>
+  <section class="">
+    <div class="halign">
+        <h2>${heading}</h2>
+    </div>
+    <form role="form" submit.delegate="submit()">
+        <div class="form-group">
+            <label for="oldName">Current system name</label>
+            <input type="text" value.bind="oldName" class="form-control" id="oldName" disabled="disabled">
+        </div>
+        <div class="form-group">
+            <label for="newName">New system name</label>
+            <input type="text" value.bind="newName" class="form-control" id="newName" placeholder="new system name">
+        </div>
+        <div class="halign">
+            <button type="submit" class="btn btn-danger" disabled.bind="!newName">CHANGE SYSTEM NAME</button>
+        </div>
+    </form>
+  </section>
+</template>
