@@ -12,7 +12,7 @@
                         <div>
                             <span class="color-red">WARNING !</span><br/>
                             <span>
-                               This option will change software on Your router. Please use wisely, as this operation is NOT reversible.
+                               Those options will change software on Your router. Please use wisely, as those operations are NOT reversible.
                             </span>
                         </div>
                     </td>
@@ -20,6 +20,40 @@
             </table>
         </div>
         <div class="div-border">
+            <form role="form" submit.delegate="upgradePkgs()" name="${device['#']}">
+                <div>
+                    <span>
+                      This option checks for core router software upgrades.
+                    </span>
+                </div>
+                <div if.bind="system.internet !== 'online'">
+                    <span class="color-red">
+                      <b>You must be online to use it.</b>
+                    </span>
+                </div><br/>
+                <div class="halign" if.bind="!canUpgrade">
+                    <button class="btn btn-danger" disabled.bind="system.internet !== 'online'" click.delegate="checkPkgs()">CHECK UPGRADES</button>
+                </div>
+                <div class="halign" if.bind="canUpgrade && system.internet === 'online'">
+                    <span>
+                      Packages to upgrade:
+                    </span></br>
+                    <span>&nbsp;&nbsp;(&nbsp;<input type="checkbox" checked.bind="allPkgsSelected" change.delegate="selectAll()"/>&nbsp;select all&nbsp;)<br/></span>
+                    <span repeat.for="pkg of pkgs">
+                        <input type="checkbox" checked.bind="pkg.use" change.delegate="changedPkgs()"></input>
+                        &nbsp;${pkg.name}&nbsp;&nbsp;
+                    </span>
+                    <br/><br>
+                    <button type="submit" class="btn btn-danger" disabled.bind="!selectedPkgs">UPGRADE PACKAGES</button>
+                </div>
+            </form>
+        </div>
+        <div class="div-border">
+            <div>
+                <span>
+                  This option will upgrade custom software elements (UI/scripts).
+                </span>
+            </div><br/>
             <div>
                 <label for="uploadFile">Select Binary Update File for Upload:</label>
                 <input type="file" value.bind="uploadFile" class="form-control" id="uploadBuFile" accept=".buf" />

@@ -110,7 +110,7 @@ export class Wireless {
                     disabled: device.enabled ? '0' : '1'
                 };
                 if (device.newChannel && device.newChannel != 'do not change') {
-                    data.newChannel = device.newChannel;
+                    data.channel = device.newChannel;
                 }
                 this.overlay.open();
                 this.FEC.submit('cgi-bin/set_radio.json', data)

@@ -72,7 +72,7 @@
 		            </table>
 		        </div>
 		        <div class="halign">
-		            <button type="submit" class="btn btn-danger" disabled.bind="!lan.newIpaddr || !check(lan.newIpaddr, lan.dhcp.newStart, lan.dhcp.newStop) || lan.newIpaddr === lan.ipaddr">CHANGE LAN IP ADDRESS</button>
+		            <button type="submit" class="btn btn-danger" disabled.bind="!check(lan.newIpaddr ? lan.newIpaddr : lan.ipaddr, lan.dhcp.newStart, lan.dhcp.newStop) || ((!lan.newIpaddr || lan.newIpaddr === lan.ipaddr) && lan.dhcp.newStart + '' === lan.dhcp.start + '' && lan.dhcp.newStop + '' === lan.dhcp.stop + '')">CHANGE LAN IP ADDRESS</button>
 		        </div>
 	        </form>
 	    </div>

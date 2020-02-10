@@ -80,7 +80,7 @@ export class LAN {
             console.log('Error: unknown lan referenced');
             return;
         }
-        var newIp = lan.newIpaddr;
+        var newIp = lan.newIpaddr ? lan.newIpaddr : lan.ipaddr;
         // WARNING: netmask is fixed and we do not touch it
         var newMask = lan.netmask;
         let dlg = 
