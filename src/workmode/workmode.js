@@ -133,6 +133,7 @@ export class WorkMode {
                                 dev.newIp = chosen.ipaddr;
                                 dev.newMask = chosen.netmask;
                                 dev.newMac = chosen.mac;
+                                dev.newGateway = chosen.gateway;
                                 break;
                             }
                         }
@@ -272,7 +273,7 @@ export class WorkMode {
         }
     }
     
-    @computedFrom('source.newProto', 'source.newIp', 'source.newMask', 'source.newMac', 'source.parent.encryption', 'source.parent.key')
+    @computedFrom('source.newProto', 'source.newIp', 'source.newMask', 'source.newMac', 'source.newGateway', 'source.parent.encryption', 'source.parent.key')
     get checkButton() {
         var src = this.source;
         if (!src) {
@@ -284,6 +285,9 @@ export class WorkMode {
                 return false;
             }
             if ((!src.mask && !src.newMask) || (src.newMask && !regex.test(src.newMask))) {
+                return false;
+            }
+            if (src.newGateway && !regex.test(src.newGateway)) {
                 return false;
             }
         }
@@ -317,6 +321,7 @@ export class WorkMode {
                 if (data.proto === 'static') {
                     data.ipaddr = this.source.newIp ? this.source.newIp : this.source.ip;
                     data.netmask = this.source.newMask ? this.source.newMask : this.source.mask;
+                    data.gateway = this.source.newGateway ? this.source.newGateway : this.source.gateway;
                 }
                 if (this.source.newMac || this.source.newMacReset) {
                     data.mac = this.source.newMac;

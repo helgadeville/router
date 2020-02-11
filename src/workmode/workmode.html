@@ -134,7 +134,7 @@
                                             <input type="text" value.bind="source.ip" class="form-control" id="oldIp${source.ifname}" disabled="disabled">
                                         </td>
                                     </tr>
-                                    <tr  if.bind="source.newProto === 'static' || (source.newProto === 'do not change' && source.proto === 'static')" class="width100">
+                                    <tr  if.bind="source.newProto === 'static' || ((!source.newProto || source.newProto === 'do not change') && source.proto === 'static')" class="width100">
                                         <td>
                                             <label for="newIp${source.ifname}">New WAN IP Address</label>
                                             <input type="text" value.bind="source.newIp" class="form-control" id="newIp${source.ifname}">
@@ -155,7 +155,7 @@
                                             <input type="text" value.bind="source.mask" class="form-control" id="oldMask${source.ifname}" disabled="disabled">
                                         </td>
                                     </tr>
-                                    <tr if.bind="source.newProto === 'static' || (source.newProto === 'do not change' && source.proto === 'static')" class="width100">
+                                    <tr if.bind="source.newProto === 'static' || ((!source.newProto || source.newProto === 'do not change') && source.proto === 'static')" class="width100">
                                         <td>
                                             <label for="newMask${source.ifname}">New WAN Netmask</label>
                                             <input type="text" value.bind="source.newMask" class="form-control" id="newMask${source.ifname}">
@@ -166,6 +166,31 @@
                                     </tr>
                                 </table>
                             </div>
+                        </td>
+                    </tr>
+                    <tr if.bind="source.newProto === 'static' || ((!source.newProto || source.newProto === 'do not change') && source.proto === 'static')" class="width100 talign">
+                        <td class="width50">
+                            <div class="mini-border">
+                                <table class="width100">
+                                    <tr class="width100">
+                                        <td>
+                                            <label for="oldGw${source.ifname}">Current Gateway</label>
+                                            <input type="text" value.bind="source.gateway" class="form-control" id="oldGw${source.ifname}" disabled="disabled">
+                                        </td>
+                                    </tr>
+                                    <tr class="width100">
+                                        <td>
+                                            <label for="newGw${source.ifname}">New Gateway</label>
+                                            <input type="text" value.bind="source.newGateway" class="form-control" id="newGw${source.ifname}">
+                                            <ul>
+                                                <li><span><small>with static IP, this field usually should be the IP of your router</small></span></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                        <td class="width50">
                         </td>
                     </tr>
                 </table>

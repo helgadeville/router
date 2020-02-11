@@ -287,6 +287,8 @@ System.config({
       "storage/storage.js",
       "system/configurations/configurations.html!github:systemjs/plugin-text@0.0.8.js",
       "system/configurations/configurations.js",
+      "system/dhcpclients/dhcpclients.html!github:systemjs/plugin-text@0.0.8.js",
+      "system/dhcpclients/dhcpclients.js",
       "system/dmesg/dmesg.html!github:systemjs/plugin-text@0.0.8.js",
       "system/dmesg/dmesg.js",
       "system/logread/logread.html!github:systemjs/plugin-text@0.0.8.js",
@@ -376,6 +378,11 @@ System.config({
       "aurelia-framework",
       "formencoder/formencoder",
       "modal/dialogs",
+      "overlay/overlay"
+    ],
+    "system/dhcpclients/dhcpclients.js": [
+      "aurelia-framework",
+      "formencoder/formencoder",
       "overlay/overlay"
     ],
     "system/dmesg/dmesg.js": [
